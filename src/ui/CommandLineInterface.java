@@ -2,14 +2,21 @@ package ui;
 
 import java.util.Scanner;
 
+import com.mysql.jdbc.Connection;
+
+import DAO.CompanyDao;
+import DAO.CompanyDaoImplementation;
 import DAO.DAOFactory;
 
 public class CommandLineInterface {
 	
 	private DAOFactory daoFactory;
+	private CompanyDaoImplementation companyDaoImplementation;
 	
 	public CommandLineInterface() {
 		this.daoFactory = DAOFactory.getInstance();
+		this.companyDaoImplementation = (CompanyDaoImplementation) this.daoFactory.getCompanyDao();
+		this.companyDaoImplementation.findAll();
 	}
 	
 	public void menuPresentation() {

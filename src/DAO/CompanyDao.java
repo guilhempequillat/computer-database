@@ -8,4 +8,6 @@ public interface CompanyDao {
 	void create(Company company) throws DAOException;
 	
 	Company find(String name) throws DAOException;
+	
+	void findAll() throws DAOException;
 }
