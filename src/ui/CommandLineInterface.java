@@ -1,10 +1,12 @@
 package ui;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
-
 import com.mysql.jdbc.Connection;
-
 import DAO.CompanyDao;
 import DAO.CompanyDaoImplementation;
 import DAO.ComputerDao;
@@ -33,8 +35,9 @@ public class CommandLineInterface {
 		System.out.println("	2) List companies");
 		System.out.println("	3) Show computer details");
 		System.out.println("	4) Update a computer");
-		System.out.println("	5) Delete a computer"); 
-		System.out.println("	6) Quit");
+		System.out.println("	5) Delete a computer");
+		System.out.println("	6) Create a computer");
+		System.out.println("	7) Quit");
 	}
 	
 	public String readUserInput() {
@@ -44,7 +47,7 @@ public class CommandLineInterface {
 	}
 	
 	public void commandLineInterfaceWorking() {
-		while(true) {
+		while(this.notQuit) {
 			menuPresentation();
 			String input = readUserInput();
 			executeChoise(input);
@@ -69,6 +72,9 @@ public class CommandLineInterface {
 				deleteAComputer();
 				break;
 			case "6" :
+				createAComputer();
+				break;
+			case "7" :
 				quit();
 				break;
 		}
@@ -123,13 +129,13 @@ public class CommandLineInterface {
 				updateName(idComputer);
 				break;
 			case 2 :
-				updateIntroduced();
+				updateIntroduced(idComputer);
 				break;
 			case 3 :
-				updateDiscontinued();
+				updateDiscontinued(idComputer);
 				break;
 			case 4 :
-				upDateCompanyId();
+				updateCompanyId(idComputer);
 				break;
 		}
 	}
@@ -140,20 +146,49 @@ public class CommandLineInterface {
 		this.computerDaoImplementation.updateName(idComputer, name);
 	}
 	
-	public void updateIntroduced() {
+	public void updateIntroduced(int idComputer) {
+		LocalDate localDate = enterDate();
+		java.sql.Date sqlDate = java.sql.Date.valueOf(localDate);
+		this.computerDaoImplementation.updateIntroduced(idComputer, sqlDate);
+	}
+	
+	public LocalDate enterDate() {
+		System.out.println("\nEnter the Year : ");
+		int year = Integer.parseInt(readUserInput());
+		System.out.println("\nEnter the Month : ");
+		int month = Integer.parseInt(readUserInput());
+		System.out.println("\nEnter the Day : ");
+		int day = Integer.parseInt(readUserInput());
+		LocalDate localDate = LocalDate.of(year, month, day);
+		return localDate;
 		
 	}
 	
-	public void updateDiscontinued() {
-		
+	public void updateDiscontinued(int idComputer) {
+		LocalDate localDate = enterDate();
+		java.sql.Date sqlDate = java.sql.Date.valueOf(localDate);
+		this.computerDaoImplementation.updateDiscontinued(idComputer, sqlDate);
 	}
 	
-	public void upDateCompanyId() {
-		
+	public void updateCompanyId(int idComputer) {
+		System.out.println("\nEnter the company id :");
+		int idCompany = Integer.parseInt(readUserInput());
+		this.computerDaoImplementation.updateCompany(idComputer, idCompany);
 	}
 	
 	public void deleteAComputer() {
 		
+	}
+	
+	public void createAComputer() {
+		System.out.println("\nPlease enter the Computer's name :");
+		String name = readUserInput();
+		System.out.println("\nPlease enter the Introduced date : ");
+		LocalDate introducedLocalDate = enterDate();
+		java.sql.Date introducedDate = java.sql.Date.valueOf(introducedLocalDate);
+		System.out.println("\nPlease enter the Discontined date : ");
+		LocalDate discontinuedLocalDate = enterDate();
+		java.sql.Date discontinuedDate = java.sql.Date.valueOf(discontinuedLocalDate);
 	}
 	
 	public void quit() {

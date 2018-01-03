@@ -1,5 +1,6 @@
 package DAO;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public class ComputerDaoImplementation implements ComputerDao {
 	private static final String SQL_UPDATE_NAME = "UPDATE computer SET name = ? WHERE id = ?";
 	private static final String SQL_UPDATE_COMPANY = "UPDATE computer SET company_id = ? WHERE id = ?";
 	private static final String SQL_UPDATE_INTRODUCED = "UPDATE computer SET introduced = ? WHERE id = ?";
-	private static final String SQL_UPDATE_DISCONTINUED = "UPDATE computer SET discontinued = ? WHERE id = ?";
+	private static final String SQL_UPDATE_DISCONTINUED = "DELETE computer SET discontinued = ? WHERE id = ?";
 	
 	public ComputerDaoImplementation(DAOFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -76,6 +77,60 @@ public class ComputerDaoImplementation implements ComputerDao {
 			connection = (Connection) daoFactory.getConnection();
 			Object[] objects = { name , id };
 			preparedStatement = DaoUtilitary.initializePreparedRequest(connection, SQL_UPDATE_NAME, true, objects);
+			int result = preparedStatement.executeUpdate();
+			System.out.println(result);
+		} catch ( SQLException e ) {
+	        throw new DAOException( e );
+	    } finally {
+	        //fermeturesSilencieuses( valeursAutoGenerees, preparedStatement, connexion );
+	    }
+	}
+	
+	@Override
+	public void updateIntroduced(int id, Date introduced) {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		Computer computer =null;
+		try {
+			connection = (Connection) daoFactory.getConnection();
+			Object[] objects = { introduced , id };
+			preparedStatement = DaoUtilitary.initializePreparedRequest(connection, SQL_UPDATE_INTRODUCED, true, objects);
+			int result = preparedStatement.executeUpdate();
+			System.out.println(result);
+		} catch ( SQLException e ) {
+	        throw new DAOException( e );
+	    } finally {
+	        //fermeturesSilencieuses( valeursAutoGenerees, preparedStatement, connexion );
+	    }
+	}
+	
+	@Override
+	public void updateDiscontinued(int id, Date discontinued) {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		Computer computer =null;
+		try {
+			connection = (Connection) daoFactory.getConnection();
+			Object[] objects = { discontinued , id };
+			preparedStatement = DaoUtilitary.initializePreparedRequest(connection, SQL_UPDATE_DISCONTINUED, true, objects);
+			int result = preparedStatement.executeUpdate();
+			System.out.println(result);
+		} catch ( SQLException e ) {
+	        throw new DAOException( e );
+	    } finally {
+	        //fermeturesSilencieuses( valeursAutoGenerees, preparedStatement, connexion );
+	    }
+	}
+	
+	@Override
+	public void updateCompany(int idComputer, int idCompany) {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		Computer computer =null;
+		try {
+			connection = (Connection) daoFactory.getConnection();
+			Object[] objects = { idCompany , idComputer };
+			preparedStatement = DaoUtilitary.initializePreparedRequest(connection, SQL_UPDATE_COMPANY, true, objects);
 			int result = preparedStatement.executeUpdate();
 			System.out.println(result);
 		} catch ( SQLException e ) {
