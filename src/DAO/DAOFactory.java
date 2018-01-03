@@ -72,4 +72,8 @@ public class DAOFactory {
     public CompanyDao getCompanyDao() {
         return new CompanyDaoImplementation(this);
     }
+    
+    public ComputerDao getComputerDao() {
+    	return new ComputerDaoImplementation(this);
+    }
 }

@@ -2,6 +2,7 @@ package DAO;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
@@ -19,7 +20,7 @@ public class CompanyDaoImplementation implements CompanyDao {
 	}
 	
 	@Override
-	public void findAll() throws DAOException {
+	public ArrayList<Company> findAll() throws DAOException {
 		Connection connection = null;
 	    PreparedStatement preparedStatement = null;
 	    ResultSet valeursAutoGenerees = null;
@@ -28,24 +29,17 @@ public class CompanyDaoImplementation implements CompanyDao {
 	    	connection = (Connection) daoFactory.getConnection();
 	        preparedStatement = DaoUtilitary.initializePreparedRequest( connection, SQL_SELECT, true );
 	        ResultSet resultSet = preparedStatement.executeQuery();
+	        ArrayList<Company> companies = new ArrayList<>();
 	        while (resultSet.next()) {
-	        	String companyName = resultSet.getString("name");
-	        	System.out.println(companyName);
+	        	Company company = new Company(resultSet.getString("name"));
+	        	companies.add(company);
 	        }
+	        return companies;
 	    } catch ( SQLException e ) {
 	        throw new DAOException( e );
 	    } finally {
 	        //fermeturesSilencieuses( valeursAutoGenerees, preparedStatement, connexion );
 	    }
-	}
-	
-	@Override
-	public void create(Company company) throws DAOException {
-	}
-	
-	@Override
-	public Company find(String name) throws DAOException {
-		return null;
 	}
 	
 	private static Company map( ResultSet resultSet ) throws SQLException {
