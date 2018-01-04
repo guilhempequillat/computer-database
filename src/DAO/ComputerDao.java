@@ -14,7 +14,11 @@ public interface ComputerDao {
 	
 	void updateIntroduced(int id, Date introduced);
 	
-	void updateDiscontinued(int id, Date introduced);
+	void updateDiscontinued(int id, Date discontinued);
 	
 	void updateCompany(int idComputer, int idCompany);
+	
+	void create( String name, Date introduced, Date discontinued, int idCompany);
+	
+	void delete( int idComputer );
 }

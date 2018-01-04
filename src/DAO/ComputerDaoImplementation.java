@@ -20,6 +20,8 @@ public class ComputerDaoImplementation implements ComputerDao {
 	private static final String SQL_UPDATE_COMPANY = "UPDATE computer SET company_id = ? WHERE id = ?";
 	private static final String SQL_UPDATE_INTRODUCED = "UPDATE computer SET introduced = ? WHERE id = ?";
 	private static final String SQL_UPDATE_DISCONTINUED = "DELETE computer SET discontinued = ? WHERE id = ?";
+	private static final String SQL_CREATE = "INSERT INTO computer ( name , discontinued ,introduced , company_id ) VALUES (?,?,?,?) ";
+	private static final String SQL_DELETE = "DELETE FROM computer WHERE id = ?";
 	
 	public ComputerDaoImplementation(DAOFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -131,6 +133,42 @@ public class ComputerDaoImplementation implements ComputerDao {
 			connection = (Connection) daoFactory.getConnection();
 			Object[] objects = { idCompany , idComputer };
 			preparedStatement = DaoUtilitary.initializePreparedRequest(connection, SQL_UPDATE_COMPANY, true, objects);
+			int result = preparedStatement.executeUpdate();
+			System.out.println(result);
+		} catch ( SQLException e ) {
+	        throw new DAOException( e );
+	    } finally {
+	        //fermeturesSilencieuses( valeursAutoGenerees, preparedStatement, connexion );
+	    }
+	}
+	
+	@Override
+	public void create(String name, Date introduced, Date discontinued , int idCompany) {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		Computer computer =null;
+		try {
+			connection = (Connection) daoFactory.getConnection();
+			Object[] objects = { name, discontinued, introduced, idCompany };
+			preparedStatement = DaoUtilitary.initializePreparedRequest(connection, SQL_CREATE, true, objects);
+			int result = preparedStatement.executeUpdate();
+			System.out.println(result);
+		} catch ( SQLException e ) {
+	        throw new DAOException( e );
+	    } finally {
+	        //fermeturesSilencieuses( valeursAutoGenerees, preparedStatement, connexion );
+	    }
+	}
+	
+	@Override
+	public void delete(int idComputer) {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		Computer computer =null;
+		try {
+			connection = (Connection) daoFactory.getConnection();
+			Object[] objects = { idComputer };
+			preparedStatement = DaoUtilitary.initializePreparedRequest(connection, SQL_DELETE, true, objects);
 			int result = preparedStatement.executeUpdate();
 			System.out.println(result);
 		} catch ( SQLException e ) {

@@ -177,7 +177,9 @@ public class CommandLineInterface {
 	}
 	
 	public void deleteAComputer() {
-		
+		System.out.println("\nPlease entrer the computer's id : ");
+		int idComputer = Integer.parseInt(readUserInput());
+		this.computerDaoImplementation.delete(idComputer);
 	}
 	
 	public void createAComputer() {
@@ -189,6 +191,9 @@ public class CommandLineInterface {
 		System.out.println("\nPlease enter the Discontined date : ");
 		LocalDate discontinuedLocalDate = enterDate();
 		java.sql.Date discontinuedDate = java.sql.Date.valueOf(discontinuedLocalDate);
+		System.out.println("\nPlease enter the Company's id : ");
+		int idCompany = Integer.parseInt(readUserInput());
+		this.computerDaoImplementation.create(name, introducedDate, discontinuedDate, idCompany);
 	}
 	
 	public void quit() {
