@@ -1,6 +1,10 @@
 package ui;
 
 import java.text.DateFormat;
+
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.LoggerContext;
+import org.slf4j.LoggerFactory;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -21,8 +25,10 @@ public class CommandLineInterface {
 	private CompanyDaoImplementation companyDaoImplementation;
 	private ComputerDaoImplementation computerDaoImplementation;
 	private boolean notQuit = true; 
+	private Logger logger = (Logger) LoggerFactory.getLogger("Commande line interface");
 	
 	public CommandLineInterface() {
+		logger.info("test");
 		this.daoFactory = DAOFactory.getInstance();
 		this.companyDaoImplementation = (CompanyDaoImplementation) this.daoFactory.getCompanyDao();
 		this.computerDaoImplementation = (ComputerDaoImplementation) this.daoFactory.getComputerDao();
@@ -77,6 +83,8 @@ public class CommandLineInterface {
 			case "7" :
 				quit();
 				break;
+			default : 
+				System.out.println("\nInsert a number between 1 and 7");
 		}
 	}
 	
@@ -96,16 +104,18 @@ public class CommandLineInterface {
 	
 	public void showComputerDetails() {
 		System.out.println("\nEntrer the computer's id you want to show : ");
-		String input = readUserInput();
-		int inputInt = Integer.parseInt(input);
+		int inputInt = readUserInputInt();
 		Computer computer = this.computerDaoImplementation.find(inputInt);
-		System.out.println(computer);
+		if(computer != null) {
+			System.out.println(computer);
+		} else {
+			System.out.println("\nThere is no computer for this id");
+		}
 	}
 	
 	public void updateAComputer() {
 		System.out.println("\nEntrer the computer's id you want to update : ");
-		String input = readUserInput();
-		int inputInt = Integer.parseInt(input);
+		int inputInt = readUserInputInt();
 		Computer computer = this.computerDaoImplementation.find(inputInt);
 		System.out.println("\n"+computer);
 		chooseParameterToUpdate(inputInt);		
@@ -117,8 +127,7 @@ public class CommandLineInterface {
 		System.out.println("	2) Introduced"); 
 		System.out.println("	3) Discontinued"); 
 		System.out.println("	4) Company id"); 
-		String input = readUserInput();
-		int inputInt = Integer.parseInt(input);
+		int inputInt = readUserInputInt();
 		determineTheUpdateChoise(inputInt, idComputer);
 		
 	}
@@ -137,6 +146,8 @@ public class CommandLineInterface {
 			case 4 :
 				updateCompanyId(idComputer);
 				break;
+			default : 
+				System.out.println("\nInsert a number between 1 and 4");
 		}
 	}
 	
@@ -147,38 +158,38 @@ public class CommandLineInterface {
 	}
 	
 	public void updateIntroduced(int idComputer) {
-		LocalDate localDate = enterDate();
+		LocalDate localDate = readUserInputDate();
 		java.sql.Date sqlDate = java.sql.Date.valueOf(localDate);
 		this.computerDaoImplementation.updateIntroduced(idComputer, sqlDate);
 	}
 	
-	public LocalDate enterDate() {
+	public LocalDate readUserInputDate() {
 		System.out.println("\nEnter the Year : ");
-		int year = Integer.parseInt(readUserInput());
+		int year = readUserYear();
 		System.out.println("\nEnter the Month : ");
-		int month = Integer.parseInt(readUserInput());
+		int month = readUserMonth();
 		System.out.println("\nEnter the Day : ");
-		int day = Integer.parseInt(readUserInput());
+		int day = readUserDay();
 		LocalDate localDate = LocalDate.of(year, month, day);
 		return localDate;
 		
 	}
 	
 	public void updateDiscontinued(int idComputer) {
-		LocalDate localDate = enterDate();
+		LocalDate localDate = readUserInputDate();
 		java.sql.Date sqlDate = java.sql.Date.valueOf(localDate);
 		this.computerDaoImplementation.updateDiscontinued(idComputer, sqlDate);
 	}
 	
 	public void updateCompanyId(int idComputer) {
 		System.out.println("\nEnter the company id :");
-		int idCompany = Integer.parseInt(readUserInput());
+		int idCompany = readUserInputInt();
 		this.computerDaoImplementation.updateCompany(idComputer, idCompany);
 	}
 	
 	public void deleteAComputer() {
 		System.out.println("\nPlease entrer the computer's id : ");
-		int idComputer = Integer.parseInt(readUserInput());
+		int idComputer = readUserInputInt();
 		this.computerDaoImplementation.delete(idComputer);
 	}
 	
@@ -186,17 +197,77 @@ public class CommandLineInterface {
 		System.out.println("\nPlease enter the Computer's name :");
 		String name = readUserInput();
 		System.out.println("\nPlease enter the Introduced date : ");
-		LocalDate introducedLocalDate = enterDate();
+		LocalDate introducedLocalDate = readUserInputDate();
 		java.sql.Date introducedDate = java.sql.Date.valueOf(introducedLocalDate);
 		System.out.println("\nPlease enter the Discontined date : ");
-		LocalDate discontinuedLocalDate = enterDate();
+		LocalDate discontinuedLocalDate = readUserInputDate();
 		java.sql.Date discontinuedDate = java.sql.Date.valueOf(discontinuedLocalDate);
 		System.out.println("\nPlease enter the Company's id : ");
-		int idCompany = Integer.parseInt(readUserInput());
+		int idCompany = readUserInputInt();
 		this.computerDaoImplementation.create(name, introducedDate, discontinuedDate, idCompany);
 	}
 	
 	public void quit() {
 		this.notQuit = false;
+	}
+	
+	public int readUserInputInt() {
+		boolean correctInput = true;
+		int input=0;
+		do {
+			try {
+				input = Integer.parseInt(readUserInput());
+				correctInput = true;
+			}catch( NumberFormatException e ) {
+				correctInput = false;
+				System.out.println("\nPlease insert a number");
+			}
+		} while ( !correctInput );
+		return input;
+	}
+
+	public int readUserYear() {
+		boolean correctInput = true;
+		int input = 1;
+		do {
+			input = readUserInputInt();
+			if(input > 1970 && input < 2038) {
+				correctInput = true;
+			} else {
+				correctInput = false;
+				System.out.println("Invalid Year");
+			}
+		} while(!correctInput);
+		return input;
+	}
+	
+	public int readUserMonth() {
+		boolean correctInput = true;
+		int input = 1;
+		do {
+			input = readUserInputInt();
+			if(input > 0 && input < 13) {
+				correctInput = true;
+			} else {
+				correctInput = false;
+				System.out.println("Invalid Month");
+			}
+		} while(!correctInput);
+		return input;
+	}
+	
+	public int readUserDay() {
+		boolean correctInput = true;
+		int input = 1;
+		do {
+			input = readUserInputInt();
+			if(input > 0 && input < 32) {
+				correctInput = true;
+			} else {
+				correctInput = false;
+				System.out.println("Invalid Day");
+			}
+		} while(!correctInput);
+		return input;
 	}
 }
