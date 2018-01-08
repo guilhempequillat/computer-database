@@ -3,10 +3,7 @@ package ui;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Scanner;
-
 import org.slf4j.LoggerFactory;
-
 import DAO.CompanyDaoImplementation;
 import DAO.ComputerDaoImplementation;
 import DAO.DAOFactory;
@@ -16,8 +13,6 @@ import model.Computer;
 
 public class Page {
 	
-	private static final int NUMBER_IMAGES_PER_PAGES = 10;
-	private CommandLineInterface commandLineInterface;
 	private CommandLineInput commandLineInput;
 	private DAOFactory daoFactory;
 	private CompanyDaoImplementation companyDaoImplementation;
@@ -36,6 +31,7 @@ public class Page {
 	
 	public void menu() {
 		System.out.println("-------------------------------------");
+		System.out.println("|                           	    |");
 		System.out.println("|               MENU           	    |");
 		System.out.println("|                            	    |");
 		System.out.println("|   1- List computers        	    |");
@@ -186,20 +182,32 @@ public class Page {
 	}
 	
 	public void createAComputer() {
+		boolean inputCorrect = false;
+		java.sql.Date introducedDate, discontinuedDate;
+		String name;
+		int idCompany;
 		System.out.println("\nPlease enter the Computer's name :");
-		String name = commandLineInput.readUserInput();
-		System.out.println("\nPlease enter the Introduced date : ");
-		LocalDate introducedLocalDate = commandLineInput.readUserInputDate();
-		java.sql.Date introducedDate = java.sql.Date.valueOf(introducedLocalDate);
-		System.out.println("\nPlease enter the Discontined date : ");
-		LocalDate discontinuedLocalDate = commandLineInput.readUserInputDate();
-		java.sql.Date discontinuedDate = java.sql.Date.valueOf(discontinuedLocalDate);
-		System.out.println("\nPlease enter the Company's id : ");
-		int idCompany = commandLineInput.readUserInputInt();
-		this.computerDaoImplementation.create(name, introducedDate, discontinuedDate, idCompany);
+		name = commandLineInput.readUserInput();
+		do {
+			System.out.println("\nPlease enter the Introduced date : ");
+			LocalDate introducedLocalDate = commandLineInput.readUserInputDate();
+			introducedDate = java.sql.Date.valueOf(introducedLocalDate);
+			System.out.println("\nPlease enter the Discontined date : ");
+			LocalDate discontinuedLocalDate = commandLineInput.readUserInputDate();
+			discontinuedDate = java.sql.Date.valueOf(discontinuedLocalDate);
+			System.out.println("\nPlease enter the Company's id : ");
+			if(introducedLocalDate.compareTo(discontinuedLocalDate) == -1) {
+				inputCorrect = true;
+			} else {
+				inputCorrect = false;
+			}
+		}while( !inputCorrect );
+		idCompany = commandLineInput.readUserInputInt();
+		this.computerDaoImplementation.create( name, introducedDate, discontinuedDate, idCompany );
 	}
 	
 	public void quit() {
 		this.notQuit = false;
+		this.commandLineInput.closeScanner();
 	}
 }
