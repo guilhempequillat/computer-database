@@ -2,41 +2,18 @@ package model;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;;
+import java.sql.Timestamp;
+import java.time.LocalDate;;
 
 public class Computer {
 	private Long id;
 	private String name;
-	private Timestamp introduced;
-	private Timestamp discontinued;
+	private LocalDate introduced;
+	private LocalDate discontinued;
 	private Long company_id;
 	private Company company;
 	
-	public Computer(String name, Timestamp introduced, Timestamp discontinued, Long company_id) {
-		this.name = name;
-		this.introduced = introduced;
-		this.discontinued = discontinued;
-		this.company_id = company_id;
-	}
-	
-	public Computer(ResultSet resultSet) throws SQLException {
-		this.id = resultSet.getLong("id");
-		if(resultSet.getString("name") != null) {
-			this.name = resultSet.getString("name");
-		}
-		if(resultSet.getTimestamp("introduced") != null) {
-			this.introduced = resultSet.getTimestamp("introduced");
-		}
-		if(resultSet.getTimestamp("discontinued") != null) {
-			this.discontinued = resultSet.getTimestamp("discontinued");
-		}
-		if((Long) resultSet.getLong("company_id") != null) {
-			this.company_id = resultSet.getLong("company_id");
-		}
-		if(resultSet.getString("company.name") != null) {
-			this.company = new Company(resultSet.getString("company.name"));
-		}
-	}
+	public Computer() {}
 	
 	public Long getId() {
 		return id;
@@ -50,16 +27,16 @@ public class Computer {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Timestamp getIntroduced() {
+	public LocalDate getIntroduced() {
 		return introduced;
 	}
-	public void setIntroduced(Timestamp introduced) {
+	public void setIntroduced(LocalDate introduced) {
 		this.introduced = introduced;
 	}
-	public Timestamp getDiscontinued() {
+	public LocalDate getDiscontinued() {
 		return discontinued;
 	}
-	public void setDiscontinued(Timestamp discontinued) {
+	public void setDiscontinued(LocalDate discontinued) {
 		this.discontinued = discontinued;
 	}
 	public Long getCompany_id() {
@@ -68,7 +45,13 @@ public class Computer {
 	public void setCompany_id(Long company_id) {
 		this.company_id = company_id;
 	}
-	
+	public Company getCompany() {
+		return company;
+	}
+
+	public void setCompany(Company company) {
+		this.company = company;
+	}
 	public String toString() {
 		String strName = "NULL";
 		String strIntroduced = "NULL";

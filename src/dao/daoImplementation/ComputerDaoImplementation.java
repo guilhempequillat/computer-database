@@ -12,6 +12,7 @@ import dao.DaoFactory;
 import dao.DaoUtilitary;
 import dao.daoInterface.ComputerDao;
 import exception.DAOException;
+import mapper.ComputerMapper;
 import model.Computer;
 
 public class ComputerDaoImplementation implements ComputerDao {
@@ -27,6 +28,7 @@ public class ComputerDaoImplementation implements ComputerDao {
 	private static final String SQL_DELETE              = "DELETE FROM computer WHERE id = ?";
 	private DaoFactory daoFactory;
 	private static Logger logger = (Logger) LoggerFactory.getLogger("ComputerDao");
+	private ComputerMapper computerMapper = ComputerMapper.getComputerMapper();
 	
 	public ComputerDaoImplementation(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -43,7 +45,7 @@ public class ComputerDaoImplementation implements ComputerDao {
 	        resultSet = preparedStatement.executeQuery();
 	        ArrayList<Computer> computers = new ArrayList<>();
 	        while (resultSet.next()) {
-	        	Computer computer = new Computer(resultSet);
+	        	Computer computer = computerMapper.mapComputer(resultSet);
 	        	computers.add(computer);
 	        }
 	        return computers;
@@ -66,7 +68,7 @@ public class ComputerDaoImplementation implements ComputerDao {
 			preparedStatement = DaoUtilitary.initializePreparedRequest(connection, SQL_FIND, true, objects);
 			resultSet = preparedStatement.executeQuery();
 			if(resultSet.next()) {
-				computer = new Computer(resultSet);
+				computer = computerMapper.mapComputer(resultSet);
 			}
 			return computer;
 		} catch ( SQLException e ) {

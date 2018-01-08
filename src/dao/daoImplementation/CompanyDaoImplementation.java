@@ -10,12 +10,14 @@ import dao.DaoFactory;
 import dao.DaoUtilitary;
 import dao.daoInterface.CompanyDao;
 import exception.DAOException;
+import mapper.CompanyMapper;
 import model.Company;
 
 public class CompanyDaoImplementation implements CompanyDao {
 
 	private DaoFactory daoFactory;
 	private static final String SQL_SELECT = "SELECT * FROM company";
+	private CompanyMapper companyMapper = CompanyMapper.getCompanyMapper();
 	
 	public CompanyDaoImplementation(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -31,7 +33,7 @@ public class CompanyDaoImplementation implements CompanyDao {
 	        ResultSet resultSet = preparedStatement.executeQuery();
 	        ArrayList<Company> companies = new ArrayList<>();
 	        while (resultSet.next()) {
-	        	Company company = new Company(resultSet.getString("name"));
+	        	Company company = companyMapper.mapCompany(resultSet);
 	        	companies.add(company);
 	        }
 	        return companies;
