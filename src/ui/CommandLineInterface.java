@@ -4,6 +4,12 @@ import java.text.DateFormat;
 
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
+import dao.DaoFactory;
+import dao.daoImplementation.CompanyDaoImplementation;
+import dao.daoImplementation.ComputerDaoImplementation;
+import dao.daoInterface.CompanyDao;
+import dao.daoInterface.ComputerDao;
+
 import org.slf4j.LoggerFactory;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -11,17 +17,13 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 import com.mysql.jdbc.Connection;
-import DAO.CompanyDao;
-import DAO.CompanyDaoImplementation;
-import DAO.ComputerDao;
-import DAO.ComputerDaoImplementation;
-import DAO.DAOFactory;
+
 import model.Company;
 import model.Computer;
 
 public class CommandLineInterface {
 	
-	private DAOFactory daoFactory;
+	private DaoFactory daoFactory;
 	private CompanyDaoImplementation companyDaoImplementation;
 	private ComputerDaoImplementation computerDaoImplementation;
 	private boolean notQuit = true; 
@@ -29,7 +31,7 @@ public class CommandLineInterface {
 	
 	public CommandLineInterface() {
 		logger.info("test");
-		this.daoFactory = DAOFactory.getInstance();
+		this.daoFactory = DaoFactory.getInstance();
 		this.companyDaoImplementation = (CompanyDaoImplementation) this.daoFactory.getCompanyDao();
 		this.computerDaoImplementation = (ComputerDaoImplementation) this.daoFactory.getComputerDao();
 		commandLineInterfaceWorking();

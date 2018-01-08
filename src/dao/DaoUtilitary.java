@@ -1,4 +1,4 @@
-package DAO;
+package dao;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -31,44 +31,47 @@ public class DaoUtilitary {
     	return preparedStatement;
     }
 	
-	public static void closeDao(Connection connection) {
+	public static void closeDaoConnection(Connection connection) {
 		if ( connection != null ) {
 	        try {
 	        	connection.close();
 	        } catch ( SQLException e ) {
 	            logger.warn("Connection close failed");
+	            logger.error(e.getMessage());
 	        }
 	    }
 	}
 	
-	public static void closeDao(ResultSet resultSet) {
+	public static void closeDaoResultSet(ResultSet resultSet) {
 		if ( resultSet != null ) {
 			try {
 				resultSet.close();
 			} catch ( SQLException e ) {
 				logger.warn("ResultSet close failed");
+				logger.error(e.getMessage());
 		    }
 		}
 	}
 	
-	public static void closeDao(PreparedStatement statement) {
+	public static void closeDaoPreparedStatement(PreparedStatement statement) {
 	    if ( statement != null ) {
 	        try {
 	            statement.close();
 	        } catch ( SQLException e ) {
 	        	logger.warn("PreparedStatement close failed");
+	        	logger.error(e.getMessage());
 	        }
 	    }
 	}
 	
 	public static void closeDao(PreparedStatement statement, Connection connection) {
-		closeDao(statement);
-		closeDao(connection);
+		closeDaoPreparedStatement(statement);
+		closeDaoConnection(connection);
 	}
 	
 	public static void closeDao(ResultSet resultSet, PreparedStatement statement, Connection connection) {
-		closeDao(resultSet);
-		closeDao(statement);
-		closeDao(connection);
+		closeDaoResultSet(resultSet);
+		closeDaoPreparedStatement(statement);
+		closeDaoConnection(connection);
 	}
 }

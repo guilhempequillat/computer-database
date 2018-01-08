@@ -4,27 +4,28 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import org.slf4j.LoggerFactory;
-import DAO.CompanyDaoImplementation;
-import DAO.ComputerDaoImplementation;
-import DAO.DAOFactory;
+
 import ch.qos.logback.classic.Logger;
+import dao.DaoFactory;
+import dao.daoInterface.CompanyDao;
+import dao.daoInterface.ComputerDao;
 import model.Company;
 import model.Computer;
 
 public class Page {
 	
 	private CommandLineInput commandLineInput;
-	private DAOFactory daoFactory;
-	private CompanyDaoImplementation companyDaoImplementation;
-	private ComputerDaoImplementation computerDaoImplementation;
+	private DaoFactory daoFactory;
+	private CompanyDao companyDao;
+	private ComputerDao computerDao;
 	private boolean notQuit = true; 
 	private Logger logger = (Logger) LoggerFactory.getLogger("Page");
 	
 	public Page () {
-		this.daoFactory = DAOFactory.getInstance();
+		this.daoFactory = DaoFactory.getInstance();
 		this.commandLineInput = new CommandLineInput();
-		this.companyDaoImplementation = (CompanyDaoImplementation) this.daoFactory.getCompanyDao();
-		this.computerDaoImplementation = (ComputerDaoImplementation) this.daoFactory.getComputerDao();
+		this.companyDao = (CompanyDao) this.daoFactory.getCompanyDao();
+		this.computerDao = (ComputerDao) this.daoFactory.getComputerDao();
 		commandLineInterfaceWorking();
 		
 	}
@@ -49,7 +50,7 @@ public class Page {
 		while(this.notQuit) {
 			menu();
 			String input = commandLineInput.readUserInput();
-			executeChoise(input);
+			executeChoice(input);
 			try {
 			Runtime.getRuntime().exec("clear" );
 			}catch(IOException e) {
@@ -58,7 +59,7 @@ public class Page {
 		}
 	}
 	
-	public void executeChoise(String input) {
+	public void executeChoice(String input) {
 		switch (input) {
 			case "1" :
 				listComputer();
@@ -87,14 +88,14 @@ public class Page {
 	}
 	
 	public void listComputer() {
-		ArrayList<Computer> computers = this.computerDaoImplementation.findAll();
+		ArrayList<Computer> computers = this.computerDao.findAll();
 		for(int i = 0 ; i < computers.size() ; i++) {
 			System.out.println(computers.get(i));
 		}
 	}
 	
 	public void listCompanies() {
-		ArrayList<Company> companies = this.companyDaoImplementation.findAll();
+		ArrayList<Company> companies = this.companyDao.findAll();
 		for(int i = 0 ; i < companies.size() ; i++) {
 			System.out.println(companies.get(i));
 		}
@@ -103,7 +104,7 @@ public class Page {
 	public void showComputerDetails() {
 		System.out.println("\nEntrer the computer's id you want to show : ");
 		int inputInt = commandLineInput.readUserInputInt();
-		Computer computer = this.computerDaoImplementation.find(inputInt);
+		Computer computer = this.computerDao.find(inputInt);
 		if(computer != null) {
 			System.out.println(computer);
 		} else {
@@ -114,7 +115,7 @@ public class Page {
 	public void updateAComputer() {
 		System.out.println("\nEntrer the computer's id you want to update : ");
 		int inputInt = commandLineInput.readUserInputInt();
-		Computer computer = this.computerDaoImplementation.find(inputInt);
+		Computer computer = this.computerDao.find(inputInt);
 		System.out.println("\n"+computer);
 		chooseParameterToUpdate(inputInt);		
 	}
@@ -152,13 +153,13 @@ public class Page {
 	public void updateName(int idComputer) {
 		System.out.println("Enter the new name : ");
 		String name = commandLineInput.readUserInput();
-		this.computerDaoImplementation.updateName(idComputer, name);
+		this.computerDao.updateName(idComputer, name);
 	}
 	
 	public void updateIntroduced(int idComputer) {
 		LocalDate localDate = commandLineInput.readUserInputDate();
 		java.sql.Date sqlDate = java.sql.Date.valueOf(localDate);
-		this.computerDaoImplementation.updateIntroduced(idComputer, sqlDate);
+		this.computerDao.updateIntroduced(idComputer, sqlDate);
 	}
 	
 	
@@ -166,19 +167,19 @@ public class Page {
 	public void updateDiscontinued(int idComputer) {
 		LocalDate localDate = commandLineInput.readUserInputDate();
 		java.sql.Date sqlDate = java.sql.Date.valueOf(localDate);
-		this.computerDaoImplementation.updateDiscontinued(idComputer, sqlDate);
+		this.computerDao.updateDiscontinued(idComputer, sqlDate);
 	}
 	
 	public void updateCompanyId(int idComputer) {
 		System.out.println("\nEnter the company id :");
 		int idCompany = commandLineInput.readUserInputInt();
-		this.computerDaoImplementation.updateCompany(idComputer, idCompany);
+		this.computerDao.updateCompany(idComputer, idCompany);
 	}
 	
 	public void deleteAComputer() {
 		System.out.println("\nPlease entrer the computer's id : ");
 		int idComputer = commandLineInput.readUserInputInt();
-		this.computerDaoImplementation.delete(idComputer);
+		this.computerDao.delete(idComputer);
 	}
 	
 	public void createAComputer() {
@@ -203,7 +204,7 @@ public class Page {
 			}
 		}while( !inputCorrect );
 		idCompany = commandLineInput.readUserInputInt();
-		this.computerDaoImplementation.create( name, introducedDate, discontinuedDate, idCompany );
+		this.computerDao.create( name, introducedDate, discontinuedDate, idCompany );
 	}
 	
 	public void quit() {

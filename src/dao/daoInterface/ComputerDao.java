@@ -1,4 +1,4 @@
-package DAO;
+package dao.daoInterface;
 
 import java.sql.Date;
 import java.util.ArrayList;

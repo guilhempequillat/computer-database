@@ -1,4 +1,4 @@
-package DAO;
+package dao;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,8 +9,12 @@ import java.util.Properties;
 import exception.DAOConfigurationException;
 import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Logger;
+import dao.daoImplementation.CompanyDaoImplementation;
+import dao.daoImplementation.ComputerDaoImplementation;
+import dao.daoInterface.CompanyDao;
+import dao.daoInterface.ComputerDao;
 
-public class DAOFactory {
+public class DaoFactory {
 
     private static final String PROPERTIES_FILE          = "DAO/dao.properties";
     private static final String PROPERTY_URL             = "url";
@@ -22,7 +26,7 @@ public class DAOFactory {
     private String password;
     private static Logger logger = (Logger) LoggerFactory.getLogger("DaoFactory");
 
-    DAOFactory( String url, String username, String password ) {
+    DaoFactory( String url, String username, String password ) {
         this.url = url;
         this.username = username;
         this.password = password;
@@ -34,7 +38,7 @@ public class DAOFactory {
      * @return instance
      * @throws DAOConfigurationException
      */
-    public static DAOFactory getInstance() throws DAOConfigurationException {
+    public static DaoFactory getInstance() throws DAOConfigurationException {
         Properties properties = new Properties();
         String url;
         String driver;
@@ -62,11 +66,11 @@ public class DAOFactory {
         } catch ( ClassNotFoundException e ) {
             throw new DAOConfigurationException( "Driver not found.", e );
         }
-        DAOFactory instance = new DAOFactory( url, userName, password );
+        DaoFactory instance = new DaoFactory( url, userName, password );
         return instance;
     }
 
-    Connection getConnection() throws SQLException {
+    public Connection getConnection() throws SQLException {
     	logger.info("Connection with the database");
         return DriverManager.getConnection( url, username, password );
     }

@@ -1,19 +1,23 @@
-package DAO;
+package dao.daoImplementation;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
+
+import dao.DaoFactory;
+import dao.DaoUtilitary;
+import dao.daoInterface.CompanyDao;
 import exception.DAOException;
 import model.Company;
 
 public class CompanyDaoImplementation implements CompanyDao {
 
-	private DAOFactory daoFactory;
+	private DaoFactory daoFactory;
 	private static final String SQL_SELECT = "SELECT * FROM company";
 	
-	public CompanyDaoImplementation(DAOFactory daoFactory) {
+	public CompanyDaoImplementation(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
 	

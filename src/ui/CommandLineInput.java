@@ -7,6 +7,12 @@ import ch.qos.logback.classic.Logger;
 
 public class CommandLineInput {
 	
+	private final int MIN_YEAR  = 1970;
+	private final int MAX_YEAR  = 2038;
+	private final int MIN_MONTH = 1;
+	private final int MAX_MONTH = 12;
+	private final int MIN_DAY   = 1;
+	private final int MAX_DAY   = 31;
 	private Scanner sc;
 	private static Logger logger = (Logger) LoggerFactory.getLogger("CommandLineInput");
 	
@@ -40,7 +46,7 @@ public class CommandLineInput {
 		int input = 1;
 		do {
 			input = readUserInputInt();
-			if(input > 1970 && input < 2038) {
+			if(input > MIN_YEAR && input < MAX_YEAR) {
 				correctInput = true;
 			} else {
 				correctInput = false;
@@ -55,7 +61,7 @@ public class CommandLineInput {
 		int input = 1;
 		do {
 			input = readUserInputInt();
-			if(input > 0 && input < 13) {
+			if(input >= MIN_MONTH && input <= MAX_MONTH) {
 				correctInput = true;
 			} else {
 				correctInput = false;
@@ -70,7 +76,7 @@ public class CommandLineInput {
 		int input = 1;
 		do {
 			input = readUserInputInt();
-			if(input > 0 && input < 32) {
+			if(input >= MIN_DAY && input <= MAX_DAY) {
 				correctInput = true;
 			} else {
 				correctInput = false;

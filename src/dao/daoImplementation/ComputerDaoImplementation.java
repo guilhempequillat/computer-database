@@ -1,4 +1,4 @@
-package DAO;
+package dao.daoImplementation;
 
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -8,6 +8,9 @@ import org.slf4j.LoggerFactory;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
 import ch.qos.logback.classic.Logger;
+import dao.DaoFactory;
+import dao.DaoUtilitary;
+import dao.daoInterface.ComputerDao;
 import exception.DAOException;
 import model.Computer;
 
@@ -22,10 +25,10 @@ public class ComputerDaoImplementation implements ComputerDao {
 	private static final String SQL_UPDATE_DISCONTINUED = "DELETE computer SET discontinued = ? WHERE id = ?";
 	private static final String SQL_CREATE              = "INSERT INTO computer ( name , discontinued ,introduced , company_id ) VALUES (?,?,?,?) ";
 	private static final String SQL_DELETE              = "DELETE FROM computer WHERE id = ?";
-	private DAOFactory daoFactory;
+	private DaoFactory daoFactory;
 	private static Logger logger = (Logger) LoggerFactory.getLogger("ComputerDao");
 	
-	public ComputerDaoImplementation(DAOFactory daoFactory) {
+	public ComputerDaoImplementation(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
 	
@@ -47,7 +50,7 @@ public class ComputerDaoImplementation implements ComputerDao {
 	    } catch ( SQLException e ) {
 	        throw new DAOException( e );
 	    } finally {
-	        closeDao(resultSet,preparedStatement, connection);
+	    	DaoUtilitary.closeDao(resultSet,preparedStatement, connection);
 	    }
 	}
 	
@@ -69,7 +72,7 @@ public class ComputerDaoImplementation implements ComputerDao {
 		} catch ( SQLException e ) {
 	        throw new DAOException( e );
 	    } finally {
-	    	closeDao(resultSet,preparedStatement, connection);
+	    	DaoUtilitary.closeDao(resultSet,preparedStatement, connection);
 	    }
 	}
 	
@@ -85,7 +88,7 @@ public class ComputerDaoImplementation implements ComputerDao {
 		} catch ( SQLException e ) {
 	        throw new DAOException( e );
 	    } finally {
-	    	closeDao(preparedStatement, connection);
+	    	DaoUtilitary.closeDao(preparedStatement, connection);
 	    }
 	}
 	
@@ -101,7 +104,7 @@ public class ComputerDaoImplementation implements ComputerDao {
 		} catch ( SQLException e ) {
 	        throw new DAOException( e );
 	    } finally {
-	    	closeDao(preparedStatement, connection);
+	    	DaoUtilitary.closeDao(preparedStatement, connection);
 	    }
 	}
 	
@@ -117,7 +120,7 @@ public class ComputerDaoImplementation implements ComputerDao {
 		} catch ( SQLException e ) {
 	        throw new DAOException( e );
 	    } finally {
-	    	closeDao(preparedStatement, connection);
+	    	DaoUtilitary.closeDao(preparedStatement, connection);
 	    }
 	}
 	
@@ -133,7 +136,7 @@ public class ComputerDaoImplementation implements ComputerDao {
 		} catch ( SQLException e ) {
 	        throw new DAOException( e );
 	    } finally {
-	    	closeDao(preparedStatement, connection);
+	    	DaoUtilitary.closeDao(preparedStatement, connection);
 	    }
 	}
 	
@@ -149,7 +152,7 @@ public class ComputerDaoImplementation implements ComputerDao {
 		} catch ( SQLException e ) {
 	        throw new DAOException( e );
 	    } finally {
-	    	closeDao(preparedStatement, connection);
+	    	DaoUtilitary.closeDao(preparedStatement, connection);
 	    }
 	}
 	
@@ -165,48 +168,7 @@ public class ComputerDaoImplementation implements ComputerDao {
 		} catch ( SQLException e ) {
 	        throw new DAOException( e );
 	    } finally {
-	    	closeDao(preparedStatement, connection);
+	    	DaoUtilitary.closeDao(preparedStatement, connection);
 	    }
-	}
-	
-	public void closeDao(Connection connection) {
-		if ( connection != null ) {
-	        try {
-	        	connection.close();
-	        } catch ( SQLException e ) {
-	            logger.warn("Connection close failed");
-	        }
-	    }
-	}
-	
-	public void closeDao(ResultSet resultSet) {
-		if ( resultSet != null ) {
-			try {
-				resultSet.close();
-			} catch ( SQLException e ) {
-				logger.warn("ResultSet close failed");
-		    }
-		}
-	}
-	
-	public void closeDao(PreparedStatement statement) {
-	    if ( statement != null ) {
-	        try {
-	            statement.close();
-	        } catch ( SQLException e ) {
-	        	logger.warn("PreparedStatement close failed");
-	        }
-	    }
-	}
-	
-	public void closeDao(PreparedStatement statement, Connection connection) {
-		closeDao(statement);
-		closeDao(connection);
-	}
-	
-	public void closeDao(ResultSet resultSet, PreparedStatement statement, Connection connection) {
-		closeDao(resultSet);
-		closeDao(statement);
-		closeDao(connection);
 	}
 }
