@@ -11,6 +11,9 @@ import dao.daoInterface.CompanyDao;
 import dao.daoInterface.ComputerDao;
 import model.Company;
 import model.Computer;
+import service.serviceImplementation.CompanyServiceImplementation;
+import service.serviceImplementation.ComputerServiceImplementation;
+import service.serviceInterface.CompanyService;
 
 public class Page {
 	
@@ -20,14 +23,17 @@ public class Page {
 	private ComputerDao computerDao;
 	private boolean notQuit = true; 
 	private Logger logger = (Logger) LoggerFactory.getLogger("Page");
+	private CompanyServiceImplementation companyService;
+	private ComputerServiceImplementation computerService;
 	
 	public Page () {
 		this.daoFactory = DaoFactory.getInstance();
 		this.commandLineInput = new CommandLineInput();
 		this.companyDao = (CompanyDao) this.daoFactory.getCompanyDao();
 		this.computerDao = (ComputerDao) this.daoFactory.getComputerDao();
+		this.companyService = CompanyServiceImplementation.getInstance(companyDao);
+		this.computerService = ComputerServiceImplementation.getInstance(computerDao);
 		commandLineInterfaceWorking();
-		
 	}
 	
 	public void menu() {
@@ -51,11 +57,6 @@ public class Page {
 			menu();
 			String input = commandLineInput.readUserInput();
 			executeChoice(input);
-			try {
-			Runtime.getRuntime().exec("clear" );
-			}catch(IOException e) {
-				logger.error("IOExption");
-			}
 		}
 	}
 	
@@ -88,14 +89,14 @@ public class Page {
 	}
 	
 	public void listComputer() {
-		ArrayList<Computer> computers = this.computerDao.findAll();
+		ArrayList<Computer> computers = this.computerService.findAll();
 		for(int i = 0 ; i < computers.size() ; i++) {
 			System.out.println(computers.get(i));
 		}
 	}
 	
 	public void listCompanies() {
-		ArrayList<Company> companies = this.companyDao.findAll();
+		ArrayList<Company> companies = this.companyService.findAll();
 		for(int i = 0 ; i < companies.size() ; i++) {
 			System.out.println(companies.get(i));
 		}
@@ -104,7 +105,7 @@ public class Page {
 	public void showComputerDetails() {
 		System.out.println("\nEntrer the computer's id you want to show : ");
 		int inputInt = commandLineInput.readUserInputInt();
-		Computer computer = this.computerDao.find(inputInt);
+		Computer computer = this.computerService.find(inputInt);
 		if(computer != null) {
 			System.out.println(computer);
 		} else {
@@ -115,7 +116,7 @@ public class Page {
 	public void updateAComputer() {
 		System.out.println("\nEntrer the computer's id you want to update : ");
 		int inputInt = commandLineInput.readUserInputInt();
-		Computer computer = this.computerDao.find(inputInt);
+		Computer computer = this.computerService.find(inputInt);
 		System.out.println("\n"+computer);
 		chooseParameterToUpdate(inputInt);		
 	}
@@ -153,13 +154,13 @@ public class Page {
 	public void updateName(int idComputer) {
 		System.out.println("Enter the new name : ");
 		String name = commandLineInput.readUserInput();
-		this.computerDao.updateName(idComputer, name);
+		this.computerService.updateName(idComputer, name);
 	}
 	
 	public void updateIntroduced(int idComputer) {
 		LocalDate localDate = commandLineInput.readUserInputDate();
 		java.sql.Date sqlDate = java.sql.Date.valueOf(localDate);
-		this.computerDao.updateIntroduced(idComputer, sqlDate);
+		this.computerService.updateIntroduced(idComputer, sqlDate);
 	}
 	
 	
@@ -167,19 +168,19 @@ public class Page {
 	public void updateDiscontinued(int idComputer) {
 		LocalDate localDate = commandLineInput.readUserInputDate();
 		java.sql.Date sqlDate = java.sql.Date.valueOf(localDate);
-		this.computerDao.updateDiscontinued(idComputer, sqlDate);
+		this.computerService.updateDiscontinued(idComputer, sqlDate);
 	}
 	
 	public void updateCompanyId(int idComputer) {
 		System.out.println("\nEnter the company id :");
 		int idCompany = commandLineInput.readUserInputInt();
-		this.computerDao.updateCompany(idComputer, idCompany);
+		this.computerService.updateCompany(idComputer, idCompany);
 	}
 	
 	public void deleteAComputer() {
 		System.out.println("\nPlease entrer the computer's id : ");
 		int idComputer = commandLineInput.readUserInputInt();
-		this.computerDao.delete(idComputer);
+		this.computerService.delete(idComputer);
 	}
 	
 	public void createAComputer() {
@@ -204,7 +205,7 @@ public class Page {
 			}
 		}while( !inputCorrect );
 		idCompany = commandLineInput.readUserInputInt();
-		this.computerDao.create( name, introducedDate, discontinuedDate, idCompany );
+		this.computerService.create( name, introducedDate, discontinuedDate, idCompany );
 	}
 	
 	public void quit() {

@@ -23,6 +23,7 @@ public class CompanyMapper {
 			name = resultSet.getString("name");
 			company.setName(name);
 		}
+		
 		if((Long) resultSet.getLong("id") != null) {
 			id = resultSet.getLong("id");
 			company.setId(id);

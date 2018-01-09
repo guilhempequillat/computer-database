@@ -16,12 +16,13 @@ public class ComputerMapper{
 	}
 	
 	public Computer mapComputer(ResultSet resultSet) throws SQLException {
-		Long id = null, company_id;
+		Long id = null, company_id = null;
 		String name = null;
 		Timestamp discontinued = null , introduced = null;
 		Company company = null;
 		Computer computer = new Computer();
 		id = resultSet.getLong("id");
+		computer.setId(id);
 		if(resultSet.getString("name") != null) {
 			name = resultSet.getString("name");
 			computer.setName(name);
