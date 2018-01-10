@@ -35,7 +35,6 @@ public class ShowResultServlet extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		String action = (String) request.getParameter("action");
 		logger.debug(action);
 		actionChoice(action, request, response);
@@ -52,7 +51,7 @@ public class ShowResultServlet extends HttpServlet {
 				listCompany(request, response);
 				break;
 			case "computerDetails":
-
+				
 				break;
 			case "updateComputer":
 				
