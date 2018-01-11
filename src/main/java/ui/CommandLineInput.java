@@ -22,67 +22,96 @@ public class CommandLineInput {
 	}
 	
 	public String readUserInput() {
-		String input = sc.nextLine();
+		String input = getInputScanner();
 		return input;
+	}
+	
+	public String getInputScanner() {
+		return sc.nextLine();
 	}
 	
 	public int readUserInputInt() {
 		boolean correctInput = true;
 		int input=0;
+		int nbTries= 0;
 		do {
 			try {
+				System.out.println(input);
 				input = Integer.parseInt(readUserInput());
 				correctInput = true;
 			}catch( NumberFormatException e ) {
 				correctInput = false;
+				nbTries++;
 				System.out.println("\nPlease insert a number");
 			}
-		} while ( !correctInput );
+		} while ( !correctInput && nbTries < 3 );
+		if( nbTries > 2 ) {
+			logger.error("Bad input");
+			return -1;
+		}
 		return input;
 	}
 
 	public int readUserYear() {
 		boolean correctInput = true;
+		int nbTries= 0;
 		int input = 1;
 		do {
 			input = readUserInputInt();
 			if(input > MIN_YEAR && input < MAX_YEAR) {
 				correctInput = true;
 			} else {
+				nbTries++;
 				correctInput = false;
 				System.out.println("Invalid Year");
 			}
-		} while(!correctInput);
+		} while(!correctInput && nbTries < 3);
+		if( nbTries > 2 ) {
+			logger.error("Bad input");
+			return -1;
+		}
 		return input;
 	}
 	
 	public int readUserMonth() {
 		boolean correctInput = true;
 		int input = 1;
+		int nbTries= 0;
 		do {
 			input = readUserInputInt();
 			if(input >= MIN_MONTH && input <= MAX_MONTH) {
 				correctInput = true;
 			} else {
+				nbTries++;
 				correctInput = false;
 				System.out.println("Invalid Month");
 			}
-		} while(!correctInput);
+		} while(!correctInput && nbTries < 3);
+		if( nbTries > 2 ) {
+			logger.error("Bad input");
+			return -1;
+		}
 		return input;
 	}
 	
 	public int readUserDay() {
 		boolean correctInput = true;
 		int input = 1;
+		int nbTries = 0;
 		do {
 			input = readUserInputInt();
 			if(input >= MIN_DAY && input <= MAX_DAY) {
 				correctInput = true;
 			} else {
+				nbTries++;
 				correctInput = false;
 				System.out.println("Invalid Day");
 			}
-		} while(!correctInput);
+		} while(!correctInput && nbTries < 3);
+		if( nbTries > 2 ) {
+			logger.error("Bad input");
+			return -1;
+		}
 		return input;
 	}
 	
