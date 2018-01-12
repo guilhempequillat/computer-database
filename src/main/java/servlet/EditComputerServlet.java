@@ -16,6 +16,7 @@ import javax.websocket.Session;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
+import dao.DaoFactory;
 import dao.daoImplementation.ComputerDaoImplementation;
 import dao.daoInterface.ComputerDao;
 import model.Computer;
@@ -44,7 +45,7 @@ public class EditComputerServlet extends HttpServlet {
 	
 	public void updateDb(HttpServletRequest request) {
 		Computer computer = parseComputer(request);
-		ComputerDaoImplementation computerDao
+		ComputerDaoImplementation computerDao = new ComputerDaoImplementation(DaoFactory.getInstance());
 		ComputerServiceImplementation computerService =ComputerServiceImplementation.getInstance(computerDao);
 	}
 	
