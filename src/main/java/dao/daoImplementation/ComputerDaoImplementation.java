@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import org.slf4j.LoggerFactory;
 import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.PreparedStatement;
+import java.sql.PreparedStatement;
 import ch.qos.logback.classic.Logger;
 import dao.DaoFactory;
 import dao.DaoUtilitary;
@@ -27,6 +27,7 @@ public class ComputerDaoImplementation implements ComputerDao {
 	private static final String SQL_CREATE              = "INSERT INTO computer ( name , discontinued ,introduced , company_id ) VALUES (?,?,?,?) ";
 	private static final String SQL_DELETE              = "DELETE FROM computer WHERE id = ?";
 	private DaoFactory daoFactory;
+	private DaoUtilitary daoUtilitary= DaoUtilitary.getInstance();
 	private static Logger logger = (Logger) LoggerFactory.getLogger("ComputerDao");
 	private ComputerMapper computerMapper = ComputerMapper.getComputerMapper();
 	
@@ -41,7 +42,7 @@ public class ComputerDaoImplementation implements ComputerDao {
 	    ResultSet resultSet = null;
 	    try {
 	    	connection = (Connection) daoFactory.getConnection();
-	        preparedStatement = DaoUtilitary.initializePreparedRequest( connection, SQL_FIND_ALL, true );
+	        preparedStatement = daoUtilitary.initializePreparedRequest( connection, SQL_FIND_ALL, true );
 	        resultSet = preparedStatement.executeQuery();
 	        ArrayList<Computer> computers = new ArrayList<>();
 	        while (resultSet.next()) {
@@ -65,7 +66,7 @@ public class ComputerDaoImplementation implements ComputerDao {
 		try {
 			connection = (Connection) daoFactory.getConnection();
 			Object[] objects = { id };
-			preparedStatement = DaoUtilitary.initializePreparedRequest(connection, SQL_FIND, true, objects);
+			preparedStatement = daoUtilitary.initializePreparedRequest(connection, SQL_FIND, true, objects);
 			resultSet = preparedStatement.executeQuery();
 			if(resultSet.next()) {
 				computer = computerMapper.mapComputer(resultSet);
@@ -85,7 +86,7 @@ public class ComputerDaoImplementation implements ComputerDao {
 		try {
 			connection = (Connection) daoFactory.getConnection();
 			Object[] objects = { name , id };
-			preparedStatement = DaoUtilitary.initializePreparedRequest(connection, SQL_UPDATE_NAME, true, objects);
+			preparedStatement = daoUtilitary.initializePreparedRequest(connection, SQL_UPDATE_NAME, true, objects);
 			preparedStatement.executeUpdate();
 		} catch ( SQLException e ) {
 	        throw new DAOException( e );
@@ -101,7 +102,7 @@ public class ComputerDaoImplementation implements ComputerDao {
 		try {
 			connection = (Connection) daoFactory.getConnection();
 			Object[] objects = { introduced , id };
-			preparedStatement = DaoUtilitary.initializePreparedRequest(connection, SQL_UPDATE_INTRODUCED, true, objects);
+			preparedStatement = daoUtilitary.initializePreparedRequest(connection, SQL_UPDATE_INTRODUCED, true, objects);
 			preparedStatement.executeUpdate();
 		} catch ( SQLException e ) {
 	        throw new DAOException( e );
@@ -117,7 +118,7 @@ public class ComputerDaoImplementation implements ComputerDao {
 		try {
 			connection = (Connection) daoFactory.getConnection();
 			Object[] objects = { discontinued , id };
-			preparedStatement = DaoUtilitary.initializePreparedRequest(connection, SQL_UPDATE_DISCONTINUED, true, objects);
+			preparedStatement = daoUtilitary.initializePreparedRequest(connection, SQL_UPDATE_DISCONTINUED, true, objects);
 			preparedStatement.executeUpdate();
 		} catch ( SQLException e ) {
 	        throw new DAOException( e );
@@ -133,7 +134,7 @@ public class ComputerDaoImplementation implements ComputerDao {
 		try {
 			connection = (Connection) daoFactory.getConnection();
 			Object[] objects = { idCompany , idComputer };
-			preparedStatement = DaoUtilitary.initializePreparedRequest(connection, SQL_UPDATE_COMPANY, true, objects);
+			preparedStatement = daoUtilitary.initializePreparedRequest(connection, SQL_UPDATE_COMPANY, true, objects);
 			preparedStatement.executeUpdate();
 		} catch ( SQLException e ) {
 	        throw new DAOException( e );
@@ -149,7 +150,7 @@ public class ComputerDaoImplementation implements ComputerDao {
 		try {
 			connection = (Connection) daoFactory.getConnection();
 			Object[] objects = { name, discontinued, introduced, idCompany };
-			preparedStatement = DaoUtilitary.initializePreparedRequest(connection, SQL_CREATE, true, objects);
+			preparedStatement = daoUtilitary.initializePreparedRequest(connection, SQL_CREATE, true, objects);
 			preparedStatement.executeUpdate();
 		} catch ( SQLException e ) {
 	        throw new DAOException( e );
@@ -165,7 +166,7 @@ public class ComputerDaoImplementation implements ComputerDao {
 		try {
 			connection = (Connection) daoFactory.getConnection();
 			Object[] objects = { idComputer };
-			preparedStatement = DaoUtilitary.initializePreparedRequest(connection, SQL_DELETE, true, objects);
+			preparedStatement = daoUtilitary.initializePreparedRequest(connection, SQL_DELETE, true, objects);
 			preparedStatement.executeUpdate();
 		} catch ( SQLException e ) {
 	        throw new DAOException( e );

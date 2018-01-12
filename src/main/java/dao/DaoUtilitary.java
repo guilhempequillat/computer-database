@@ -1,16 +1,23 @@
 package dao;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
 import org.slf4j.LoggerFactory;
+
 import ch.qos.logback.classic.Logger;
 
 public class DaoUtilitary {
 	
 	private static Logger logger = (Logger) LoggerFactory.getLogger("DaoUtilitary");
+	private static DaoUtilitary daoUtilitary = new DaoUtilitary();
+	
+	public static DaoUtilitary getInstance() {
+		return daoUtilitary;
+	}
 	
 	/**
 	 * Return a preparedStatement with the parameter which are in the Object... 
@@ -22,8 +29,8 @@ public class DaoUtilitary {
 	 * @return preparedStatement
 	 * @throws SQLException
 	 */
-	public static PreparedStatement initializePreparedRequest(Connection connection, 
-	    	String sql, boolean returnGeneratedKeys, Object... objects)throws SQLException{
+	public PreparedStatement initializePreparedRequest(Connection connection, 
+	    String sql, boolean returnGeneratedKeys, Object... objects)throws SQLException{
     	PreparedStatement preparedStatement = (PreparedStatement) connection.prepareStatement(sql, returnGeneratedKeys ? Statement.RETURN_GENERATED_KEYS : Statement.NO_GENERATED_KEYS);
     	for(int i=0 ; i < objects.length ; i++) {
     		preparedStatement.setObject(i + 1, objects[i]);

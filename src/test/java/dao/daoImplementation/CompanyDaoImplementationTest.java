@@ -1,42 +1,27 @@
 package dao.daoImplementation;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import java.sql.Connection;
-
-import dao.DaoFactory;
-import dao.DaoUtilitary;
-import dao.ScriptRunner;
-import junit.framework.*;
-import mapper.CompanyMapper;
-import ui.CommandLineInput;
-import static org.assertj.db.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
+import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.PreparedStatement;
-import java.util.ArrayList;
+import java.sql.SQLException;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.slf4j.LoggerFactory;
-
-//import com.mysql.jdbc.PreparedStatement;
-
 import ch.qos.logback.classic.Logger;
-
-import org.hsqldb.*;
-import org.assertj.db.type.DateValue;
-import org.assertj.db.type.Table;
-import model.Company;
+import dao.DaoFactory;
+import dao.DaoUtilitary;
+import dao.ScriptRunner;
+import mapper.CompanyMapper;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CompanyDaoImplementationTest {
@@ -62,14 +47,16 @@ public class CompanyDaoImplementationTest {
 		try {
 			connection = (Connection) DriverManager.getConnection("jdbc:hsqldb:mem:computer-database", "test",  "test");
 			createTable(connection);
-			Mockito.when(daoFactory.getConnection()).thenReturn(connection);
+			Mockito.when(companyDaoImplementation.getDaoFactoryConnection()).thenReturn(connection);
+			Mockito.when(companyDaoImplementation.getPreparedStatement(connection)).thenReturn( (PreparedStatement) connection.prepareStatement(SQL_SELECT));
+			System.out.println(companyDaoImplementation.findAll());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}catch (InstantiationException | IllegalAccessException | ClassNotFoundException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}	
 	}
 	
 	public void createTable(Connection connection) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, FileNotFoundException, IOException {

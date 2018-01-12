@@ -3,9 +3,14 @@ package dao.daoImplementation;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.PreparedStatement;
 
+import org.slf4j.LoggerFactory;
+
+import java.sql.Connection;
+
+import ch.qos.logback.classic.Logger;
+
+import java.sql.PreparedStatement;
 import dao.DaoFactory;
 import dao.DaoUtilitary;
 import dao.daoInterface.CompanyDao;
@@ -16,8 +21,10 @@ import model.Company;
 public class CompanyDaoImplementation implements CompanyDao {
 
 	private DaoFactory daoFactory;
+	private DaoUtilitary daoUtilitary= DaoUtilitary.getInstance();
 	private static final String SQL_SELECT = "SELECT * FROM company";
 	private CompanyMapper companyMapper = CompanyMapper.getCompanyMapper();
+	private Logger logger = (Logger) LoggerFactory.getLogger("CompanyDaoImplementation");
 	
 	public CompanyDaoImplementation(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -28,8 +35,8 @@ public class CompanyDaoImplementation implements CompanyDao {
 		Connection connection = null;
 	    PreparedStatement preparedStatement = null;
 	    try {
-	    	connection = (Connection) daoFactory.getConnection();
-	        preparedStatement = DaoUtilitary.initializePreparedRequest( connection, SQL_SELECT, true );
+	    	connection = (Connection) getDaoFactoryConnection();
+	        preparedStatement = getPreparedStatement(connection);
 	        ResultSet resultSet = preparedStatement.executeQuery();
 	        ArrayList<Company> companies = new ArrayList<>();
 	        while (resultSet.next()) {
@@ -42,5 +49,25 @@ public class CompanyDaoImplementation implements CompanyDao {
 	    } finally {
 	    	DaoUtilitary.closeDao(preparedStatement,connection);
 	    }
+	}
+	
+	public PreparedStatement getPreparedStatement(Connection connection) {
+		try {
+			return daoUtilitary.initializePreparedRequest( connection, SQL_SELECT, true );
+		} catch (SQLException e) {
+			logger.error("The connection can't be reach");
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public Connection getDaoFactoryConnection() {
+		try {
+			return (Connection) daoFactory.getConnection();
+		} catch (SQLException e) {
+			logger.error("The connection can't be reach");
+			e.printStackTrace();
+		};
+		return null;
 	}
 }
