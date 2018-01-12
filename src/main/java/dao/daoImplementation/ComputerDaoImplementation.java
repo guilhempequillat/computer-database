@@ -31,6 +31,7 @@ public class ComputerDaoImplementation implements ComputerDao {
 	private static Logger logger = (Logger) LoggerFactory.getLogger("ComputerDao");
 	private ComputerMapper computerMapper = ComputerMapper.getComputerMapper();
 	
+	
 	public ComputerDaoImplementation(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}

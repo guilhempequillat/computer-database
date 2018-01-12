@@ -9,8 +9,10 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -35,20 +37,33 @@ public class CompanyDaoImplementationTest {
 	
 	@Mock
 	private CompanyDaoImplementation companyDaoImplementation;
+	
 
-	//private Connection connection;
+	private static Connection connection;
+	
+	@BeforeClass 
+	public static void onlyOnce() {
+		try {
+			connection = (Connection) DriverManager.getConnection("jdbc:hsqldb:mem:computer-database", "test",  "test");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	@Test
 	public void testFindAll() {
 		DaoFactory daoFactory = mock(DaoFactory.class);
-		Connection connection = mock(Connection.class);
 		DaoUtilitary daoUtilitary = mock(DaoUtilitary.class);
 		Mockito.when(companyDaoImplementation.findAll()).thenCallRealMethod();
 		try {
-			connection = (Connection) DriverManager.getConnection("jdbc:hsqldb:mem:computer-database", "test",  "test");
 			createTable(connection);
 			Mockito.when(companyDaoImplementation.getDaoFactoryConnection()).thenReturn(connection);
 			Mockito.when(companyDaoImplementation.getPreparedStatement(connection)).thenReturn( (PreparedStatement) connection.prepareStatement(SQL_SELECT));
+			PreparedStatement preparedStatement = (PreparedStatement) connection.prepareStatement(SQL_SELECT);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			System.out.println(resultSet.next());
+			System.out.println();
 			System.out.println(companyDaoImplementation.findAll());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

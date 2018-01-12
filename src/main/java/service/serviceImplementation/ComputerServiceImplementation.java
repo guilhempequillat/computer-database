@@ -50,7 +50,6 @@ public class ComputerServiceImplementation implements ComputerService {
 	@Override
 	public void updateCompany(int idComputer, int idCompany) {
 		computerDao.updateCompany(idComputer, idCompany);
-		
 	}
 
 	@Override
@@ -62,7 +61,6 @@ public class ComputerServiceImplementation implements ComputerService {
 	@Override
 	public void delete(int idComputer) {
 		computerDao.delete(idComputer);
-		
 	}
 	
 	public void setComputerDao(ComputerDao computerDaoLoaded) {

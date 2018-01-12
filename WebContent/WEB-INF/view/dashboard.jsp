@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ taglib prefix = "ex" uri = "custom.tld"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -19,7 +20,7 @@
             <a class="navbar-brand" href="dashboard.html"> Application - Computer Database </a>
         </div>
     </header>
-
+	
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">
@@ -79,22 +80,10 @@
                 </thead>
                 <!-- Browse attribute computers -->
                 <tbody id="results">
-                    <tr>
-                        <td class="editMode">
-                            <input type="checkbox" name="cb" class="cb" value="0">
-                        </td>
-                        <td>
-                            <a href="editComputer.html" onclick="">MacBook Pro</a>
-                        </td>
-                        <td>2006-01-10</td>
-                        <td></td>
-                        <td>Apple Inc.</td>
-
-                    </tr>
                     <c:forEach items="${listComputer}" var="computer">
-					   <tr>
+					    <tr>
 					       	<td>
-						       	<a href="/editComputer?id=" onclick="">
+						       	<a href="edit-computer?id=${ computer.id }" onclick="">
 						       		${ computer.name }
 						       	<a/>
 					       	</td>
@@ -102,43 +91,8 @@
 					       <td>${ computer.introduced }</td>
 					       <td>${ computer.discontinued }</td>
 					       <td>${ computer.company }</td>
-					   </tr>
+					   </tr> 
 				    </c:forEach>
-                    <tr>
-                        <td class="editMode">
-                            <input type="checkbox" name="cb" class="cb" value="0">
-                        </td>
-                        <td>
-                            <a href="editComputer.html" onclick="">Connection Machine</a>
-                        </td>
-                        <td>1987-01-01</td>
-                        <td></td>
-                        <td>Thinking Machines</td>
-
-                    </tr>
-                    <tr>
-                        <td class="editMode">
-                            <input type="checkbox" name="cb" class="cb" value="0">
-                        </td>
-                        <td>
-                            <a href="editComputer.html" onclick="">PowerBook</a>
-                        </td>
-                        <td>1991-01-01</td>
-                        <td>2006-01-01</td>
-                        <td>Apple Inc.</td>
-
-                    </tr>
-                    <tr>
-                        <td class="editMode">
-                            <input type="checkbox" name="cb" class="cb" value="0">
-                        </td>
-                        <td>
-                            <a href="editComputer.html" onclick="">Commodore 64</a>
-                        </td>
-                        <td>1982-08-01</td>
-                        <td>1994-01-01</td>
-                        <td>Commodore International</td>
-                    </tr>
                 </tbody>
             </table>
         </div>
@@ -171,9 +125,8 @@
         </div>
 
     </footer>
-<script src="js/jquery.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/dashboard.js"></script>
-
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/dashboard.js"></script>
 </body>
 </html>

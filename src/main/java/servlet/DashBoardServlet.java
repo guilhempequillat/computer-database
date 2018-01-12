@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
+import model.Company;
 import model.Computer;
 import service.UtilitaryService;
 import service.serviceImplementation.CompanyServiceImplementation;
@@ -30,6 +31,7 @@ public class DashBoardServlet extends HttpServlet {
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		listComputer(request, response);
+		listCompany(request, response);
 		this.getServletContext().getRequestDispatcher( "/WEB-INF/view/dashboard.jsp" ).forward( request, response );
 	}
 
@@ -37,6 +39,13 @@ public class DashBoardServlet extends HttpServlet {
 		this.computerServiceImplementation = utilitaryService.getInstanceComputerService();
 		ArrayList<Computer> computers = this.computerServiceImplementation.findAll();
 		request.getSession().setAttribute("listComputer", computers);
-		request.getSession().setAttribute("action", "listCompany");
+		//request.getSession().setAttribute("action", "listCompany");
 	}
+	
+	public void listCompany(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		this.companyServiceImplementation = utilitaryService.getInstanceCompanyService();
+		ArrayList<Company> companies = this.companyServiceImplementation.findAll();
+		request.getSession().setAttribute("listCompany", companies);
+	}
+	
 }
