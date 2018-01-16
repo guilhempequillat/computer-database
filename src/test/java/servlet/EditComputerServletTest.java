@@ -2,7 +2,10 @@ package servlet;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,10 +16,15 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.slf4j.LoggerFactory;
+
+import ch.qos.logback.classic.Logger;
 import model.Computer;
 
 @RunWith(MockitoJUnitRunner.class)
 public class EditComputerServletTest {
+	
+	private Logger logger = (Logger) LoggerFactory.getLogger("EditComputerServletTest");
 	
 	@Mock
 	private EditComputerServlet editComputerServlet;
@@ -92,6 +100,26 @@ public class EditComputerServletTest {
 	public void parseComputerTest() {
 		HttpServletRequest request = mock(HttpServletRequest.class);
 		
+		Mockito.when(request.getParameter("id")).thenReturn("1");
+		Mockito.when(request.getParameter("computerName")).thenReturn("TestName");		
+		Mockito.when(request.getParameter("introduced")).thenReturn("2000-10-30");		
+		Mockito.when(request.getParameter("discontinued")).thenReturn("2000-11-30");		
+		Mockito.when(request.getParameter("companyId")).thenReturn("12");
+		Mockito.when(editComputerServlet.parseComputer(request)).thenCallRealMethod();
+		Mockito.when(editComputerServlet.getComputerId()).thenReturn((Long) 1L);
 		
+		Computer computer = new Computer();
+		computer.setId(1L);
+		computer.setName("TestName");
+		computer.setIntroduced(LocalDate.parse("2000-10-30"));
+		computer.setDiscontinued(LocalDate.parse("2000-11-30"));
+		computer.setCompany_id(12L);
+	
+		//assertTrue(editComputerServlet.parseComputer(request).equals(computer));
+		
+		Mockito.when(editComputerServlet.getComputerId()).thenReturn((Long) (-1L));
+		Mockito.when(editComputerServlet.parseComputer(request)).thenCallRealMethod();
+	
+		//assertEquals(editComputerServlet.parseComputer(request),null);
 	}
 }

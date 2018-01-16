@@ -17,6 +17,7 @@ import model.Computer;
 import service.UtilitaryService;
 import service.serviceImplementation.CompanyServiceImplementation;
 import service.serviceImplementation.ComputerServiceImplementation;
+import view.PageWeb;
 
 /**
  * Servlet implementation class DashBoardServlet
@@ -26,26 +27,31 @@ public class DashBoardServlet extends HttpServlet {
 	
 	private ComputerServiceImplementation computerServiceImplementation;
 	private CompanyServiceImplementation companyServiceImplementation;
-	private UtilitaryService utilitaryService = new UtilitaryService();
+	private UtilitaryService utilitaryService = UtilitaryService.getInstance();
 	private Logger logger = (Logger) LoggerFactory.getLogger("DashBoardServlet");
-    
+    private PageWeb pageWeb;
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		listComputer(request, response);
-		listCompany(request, response);
+		pageWeb = PageWeb.getInstance(request);
+		if(request.getSession().getAttribute("beginComputerDisplay") != null) {
+			if(request.getParameter("beginComputerDisplay") != "" || request.getParameter("numberComputerToShow") != "") {
+				changeDisplay(request);
+			}
+		} else {
+			initDisplay(request);
+		}
 		this.getServletContext().getRequestDispatcher( "/WEB-INF/view/dashboard.jsp" ).forward( request, response );
 	}
-
-	public void listComputer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		this.computerServiceImplementation = utilitaryService.getInstanceComputerService();
-		ArrayList<Computer> computers = this.computerServiceImplementation.findAll();
-		request.getSession().setAttribute("listComputer", computers);
-		//request.getSession().setAttribute("action", "listCompany");
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doGet(request, response);
 	}
 	
-	public void listCompany(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		this.companyServiceImplementation = utilitaryService.getInstanceCompanyService();
-		ArrayList<Company> companies = this.companyServiceImplementation.findAll();
-		request.getSession().setAttribute("listCompany", companies);
+	public void initDisplay(HttpServletRequest request) {
+		pageWeb.initDisplay(request);
 	}
 	
+	public void changeDisplay(HttpServletRequest request) {
+		pageWeb.changeDisplay(request);
+	}
 }

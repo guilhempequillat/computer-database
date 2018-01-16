@@ -1,6 +1,7 @@
 package service.serviceImplementation;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import dao.daoImplementation.ComputerDaoImplementation;
@@ -37,13 +38,15 @@ public class ComputerServiceImplementation implements ComputerService {
 	}
 	
 	@Override
-	public void updateIntroduced(int id, Date introduced) {
-		computerDao.updateIntroduced(id, introduced);
+	public void updateIntroduced(int id, LocalDate introduced) {
+		Date date = Date.valueOf(introduced);
+		computerDao.updateIntroduced(id, date);
 	}
 	
 	@Override
-	public void updateDiscontinued(int id, Date discontinued) {
-		computerDao.updateDiscontinued(id, discontinued);
+	public void updateDiscontinued(int id, LocalDate discontinued) {
+		Date date = Date.valueOf(discontinued);
+		computerDao.updateDiscontinued(id, date);
 		
 	}
 
@@ -53,8 +56,10 @@ public class ComputerServiceImplementation implements ComputerService {
 	}
 
 	@Override
-	public void create(String name, Date introduced, Date discontinued, int idCompany) {
-		computerDao.create(name, introduced, discontinued, idCompany);
+	public void create(String name, LocalDate introduced, LocalDate discontinued, int idCompany) {
+		Date dateIntroduced = Date.valueOf(introduced);
+		Date dateDiscontinued = Date.valueOf(discontinued);
+		computerDao.create(name, dateIntroduced, dateDiscontinued, idCompany);
 		
 	}
 

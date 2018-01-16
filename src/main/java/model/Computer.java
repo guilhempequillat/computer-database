@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;;
 
-public class Computer {
+public class Computer implements Comparable<Computer>{
 	private Long id;
 	private String name;
 	private LocalDate introduced;
@@ -74,5 +74,22 @@ public class Computer {
 			strCompanyName = this.company.toString();
 		}
 		return ""+id+"/"+strName+"/"+strIntroduced+"/"+strDiscontinued+"/"+strCompanyId+"/"+strCompanyName;
+	}
+
+	@Override
+	public int compareTo(Computer arg0) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+	public boolean equals(Computer computer) {
+		if(this.id == computer.getId()
+		&& this.name.equals(computer.getName())
+		&& this.introduced.equals(computer.getIntroduced())
+		&& this.discontinued.equals(computer.getDiscontinued())
+		&& this.company_id == computer.getCompany_id()) {
+			return true;
+		}
+		return false;
 	}
 }

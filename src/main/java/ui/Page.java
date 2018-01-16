@@ -160,7 +160,7 @@ public class Page {
 	public void updateIntroduced(int idComputer) {
 		LocalDate localDate = commandLineInput.readUserInputDate();
 		java.sql.Date sqlDate = java.sql.Date.valueOf(localDate);
-		this.computerService.updateIntroduced(idComputer, sqlDate);
+		this.computerService.updateIntroduced(idComputer, localDate);
 	}
 	
 	
@@ -168,7 +168,7 @@ public class Page {
 	public void updateDiscontinued(int idComputer) {
 		LocalDate localDate = commandLineInput.readUserInputDate();
 		java.sql.Date sqlDate = java.sql.Date.valueOf(localDate);
-		this.computerService.updateDiscontinued(idComputer, sqlDate);
+		this.computerService.updateDiscontinued(idComputer, localDate);
 	}
 	
 	public void updateCompanyId(int idComputer) {
@@ -189,13 +189,16 @@ public class Page {
 		String name;
 		int idCompany;
 		System.out.println("\nPlease enter the Computer's name :");
+		LocalDate introducedLocalDate;
+		LocalDate discontinuedLocalDate;
 		name = commandLineInput.readUserInput();
 		do {
 			System.out.println("\nPlease enter the Introduced date : ");
-			LocalDate introducedLocalDate = commandLineInput.readUserInputDate();
+			
+			introducedLocalDate = commandLineInput.readUserInputDate();
 			introducedDate = java.sql.Date.valueOf(introducedLocalDate);
 			System.out.println("\nPlease enter the Discontined date : ");
-			LocalDate discontinuedLocalDate = commandLineInput.readUserInputDate();
+			discontinuedLocalDate = commandLineInput.readUserInputDate();
 			discontinuedDate = java.sql.Date.valueOf(discontinuedLocalDate);
 			System.out.println("\nPlease enter the Company's id : ");
 			if(introducedLocalDate.compareTo(discontinuedLocalDate) == -1) {
@@ -205,7 +208,7 @@ public class Page {
 			}
 		}while( !inputCorrect );
 		idCompany = commandLineInput.readUserInputInt();
-		this.computerService.create( name, introducedDate, discontinuedDate, idCompany );
+		this.computerService.create( name, introducedLocalDate, discontinuedLocalDate, idCompany );
 	}
 	
 	public void quit() {

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -29,6 +30,7 @@ import service.serviceImplementation.ComputerServiceImplementation;
 public class EditComputerServlet extends HttpServlet {
 	
 	private Long computerId;
+	private Computer computer;
 	private static Logger logger = (Logger) LoggerFactory.getLogger("EditComputerServlet");
 	   
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -39,20 +41,43 @@ public class EditComputerServlet extends HttpServlet {
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		computerId = (Long) request.getSession().getAttribute("idComputer");
-		parseComputer(request);
-		this.getServletContext().getRequestDispatcher( "/WEB-INF/view/editComputer.jsp" ).forward( request, response );
+		computer = parseComputer(request);
+		updateDb(request);
+		this.getServletContext().getRequestDispatcher( "/dashboard" ).forward( request, response );
 	}
 	
 	public void updateDb(HttpServletRequest request) {
 		Computer computer = parseComputer(request);
-		ComputerDaoImplementation computerDao = new ComputerDaoImplementation(DaoFactory.getInstance());
-		ComputerServiceImplementation computerService =ComputerServiceImplementation.getInstance(computerDao);
+		if (getComputerId() != (-1L) && inputAreValide()) {
+			ComputerDaoImplementation computerDao = new ComputerDaoImplementation(DaoFactory.getInstance());
+			ComputerServiceImplementation computerService =ComputerServiceImplementation.getInstance(computerDao);
+			Pattern pattern = Pattern.compile("<");
+			//System.out.println(computer.getName().matches("<"));
+//			if(computer.getName() != null && !(Pattern.matches("<", computer.getName()) ) ) {
+//				System.out.println(Pattern.matches("#<#", computer.getName()));
+//				computerService.updateName(Integer.parseInt(computer.getId().toString()), computer.getName());
+//			}
+			if(computer.getIntroduced() != null) {
+				computerService.updateIntroduced(Integer.parseInt(computer.getId().toString()), computer.getIntroduced());
+			}
+			if(computer.getDiscontinued() != null) {
+				computerService.updateDiscontinued(Integer.parseInt(computer.getId().toString()), computer.getDiscontinued());
+			}
+			if(computer.getCompany_id() != null) {
+				computerService.updateCompany(Integer.parseInt(computer.getId().toString()), Integer.parseInt(computer.getCompany_id().toString()));
+			}
+		}
+	}
+	
+	public boolean inputAreValide() {
+		//TODO
+		return true;
 	}
 	
 	public Computer parseComputer(HttpServletRequest request) {
 		Computer computer = new Computer();
 		computer.setId(getComputerId());
-		if( getComputerId() != (-1L)) {
+		if( ! computer.getId().equals( (Long) (-1L))) {
 			if( request.getParameter("computerName") != "" ) {
 				computer.setName(request.getParameter("computerName"));
 				logger.debug(computer.toString());
@@ -69,6 +94,7 @@ public class EditComputerServlet extends HttpServlet {
 				computer.setCompany_id(Long.parseLong(request.getParameter("companyId")));
 				logger.debug(computer.toString());
 			}
+			return computer;
 		}
 		return null;
 	}
@@ -115,10 +141,12 @@ public class EditComputerServlet extends HttpServlet {
 	public ArrayList<Computer> getListComputer(HttpServletRequest request){
 		HttpSession session = request.getSession();
 		ArrayList<Computer> listComputer = (ArrayList<Computer>) session.getAttribute("listComputer");
-		if(listComputer.size() == 0) {
+		if( listComputer != null ) {
+			return listComputer;
+		}else {
 			logger.info("No computer in session");
+			return null;
 		}
-		return listComputer;
 	}
 	
 	public Long getComputerId() {

@@ -13,6 +13,7 @@ public class UtilitaryService {
 	private ComputerDao computerDao;
 	private static CompanyServiceImplementation companyService;
 	private static ComputerServiceImplementation computerService;
+	private static UtilitaryService utilitaryService = new UtilitaryService();
 
 	public UtilitaryService() {
 		this.daoFactory = DaoFactory.getInstance();
@@ -22,11 +23,15 @@ public class UtilitaryService {
 		this.computerService = ComputerServiceImplementation.getInstance(computerDao);
 	}
 	
+	public static UtilitaryService getInstance() {
+		return utilitaryService;
+	}
+	
 	public CompanyServiceImplementation getInstanceCompanyService() {
 		return companyService;
 	}
 	
 	public ComputerServiceImplementation getInstanceComputerService() {
 		return computerService;
-	} 
+	}
 }

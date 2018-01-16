@@ -36,7 +36,7 @@
                     </form>
                 </div>
                 <div class="pull-right">
-                    <a class="btn btn-success" id="addComputer" href="addComputer.html">Add Computer</a> 
+                    <a class="btn btn-success" id="addComputer" href="add-computer">Add Computer</a> 
                     <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
                 </div>
             </div>
@@ -57,7 +57,8 @@
                             <input type="checkbox" id="selectall" /> 
                             <span style="vertical-align: top;">
                                  -  <a href="#" id="deleteSelected" onclick="$.fn.deleteSelected();">
-                                        <i class="fa fa-trash-o fa-lg"></i>
+                                       <!--  <i class="fa fa-trash-o fa-lg"></i> -->
+                                       <img src="image/trash.png" style="width:20px;"/>
                                     </a>
                             </span>
                         </th>
@@ -80,18 +81,23 @@
                 </thead>
                 <!-- Browse attribute computers -->
                 <tbody id="results">
-                    <c:forEach items="${listComputer}" var="computer">
-					    <tr>
-					       	<td>
-						       	<a href="edit-computer?id=${ computer.id }" onclick="">
-						       		${ computer.name }
-						       	<a/>
-					       	</td>
-					       </a>
-					       <td>${ computer.introduced }</td>
-					       <td>${ computer.discontinued }</td>
-					       <td>${ computer.company }</td>
-					   </tr> 
+                    <c:forEach items="${listComputer}" var="computer" varStatus="status">
+                    	<c:if test="${status.count > beginComputerDisplay && status.count < beginComputerDisplay+numberComputerToShow}">
+						    <tr>
+							    <td class="editMode">
+		                            <input type="checkbox" name="cb" class="cb" value="0">
+		                        </td>
+						       	<td>
+							       	<a href="edit-computer?id=${ computer.id }" onclick="">
+							       		${ computer.name }
+							       	<a/>
+						       	</td>
+						       </a>
+						       <td>${ computer.introduced }</td>
+						       <td>${ computer.discontinued }</td>
+						       <td>${ computer.company }</td>
+						   </tr> 
+						</c:if>
 				    </c:forEach>
                 </tbody>
             </table>
@@ -101,29 +107,34 @@
     <footer class="navbar-fixed-bottom">
         <div class="container text-center">
             <ul class="pagination">
-                <li>
-                    <a href="#" aria-label="Previous">
-                      <span aria-hidden="true">&laquo;</span>
-                  </a>
-              </li>
-              <li><a href="#">1</a></li>
-              <li><a href="#">2</a></li>
-              <li><a href="#">3</a></li>
-              <li><a href="#">4</a></li>
-              <li><a href="#">5</a></li>
-              <li>
-                <a href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
-            </li>
+	            <c:if test="${beginComputerDisplay-numberComputerToShow >= 0}">
+	                <li>
+	                    <a href="dashboard?beginComputerDisplay=${ beginComputerDisplay - numberComputerToShow }" aria-label="Previous">
+	                      <span aria-hidden="true">&laquo;</span>
+	                  </a>
+	              </li>
+              </c:if>
+              <c:forEach var="i" begin="${beginComputerDisplay}" end="${listComputer.size()-numberComputerToShow}" step="${numberComputerToShow}" varStatus="status">
+              	<c:if test="${status.count < 5}">
+              		<li><a href="dashboard?beginComputerDisplay=${ i + numberComputerToShow }"> ${ i + numberComputerToShow } </a></li>
+              	</c:if>
+              	<c:if test="${status.count == 5}">
+              		<li><a href="dashboard?beginComputerDisplay=${ i + numberComputerToShow }">... </a></li>
+              	</c:if>
+              </c:forEach>
+              <c:if test="${beginComputerDisplay+numberComputerToShow <= listComputer.size()}">
+	              <li>
+	                <a href="dashboard?beginComputerDisplay=${ beginComputerDisplay + numberComputerToShow }" aria-label="Next">
+	                    <span aria-hidden="true">&raquo;</span>
+	                </a>
+	            </li>
+            </c:if>
         </ul>
-
         <div class="btn-group btn-group-sm pull-right" role="group" >
-            <button type="button" class="btn btn-default">10</button>
-            <button type="button" class="btn btn-default">50</button>
-            <button type="button" class="btn btn-default">100</button>
+            <a href="dashboard?numberComputerToShow=10&beginComputerDisplay=0"><button type="button" class="btn btn-default">10</button></a>
+            <a href="dashboard?numberComputerToShow=50&beginComputerDisplay=0"><button type="button" class="btn btn-default">50</button></a>
+            <a href="dashboard?numberComputerToShow=100&beginComputerDisplay=0"><button type="button" class="btn btn-default">100</button></a>
         </div>
-
     </footer>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>

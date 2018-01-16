@@ -23,7 +23,7 @@ public class ComputerDaoImplementation implements ComputerDao {
 	private static final String SQL_UPDATE_NAME         = "UPDATE computer SET name = ? WHERE id = ?";
 	private static final String SQL_UPDATE_COMPANY      = "UPDATE computer SET company_id = ? WHERE id = ?";
 	private static final String SQL_UPDATE_INTRODUCED   = "UPDATE computer SET introduced = ? WHERE id = ?";
-	private static final String SQL_UPDATE_DISCONTINUED = "DELETE computer SET discontinued = ? WHERE id = ?";
+	private static final String SQL_UPDATE_DISCONTINUED = "UPDATE computer SET discontinued = ? WHERE id = ?";
 	private static final String SQL_CREATE              = "INSERT INTO computer ( name , discontinued ,introduced , company_id ) VALUES (?,?,?,?) ";
 	private static final String SQL_DELETE              = "DELETE FROM computer WHERE id = ?";
 	private DaoFactory daoFactory;
@@ -150,7 +150,13 @@ public class ComputerDaoImplementation implements ComputerDao {
 		PreparedStatement preparedStatement = null;
 		try {
 			connection = (Connection) daoFactory.getConnection();
-			Object[] objects = { name, discontinued, introduced, idCompany };
+			//Object[] objects = new Object[4];
+			Object[] objects = { null , discontinued, introduced, idCompany };
+//			if(name != null ) {
+//				objects[0] =name;
+//			}else {
+//				objects[0] ="NU";
+//			}
 			preparedStatement = daoUtilitary.initializePreparedRequest(connection, SQL_CREATE, true, objects);
 			preparedStatement.executeUpdate();
 		} catch ( SQLException e ) {
