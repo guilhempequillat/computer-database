@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import dao.DaoFactory;
 import dao.daoImplementation.ComputerDaoImplementation;
 import dao.daoInterface.ComputerDao;
 import model.Computer;
+import security.PasswordVerification;
 import service.serviceImplementation.ComputerServiceImplementation;
 
 /**
@@ -32,6 +34,7 @@ public class EditComputerServlet extends HttpServlet {
 	private Long computerId;
 	private Computer computer;
 	private static Logger logger = (Logger) LoggerFactory.getLogger("EditComputerServlet");
+	private PasswordVerification passwordVerification = PasswordVerification.getInstance();
 	   
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		logger.info(request.getRemoteAddr());
@@ -48,7 +51,7 @@ public class EditComputerServlet extends HttpServlet {
 	
 	public void updateDb(HttpServletRequest request) {
 		Computer computer = parseComputer(request);
-		if (getComputerId() != (-1L) && inputAreValide()) {
+		if (getComputerId() != (-1L) && inputAreValide() && passwordVerification.passwordIsCorrect(request.getParameter("password"))) {
 			ComputerDaoImplementation computerDao = new ComputerDaoImplementation(DaoFactory.getInstance());
 			ComputerServiceImplementation computerService =ComputerServiceImplementation.getInstance(computerDao);
 			Pattern pattern = Pattern.compile("<");
@@ -66,11 +69,21 @@ public class EditComputerServlet extends HttpServlet {
 			if(computer.getCompany_id() != null) {
 				computerService.updateCompany(Integer.parseInt(computer.getId().toString()), Integer.parseInt(computer.getCompany_id().toString()));
 			}
+		}else if( !passwordVerification.passwordIsCorrect(request.getParameter("password"))) {
+			logger.info("Password invalide");
 		}
 	}
 	
 	public boolean inputAreValide() {
-		//TODO
+		if(computer.getIntroduced() != null && computer.getDiscontinued() != null) {
+			logger.debug(computer.getIntroduced().compareTo(computer.getDiscontinued()) +"&&&&&&&&&");
+			if(computer.getIntroduced().compareTo(computer.getDiscontinued()) == -10) {
+				return true;
+			} else {
+				logger.info("The dates are invalide");
+				return false;
+			}
+		}
 		return true;
 	}
 	

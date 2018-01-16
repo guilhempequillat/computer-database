@@ -85,7 +85,11 @@
 			                            </c:choose>
                                     </c:forEach>
                                 </select>
-                            </div>            
+                            </div>
+							<div class="form-group">
+		                        <label for="password">Password</label>
+		                        <input type="password" class="form-control" id="password" placeholder="Password" name="password">
+	                       	</div>           
                         </fieldset>
                         <div class="actions pull-right">
                             <input type="submit" value="Edit" class="btn btn-primary">

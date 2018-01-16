@@ -11,6 +11,7 @@ import dao.DaoFactory;
 import dao.daoImplementation.ComputerDaoImplementation;
 import dto.Dto;
 import model.Computer;
+import security.PasswordVerification;
 import service.serviceImplementation.ComputerServiceImplementation;
 
 public class PageWebAddComputer {
@@ -18,6 +19,7 @@ public class PageWebAddComputer {
 	private static PageWebAddComputer pageWebAddComputer = new PageWebAddComputer();
 	private static Logger logger = (Logger) LoggerFactory.getLogger("PageWebAddComputer");
 	private static Dto dto;
+	private PasswordVerification passwordVerification = PasswordVerification.getInstance();
 	
 	public static PageWebAddComputer getInstance(HttpServletRequest request) {
 		dto = Dto.getInstance(request);
@@ -28,18 +30,19 @@ public class PageWebAddComputer {
 		Computer computer = parseComputer(request);
 		ComputerDaoImplementation computerDao = new ComputerDaoImplementation(DaoFactory.getInstance());
 		ComputerServiceImplementation computerService =ComputerServiceImplementation.getInstance(computerDao);
-		if(computer != null) {
+		if(computer != null && passwordVerification.passwordIsCorrect(request.getParameter("password"))) {
 			if(computer.getName()!=null && computer.getIntroduced()!=null && computer.getDiscontinued()!=null && computer.getCompany_id() !=null ) {
 				computerService.create(computer.getName(), computer.getIntroduced(), computer.getDiscontinued(), Integer.parseInt(computer.getCompany_id().toString()));
 				return true;
 			}
+		}else if( passwordVerification.passwordIsCorrect(request.getParameter("password"))) {
+			logger.info("Password invalide");
 		}
 		return false;
 	}
 	
 	public Computer parseComputer(HttpServletRequest request) {
 		Computer computer = new Computer();
-	
 		if( request.getParameter("computerName") != "" ) {
 			computer.setName(request.getParameter("computerName"));
 			logger.debug(computer.toString());
@@ -54,7 +57,7 @@ public class PageWebAddComputer {
 			if( request.getParameter("companyId") != "" ) {
 				computer.setCompany_id(Long.parseLong(request.getParameter("companyId")));
 				logger.debug(computer.toString());
-			}
+			} 
 			return computer;
 		}
 		return null;

@@ -19,7 +19,7 @@ public class AddComputerServlet extends HttpServlet {
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		pageWebAddComputer = PageWebAddComputer.getInstance(request);pageWebAddComputer = PageWebAddComputer.getInstance(request);
+		pageWebAddComputer = PageWebAddComputer.getInstance(request);
 		boolean isAdded = pageWebAddComputer.addComputerDb(request);
 		if(isAdded) {
 			this.getServletContext().getRequestDispatcher( "/dashboard" ).forward( request, response );

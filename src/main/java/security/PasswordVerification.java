@@ -1,0 +1,67 @@
+package security;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+public class PasswordVerification {
+	
+	private static byte[] hash = new byte[32];
+	private static PasswordVerification passwordVerification = new PasswordVerification();
+	
+	public static PasswordVerification getInstance() {
+		createHash();
+		return passwordVerification;
+	}
+	
+	public static void createHash() {
+		hash[0] = 93;
+		hash[1] = 45;
+		hash[2] = 60;
+	    hash[3] = -21;
+	    hash[4] = 122;
+	    hash[5] = -66;
+	    hash[6] = 85;
+	    hash[7] = 35;
+	    hash[8] = 68;
+	    hash[9] = 39;
+	    hash[10] = 109;
+	    hash[11] = 71;
+	    hash[12] = -45;
+	    hash[13] = 106;
+	    hash[14] = -127;
+	    hash[15] = 117;
+	    hash[16] = -73;
+	    hash[17] = -82;
+	    hash[18] = -78;
+	    hash[19] = 80;
+	    hash[20] = -87;
+	    hash[21] = -65;
+	    hash[22] = 11;
+	    hash[23] = -16;
+	    hash[24] = 14;
+	    hash[25] = -123;
+	    hash[26] = 12;
+	    hash[27] = -46;
+	    hash[28] = 62;
+	    hash[29] = -49;
+	    hash[30] = 46;
+	    hash[31] = 67;
+	}
+	
+	public boolean passwordIsCorrect(String password) {
+		MessageDigest digest;
+		try {
+			digest = MessageDigest.getInstance("SHA-256");
+			byte[] hash = digest.digest(password.getBytes());
+			for(int i = 0 ; i < hash.length ; i++) {
+				if(hash[i] != this.hash[i]) {
+					return false;
+				}
+			}
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return true;
+	}
+}

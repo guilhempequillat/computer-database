@@ -41,11 +41,14 @@
                 </div>
             </div>
         </div>
-
-        <form id="deleteForm" action="#" method="POST">
+        <form id="deleteForm" action="delete-computer" method="POST">
+        	<div class=" container">
+        		<div class = "pull-left">
+        			<input type="password" name="password" class="form-control container" placeholder = "Password"/>
+        		</div>
+        	</div>
             <input type="hidden" name="selection" value="">
         </form>
-
         <div class="container" style="margin-top: 10px;">
             <table class="table table-striped table-bordered">
                 <thead>
@@ -81,29 +84,17 @@
                 </thead>
                 <!-- Browse attribute computers -->
                 <tbody id="results">
+               
                     <c:forEach items="${listComputer}" var="computer" varStatus="status">
+                    
                     	<c:if test="${status.count > beginComputerDisplay && status.count < beginComputerDisplay+numberComputerToShow}">
-						    <tr>
-							    <td class="editMode">
-		                            <input type="checkbox" name="cb" class="cb" value="0">
-		                        </td>
-						       	<td>
-							       	<a href="edit-computer?id=${ computer.id }" onclick="">
-							       		${ computer.name }
-							       	<a/>
-						       	</td>
-						       </a>
-						       <td>${ computer.introduced }</td>
-						       <td>${ computer.discontinued }</td>
-						       <td>${ computer.company }</td>
-						   </tr> 
+							<ex:Link computer="${computer}" />
 						</c:if>
 				    </c:forEach>
                 </tbody>
             </table>
         </div>
     </section>
-
     <footer class="navbar-fixed-bottom">
         <div class="container text-center">
             <ul class="pagination">

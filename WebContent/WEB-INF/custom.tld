@@ -8,4 +8,16 @@
 	   <tag-class>customTag.HelloTag</tag-class>
 	   <body-content>empty</body-content>
 	</tag>
+	<tag>
+		<name>Link</name>
+		<tag-class>customTag.Link</tag-class>
+		<body-content>scriptless</body-content>
+      
+		<attribute>
+			<name>computer</name>
+			<required>true</required>
+			<type>model.Computer</type>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
 </taglib>
