@@ -6,4 +6,4 @@ target/
 create_db_error.log
 create_db.log
 src/main/java/dao/dao.properties
-src/main/java/dataSource.properties
+src/main/java/connectionPool/dataSource.properties
