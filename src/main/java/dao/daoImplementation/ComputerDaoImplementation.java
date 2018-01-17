@@ -1,13 +1,19 @@
 package dao.daoImplementation;
 
 import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
 import org.slf4j.LoggerFactory;
+
 import com.mysql.jdbc.Connection;
-import java.sql.PreparedStatement;
+import com.zaxxer.hikari.HikariDataSource;
+import com.zaxxer.hikari.pool.HikariProxyConnection;
+
 import ch.qos.logback.classic.Logger;
+import connectionPool.DataSource;
 import dao.DaoFactory;
 import dao.DaoUtilitary;
 import dao.daoInterface.ComputerDao;
@@ -30,7 +36,7 @@ public class ComputerDaoImplementation implements ComputerDao {
 	private DaoUtilitary daoUtilitary= DaoUtilitary.getInstance();
 	private static Logger logger = (Logger) LoggerFactory.getLogger("ComputerDao");
 	private ComputerMapper computerMapper = ComputerMapper.getComputerMapper();
-	
+	private HikariDataSource hikariDataSource = DataSource.getHikariDataSource();
 	
 	public ComputerDaoImplementation(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -38,11 +44,11 @@ public class ComputerDaoImplementation implements ComputerDao {
 	
 	@Override
 	public ArrayList<Computer> findAll() {
-		Connection connection = null;
 	    PreparedStatement preparedStatement = null;
 	    ResultSet resultSet = null;
+	    HikariProxyConnection connection = null;
 	    try {
-	    	connection = (Connection) daoFactory.getConnection();
+	    	connection = (HikariProxyConnection) hikariDataSource.getConnection();
 	        preparedStatement = daoUtilitary.initializePreparedRequest( connection, SQL_FIND_ALL, true );
 	        resultSet = preparedStatement.executeQuery();
 	        ArrayList<Computer> computers = new ArrayList<>();
@@ -60,12 +66,12 @@ public class ComputerDaoImplementation implements ComputerDao {
 	
 	@Override
 	public Computer find(int id) {
-		Connection connection = null;
+		HikariProxyConnection connection = null;
 		PreparedStatement preparedStatement = null;
 		Computer computer =null;
 		ResultSet resultSet = null;
 		try {
-			connection = (Connection) daoFactory.getConnection();
+	    	connection = (HikariProxyConnection) hikariDataSource.getConnection();
 			Object[] objects = { id };
 			preparedStatement = daoUtilitary.initializePreparedRequest(connection, SQL_FIND, true, objects);
 			resultSet = preparedStatement.executeQuery();
@@ -82,10 +88,10 @@ public class ComputerDaoImplementation implements ComputerDao {
 	
 	@Override 
 	public void updateName(int id, String name) {
-		Connection connection = null;
+		HikariProxyConnection connection = null;
 		PreparedStatement preparedStatement = null;
 		try {
-			connection = (Connection) daoFactory.getConnection();
+	    	connection = (HikariProxyConnection) hikariDataSource.getConnection();
 			Object[] objects = { name , id };
 			preparedStatement = daoUtilitary.initializePreparedRequest(connection, SQL_UPDATE_NAME, true, objects);
 			preparedStatement.executeUpdate();
@@ -98,10 +104,10 @@ public class ComputerDaoImplementation implements ComputerDao {
 	
 	@Override
 	public void updateIntroduced(int id, Date introduced) {
-		Connection connection = null;
+		HikariProxyConnection connection = null;
 		PreparedStatement preparedStatement = null;
 		try {
-			connection = (Connection) daoFactory.getConnection();
+	    	connection = (HikariProxyConnection) hikariDataSource.getConnection();
 			Object[] objects = { introduced , id };
 			preparedStatement = daoUtilitary.initializePreparedRequest(connection, SQL_UPDATE_INTRODUCED, true, objects);
 			preparedStatement.executeUpdate();
@@ -114,10 +120,10 @@ public class ComputerDaoImplementation implements ComputerDao {
 	
 	@Override
 	public void updateDiscontinued(int id, Date discontinued) {
-		Connection connection = null;
+		HikariProxyConnection connection = null;
 		PreparedStatement preparedStatement = null;
 		try {
-			connection = (Connection) daoFactory.getConnection();
+	    	connection = (HikariProxyConnection) hikariDataSource.getConnection();
 			Object[] objects = { discontinued , id };
 			preparedStatement = daoUtilitary.initializePreparedRequest(connection, SQL_UPDATE_DISCONTINUED, true, objects);
 			preparedStatement.executeUpdate();
@@ -130,10 +136,10 @@ public class ComputerDaoImplementation implements ComputerDao {
 	
 	@Override
 	public void updateCompany(int idComputer, int idCompany) {
-		Connection connection = null;
+		HikariProxyConnection connection = null;
 		PreparedStatement preparedStatement = null;
 		try {
-			connection = (Connection) daoFactory.getConnection();
+	    	connection = (HikariProxyConnection) hikariDataSource.getConnection();
 			Object[] objects = { idCompany , idComputer };
 			preparedStatement = daoUtilitary.initializePreparedRequest(connection, SQL_UPDATE_COMPANY, true, objects);
 			preparedStatement.executeUpdate();
@@ -146,10 +152,10 @@ public class ComputerDaoImplementation implements ComputerDao {
 	
 	@Override
 	public void create(String name, Date introduced, Date discontinued , int idCompany) {
-		Connection connection = null;
+		HikariProxyConnection connection = null;
 		PreparedStatement preparedStatement = null;
 		try {
-			connection = (Connection) daoFactory.getConnection();
+	    	connection = (HikariProxyConnection) hikariDataSource.getConnection();
 			Object[] objects = { name , discontinued, introduced, idCompany };
 			preparedStatement = daoUtilitary.initializePreparedRequest(connection, SQL_CREATE, true, objects);
 			preparedStatement.executeUpdate();
@@ -162,10 +168,10 @@ public class ComputerDaoImplementation implements ComputerDao {
 	
 	@Override
 	public void delete(int idComputer) {
-		Connection connection = null;
+	    HikariProxyConnection connection = null;
 		PreparedStatement preparedStatement = null;
 		try {
-			connection = (Connection) daoFactory.getConnection();
+	    	connection = (HikariProxyConnection) hikariDataSource.getConnection();
 			Object[] objects = { idComputer };
 			preparedStatement = daoUtilitary.initializePreparedRequest(connection, SQL_DELETE, true, objects);
 			preparedStatement.executeUpdate();

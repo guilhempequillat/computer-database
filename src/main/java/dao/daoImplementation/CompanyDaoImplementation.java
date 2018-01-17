@@ -6,9 +6,13 @@ import java.util.ArrayList;
 
 import org.slf4j.LoggerFactory;
 
+import com.zaxxer.hikari.HikariDataSource;
+import com.zaxxer.hikari.pool.HikariProxyConnection;
+
 import java.sql.Connection;
 
 import ch.qos.logback.classic.Logger;
+import connectionPool.DataSource;
 
 import java.sql.PreparedStatement;
 import dao.DaoFactory;
@@ -23,8 +27,10 @@ public class CompanyDaoImplementation implements CompanyDao {
 	private DaoFactory daoFactory;
 	private DaoUtilitary daoUtilitary= DaoUtilitary.getInstance();
 	private static final String SQL_SELECT = "SELECT * FROM company";
+	private static final String SQL_CREATE = "INSERT INTO company "; //TODO
 	private CompanyMapper companyMapper = CompanyMapper.getCompanyMapper();
 	private Logger logger = (Logger) LoggerFactory.getLogger("CompanyDaoImplementation");
+	private HikariDataSource hikariDataSource = DataSource.getHikariDataSource();
 	
 	public CompanyDaoImplementation(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -32,10 +38,10 @@ public class CompanyDaoImplementation implements CompanyDao {
 	
 	@Override
 	public ArrayList<Company> findAll() throws DAOException {
-		Connection connection = null;
+	    HikariProxyConnection connection = null;
 	    PreparedStatement preparedStatement = null;
 	    try {
-	    	connection = (Connection) getDaoFactoryConnection();
+	    	connection = (HikariProxyConnection) hikariDataSource.getConnection();
 	        preparedStatement = getPreparedStatement(connection);
 	        ResultSet resultSet = preparedStatement.executeQuery();
 	        ArrayList<Company> companies = new ArrayList<>();

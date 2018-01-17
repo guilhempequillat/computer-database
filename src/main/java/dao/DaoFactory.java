@@ -70,7 +70,6 @@ public class DaoFactory {
         } catch ( ClassNotFoundException e ) {
             throw new DAOConfigurationException( "Driver not found.", e );
         }
-        //DaoFactory instance = new DaoFactory( url, userName, password );
         setDaoFactoryParameter( url, userName, password );
         return daoFactorySingleton;
     }

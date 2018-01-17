@@ -52,7 +52,7 @@ public class DataSource {
             hikariConfig.addDataSourceProperty( "cachePrepStmts" , cachePrepStmts );
             hikariConfig.addDataSourceProperty( "prepStmtCacheSize" , prepStmtCacheSize );
             hikariConfig.addDataSourceProperty( "prepStmtCacheSqlLimit" , prepStmtCacheSqlLimit );
-        } catch ( IOException e ) {
+        } catch ( IOException e  ) {
             throw new DAOConfigurationException( "Can't load properties file " + PROPERTIES_FILE, e );
         }
 		

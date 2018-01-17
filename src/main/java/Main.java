@@ -12,7 +12,8 @@ import security.PasswordVerification;
 public class Main {
 
 	public static void main(String[] args) {
-		//HikariDataSource h = DataSource.getHikariDataSource();
+		HikariDataSource h = DataSource.getHikariDataSource();
+		h.setAutoCommit(false);
 		Page page = new Page();
 	}
 }
