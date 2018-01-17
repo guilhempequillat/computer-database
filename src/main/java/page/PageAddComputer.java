@@ -1,4 +1,4 @@
-package view;
+package page;
 
 import java.time.LocalDate;
 
@@ -14,14 +14,14 @@ import model.Computer;
 import security.PasswordVerification;
 import service.serviceImplementation.ComputerServiceImplementation;
 
-public class PageWebAddComputer {
+public class PageAddComputer {
 	
-	private static PageWebAddComputer pageWebAddComputer = new PageWebAddComputer();
+	private static PageAddComputer pageWebAddComputer = new PageAddComputer();
 	private static Logger logger = (Logger) LoggerFactory.getLogger("PageWebAddComputer");
 	private static Dto dto;
 	private PasswordVerification passwordVerification = PasswordVerification.getInstance();
 	
-	public static PageWebAddComputer getInstance(HttpServletRequest request) {
+	public static PageAddComputer getInstance(HttpServletRequest request) {
 		dto = Dto.getInstance(request);
 		return pageWebAddComputer;
 	}
@@ -35,7 +35,7 @@ public class PageWebAddComputer {
 				computerService.create(computer.getName(), computer.getIntroduced(), computer.getDiscontinued(), Integer.parseInt(computer.getCompany_id().toString()));
 				return true;
 			}
-		}else if( passwordVerification.passwordIsCorrect(request.getParameter("password"))) {
+		}else if( !passwordVerification.passwordIsCorrect(request.getParameter("password"))) {
 			logger.info("Password invalide");
 		}
 		return false;

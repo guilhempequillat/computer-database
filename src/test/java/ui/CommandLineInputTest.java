@@ -11,6 +11,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import cui.CommandLineInput;
+
 @RunWith(MockitoJUnitRunner.class)
 public class CommandLineInputTest {
 	

@@ -7,6 +7,7 @@ public class PasswordVerification {
 	
 	private static byte[] hash = new byte[32];
 	private static PasswordVerification passwordVerification = new PasswordVerification();
+	private final String HASH_ALGO = "SHA-256";
 	
 	public static PasswordVerification getInstance() {
 		createHash();
@@ -14,6 +15,7 @@ public class PasswordVerification {
 	}
 	
 	public static void createHash() {
+		//Password hash for SHA-256
 		hash[0] = 93;
 		hash[1] = 45;
 		hash[2] = 60;
@@ -51,7 +53,7 @@ public class PasswordVerification {
 	public boolean passwordIsCorrect(String password) {
 		MessageDigest digest;
 		try {
-			digest = MessageDigest.getInstance("SHA-256");
+			digest = MessageDigest.getInstance(HASH_ALGO);
 			byte[] hash = digest.digest(password.getBytes());
 			for(int i = 0 ; i < hash.length ; i++) {
 				if(hash[i] != this.hash[i]) {
@@ -59,7 +61,6 @@ public class PasswordVerification {
 				}
 			}
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return true;

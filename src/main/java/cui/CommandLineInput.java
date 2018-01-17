@@ -1,4 +1,4 @@
-package ui;
+package cui;
 
 import java.time.LocalDate;
 import java.util.Scanner;

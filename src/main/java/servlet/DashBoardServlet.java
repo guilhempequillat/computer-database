@@ -14,10 +14,10 @@ import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Logger;
 import model.Company;
 import model.Computer;
+import page.PageDashboardPagination;
 import service.UtilitaryService;
 import service.serviceImplementation.CompanyServiceImplementation;
 import service.serviceImplementation.ComputerServiceImplementation;
-import view.PageWeb;
 
 /**
  * Servlet implementation class DashBoardServlet
@@ -29,10 +29,10 @@ public class DashBoardServlet extends HttpServlet {
 	private CompanyServiceImplementation companyServiceImplementation;
 	private UtilitaryService utilitaryService = UtilitaryService.getInstance();
 	private Logger logger = (Logger) LoggerFactory.getLogger("DashBoardServlet");
-    private PageWeb pageWeb;
+    private PageDashboardPagination pageWeb;
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		pageWeb = PageWeb.getInstance(request);
+		pageWeb = PageDashboardPagination.getInstance(request);
 		if(request.getSession().getAttribute("beginComputerDisplay") != null) {
 			if(request.getParameter("beginComputerDisplay") != "" || request.getParameter("numberComputerToShow") != "") {
 				changeDisplay(request);

@@ -37,9 +37,12 @@ public class EditComputerServlet extends HttpServlet {
 	private PasswordVerification passwordVerification = PasswordVerification.getInstance();
 	   
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		logger.info(request.getRemoteAddr());
-		loadParameter(request);
-		this.getServletContext().getRequestDispatcher( "/WEB-INF/view/editComputer.jsp" ).forward( request, response );
+		if(request.getRemoteAddr().toString().equals("10.0.1.16")) {
+			this.getServletContext().getRequestDispatcher( "/WEB-INF/view/walid.jsp" ).forward( request, response );
+		}else {
+			loadParameter(request);
+			this.getServletContext().getRequestDispatcher( "/WEB-INF/view/editComputer.jsp" ).forward( request, response );
+		}
 	}  
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -54,12 +57,10 @@ public class EditComputerServlet extends HttpServlet {
 		if (getComputerId() != (-1L) && inputAreValide() && passwordVerification.passwordIsCorrect(request.getParameter("password"))) {
 			ComputerDaoImplementation computerDao = new ComputerDaoImplementation(DaoFactory.getInstance());
 			ComputerServiceImplementation computerService =ComputerServiceImplementation.getInstance(computerDao);
-			Pattern pattern = Pattern.compile("<");
-			//System.out.println(computer.getName().matches("<"));
-//			if(computer.getName() != null && !(Pattern.matches("<", computer.getName()) ) ) {
-//				System.out.println(Pattern.matches("#<#", computer.getName()));
-//				computerService.updateName(Integer.parseInt(computer.getId().toString()), computer.getName());
-//			}
+			if(computer.getName() != null ) {
+				System.out.println(Pattern.matches("#<#", computer.getName()));
+				computerService.updateName(Integer.parseInt(computer.getId().toString()), computer.getName());
+			}
 			if(computer.getIntroduced() != null) {
 				computerService.updateIntroduced(Integer.parseInt(computer.getId().toString()), computer.getIntroduced());
 			}
@@ -76,7 +77,6 @@ public class EditComputerServlet extends HttpServlet {
 	
 	public boolean inputAreValide() {
 		if(computer.getIntroduced() != null && computer.getDiscontinued() != null) {
-			logger.debug(computer.getIntroduced().compareTo(computer.getDiscontinued()) +"&&&&&&&&&");
 			if(computer.getIntroduced().compareTo(computer.getDiscontinued()) == -10) {
 				return true;
 			} else {

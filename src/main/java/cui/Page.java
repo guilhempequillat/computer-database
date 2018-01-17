@@ -1,4 +1,4 @@
-package ui;
+package cui;
 
 import java.io.IOException;
 import java.time.LocalDate;

@@ -1,4 +1,4 @@
-package view;
+package page;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -7,19 +7,19 @@ import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Logger;
 import dto.Dto;
 
-public class PageWeb {
+public class PageDashboardPagination {
 	
-	private static PageWeb pageWeb = new PageWeb();
+	private static PageDashboardPagination pageWeb = new PageDashboardPagination();
 	private Logger logger = (Logger) LoggerFactory.getLogger("PageWeb");
 	private static Dto dto;
 	
-	public static PageWeb getInstance(HttpServletRequest request) {
+	public static PageDashboardPagination getInstance(HttpServletRequest request) {
 		dto = Dto.getInstance(request);
 		return pageWeb;
 	}
 	
 	public void changeDisplay(HttpServletRequest request) {
-		if(request.getParameter("beginComputerDisplay") != "" ) {
+		if(request.getParameter("beginComputerDisplay") != null ) {
 			try {
 				int beginComputerDisplay = Integer.parseInt(request.getParameter("beginComputerDisplay"));
 				request.getSession().setAttribute("beginComputerDisplay", beginComputerDisplay);
@@ -27,7 +27,7 @@ public class PageWeb {
 				logger.warn("beginComputerDisplay can't be parsed");
 			}
 		}
-		if(request.getParameter("numberComputerToShow") != "" ) {
+		if(request.getParameter("numberComputerToShow") != null ) {
 			try {
 				int numberComputerToShow = Integer.parseInt(request.getParameter("numberComputerToShow"));
 				request.getSession().setAttribute("numberComputerToShow", numberComputerToShow);
@@ -40,9 +40,5 @@ public class PageWeb {
 	public void initDisplay(HttpServletRequest request) {
 		request.getSession().setAttribute("beginComputerDisplay", 0);
 		request.getSession().setAttribute("numberComputerToShow", 10);	
-	}
-	
-	public void updateDb(HttpServletRequest request) {
-		
 	}
 }

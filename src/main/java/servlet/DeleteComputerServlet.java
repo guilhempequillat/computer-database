@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
-import controller.DeleteController;
 import model.Computer;
+import page.DeleteController;
 
 /**
  * Servlet implementation class DeleteComputerServlet
