@@ -1,6 +1,7 @@
-package page;
+package controller;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,25 +15,25 @@ import model.Computer;
 import security.PasswordVerification;
 import service.serviceImplementation.ComputerServiceImplementation;
 
-public class PageAddComputer {
+public class AddComputerController {
 	
-	private static PageAddComputer pageWebAddComputer = new PageAddComputer();
+	private static AddComputerController pageWebAddComputer = new AddComputerController();
 	private static Logger logger = (Logger) LoggerFactory.getLogger("PageWebAddComputer");
 	private static Dto dto;
 	private PasswordVerification passwordVerification = PasswordVerification.getInstance();
 	
-	public static PageAddComputer getInstance(HttpServletRequest request) {
+	public static AddComputerController getInstance(HttpServletRequest request) {
 		dto = Dto.getInstance(request);
 		return pageWebAddComputer;
 	}
 	
 	public boolean addComputerDb(HttpServletRequest request) {
-		Computer computer = parseComputer(request);
+		Optional<Computer> computer = parseComputer(request);
 		ComputerDaoImplementation computerDao = new ComputerDaoImplementation(DaoFactory.getInstance());
 		ComputerServiceImplementation computerService =ComputerServiceImplementation.getInstance(computerDao);
-		if(computer != null && passwordVerification.passwordIsCorrect(request.getParameter("password"))) {
-			if(computer.getName()!=null && computer.getIntroduced()!=null && computer.getDiscontinued()!=null && computer.getCompany_id() !=null ) {
-				computerService.create(computer.getName(), computer.getIntroduced(), computer.getDiscontinued(), Integer.parseInt(computer.getCompany_id().toString()));
+		if(computer.isPresent() && passwordVerification.passwordIsCorrect(request.getParameter("password"))) {
+			if(allFieldsAreCompleted(computer.get()) ) {
+				computerService.create(computer.get());
 				return true;
 			}
 		}else if( !passwordVerification.passwordIsCorrect(request.getParameter("password"))) {
@@ -41,7 +42,11 @@ public class PageAddComputer {
 		return false;
 	}
 	
-	public Computer parseComputer(HttpServletRequest request) {
+	public boolean allFieldsAreCompleted(Computer computer) {
+		return (computer.getName()!=null && computer.getIntroduced()!=null && computer.getDiscontinued()!=null && computer.getCompany_id() !=null);
+	}
+	
+	public Optional<Computer> parseComputer(HttpServletRequest request) {
 		Computer computer = new Computer();
 		if( request.getParameter("computerName") != "" ) {
 			computer.setName(request.getParameter("computerName"));
@@ -58,9 +63,9 @@ public class PageAddComputer {
 				computer.setCompany_id(Long.parseLong(request.getParameter("companyId")));
 				logger.debug(computer.toString());
 			} 
-			return computer;
+			return Optional.of(computer);
 		}
-		return null;
+		return Optional.empty();
 	}
 	
 	public boolean inputIsCorrect(HttpServletRequest request) {

@@ -208,7 +208,12 @@ public class Page {
 			}
 		}while( !inputCorrect );
 		idCompany = commandLineInput.readUserInputInt();
-		this.computerService.create( name, introducedLocalDate, discontinuedLocalDate, idCompany );
+		Computer computer = new Computer();
+		computer.setName(name);
+		computer.setIntroduced(introducedLocalDate);
+		computer.setDiscontinued(discontinuedLocalDate);
+		computer.setCompany_id((Long) new Integer(idCompany).longValue());
+		this.computerService.create(computer);
 	}
 	
 	public void quit() {

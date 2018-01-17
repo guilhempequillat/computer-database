@@ -150,13 +150,7 @@ public class ComputerDaoImplementation implements ComputerDao {
 		PreparedStatement preparedStatement = null;
 		try {
 			connection = (Connection) daoFactory.getConnection();
-			//Object[] objects = new Object[4];
-			Object[] objects = { null , discontinued, introduced, idCompany };
-//			if(name != null ) {
-//				objects[0] =name;
-//			}else {
-//				objects[0] ="NU";
-//			}
+			Object[] objects = { name , discontinued, introduced, idCompany };
 			preparedStatement = daoUtilitary.initializePreparedRequest(connection, SQL_CREATE, true, objects);
 			preparedStatement.executeUpdate();
 		} catch ( SQLException e ) {

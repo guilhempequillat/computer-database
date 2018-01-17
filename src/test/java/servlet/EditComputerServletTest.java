@@ -7,6 +7,8 @@ import static org.mockito.Mockito.mock;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Optional;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -37,9 +39,13 @@ public class EditComputerServletTest {
 		
 		Computer computer = new Computer();
 		computer.setId(1L);
+		
 		ArrayList<Computer> listComputer = new ArrayList<>();
 		listComputer.add(computer);
-		Mockito.when(editComputerServlet.getListComputer(request)).thenReturn( listComputer );
+		Optional<ArrayList<Computer>> listComputerOptional;
+		listComputerOptional = Optional.of(listComputer);
+		
+		Mockito.when(editComputerServlet.getListComputer(request)).thenReturn( listComputerOptional );
 		assertEquals(editComputerServlet.getComputerEdited(request,1L),computer );
 		
 		Mockito.when(editComputerServlet.getComputerEdited(request,2L)).thenCallRealMethod();

@@ -1,4 +1,4 @@
-package page;
+package controller;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -7,13 +7,13 @@ import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Logger;
 import dto.Dto;
 
-public class PageDashboardPagination {
+public class DashboardPaginationController {
 	
-	private static PageDashboardPagination pageWeb = new PageDashboardPagination();
+	private static DashboardPaginationController pageWeb = new DashboardPaginationController();
 	private Logger logger = (Logger) LoggerFactory.getLogger("PageWeb");
 	private static Dto dto;
 	
-	public static PageDashboardPagination getInstance(HttpServletRequest request) {
+	public static DashboardPaginationController getInstance(HttpServletRequest request) {
 		dto = Dto.getInstance(request);
 		return pageWeb;
 	}

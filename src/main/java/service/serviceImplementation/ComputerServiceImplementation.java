@@ -56,11 +56,14 @@ public class ComputerServiceImplementation implements ComputerService {
 	}
 
 	@Override
-	public void create(String name, LocalDate introduced, LocalDate discontinued, int idCompany) {
+	public void create(Computer computer) {
+		String name = computer.getName();
+		LocalDate introduced = computer.getIntroduced();
+		LocalDate discontinued = computer.getDiscontinued();
+		int idCompany = Integer.parseInt(computer.getCompany_id().toString());
 		Date dateIntroduced = Date.valueOf(introduced);
 		Date dateDiscontinued = Date.valueOf(discontinued);
 		computerDao.create(name, dateIntroduced, dateDiscontinued, idCompany);
-		
 	}
 
 	@Override

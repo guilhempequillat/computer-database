@@ -7,19 +7,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import page.PageAddComputer;
+import controller.AddComputerController;
 
 @WebServlet("/add-computer")
 public class AddComputerServlet extends HttpServlet {
 	
-	private static PageAddComputer pageWebAddComputer;
+	private static AddComputerController pageWebAddComputer;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		this.getServletContext().getRequestDispatcher( "/WEB-INF/view/addComputer.jsp" ).forward( request, response );
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		pageWebAddComputer = PageAddComputer.getInstance(request);
+		pageWebAddComputer = AddComputerController.getInstance(request);
 		boolean isAdded = pageWebAddComputer.addComputerDb(request);
 		if(isAdded) {
 			this.getServletContext().getRequestDispatcher( "/dashboard" ).forward( request, response );

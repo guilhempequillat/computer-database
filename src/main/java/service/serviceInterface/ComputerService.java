@@ -13,6 +13,6 @@ public interface ComputerService {
 	void updateIntroduced(int id, LocalDate introduced);
 	void updateDiscontinued(int id, LocalDate discontinued);
 	void updateCompany(int idComputer, int idCompany);
-	void create(String name, LocalDate introduced, LocalDate discontinued, int idCompany);
+	void create(Computer computer);
 	void delete(int idComputer);
 }

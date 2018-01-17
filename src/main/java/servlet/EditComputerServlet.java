@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
@@ -77,7 +78,7 @@ public class EditComputerServlet extends HttpServlet {
 	
 	public boolean inputAreValide() {
 		if(computer.getIntroduced() != null && computer.getDiscontinued() != null) {
-			if(computer.getIntroduced().compareTo(computer.getDiscontinued()) == -10) {
+			if(computer.getIntroduced().compareTo(computer.getDiscontinued()) < 0) {
 				return true;
 			} else {
 				logger.info("The dates are invalide");
@@ -115,29 +116,31 @@ public class EditComputerServlet extends HttpServlet {
 	public void loadParameter(HttpServletRequest request) {
 		Long id = loadComputerId(request);
 		request.getSession().setAttribute("idComputer", id );
-		request.getSession().setAttribute("computer", getComputerEdited(request, id));
+		if(getComputerEdited(request, id).isPresent()) {
+			request.getSession().setAttribute("computer", getComputerEdited(request, id).get());
+		}
 	}
 	
-	public Computer getComputerEdited(HttpServletRequest request, Long idComputer) {
+	public Optional<Computer> getComputerEdited(HttpServletRequest request, Long idComputer) {
 		if( idComputer != -1L ) {
-			ArrayList<Computer> listComputer;
+			Optional<ArrayList<Computer>> listComputer;
 			try {
 				listComputer = getListComputer(request);
 			} catch (NullPointerException e) {
-				return null;
+				return Optional.empty();
 			}
 			if( listComputer != null ) {
-				for(Computer computer : listComputer) {
+				for(Computer computer : listComputer.get()) {
 					if(computer.getId().equals(idComputer)) {
 						logger.info("Computer found");
-						return computer;
+						return Optional.of(computer);
 					}
 				}
 				logger.info("Computer not found");
 			}
-			return null;
+			return Optional.empty();
 		}else {
-			return null;
+			return Optional.empty();
 		}
 	}
 	
@@ -151,14 +154,14 @@ public class EditComputerServlet extends HttpServlet {
 		return -1L;		
 	}
 	
-	public ArrayList<Computer> getListComputer(HttpServletRequest request){
+	public Optional<ArrayList<Computer>> getListComputer(HttpServletRequest request){
 		HttpSession session = request.getSession();
 		ArrayList<Computer> listComputer = (ArrayList<Computer>) session.getAttribute("listComputer");
 		if( listComputer != null ) {
-			return listComputer;
+			return Optional.of(listComputer);
 		}else {
 			logger.info("No computer in session");
-			return null;
+			return Optional.empty();
 		}
 	}
 	
