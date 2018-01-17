@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.junit.runner.Computer;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;

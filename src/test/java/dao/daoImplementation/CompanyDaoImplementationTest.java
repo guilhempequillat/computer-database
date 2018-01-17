@@ -62,9 +62,7 @@ public class CompanyDaoImplementationTest {
 			Mockito.when(companyDaoImplementation.getPreparedStatement(connection)).thenReturn( (PreparedStatement) connection.prepareStatement(SQL_SELECT));
 			PreparedStatement preparedStatement = (PreparedStatement) connection.prepareStatement(SQL_SELECT);
 			ResultSet resultSet = preparedStatement.executeQuery();
-			System.out.println(resultSet.next());
-			System.out.println();
-			System.out.println(companyDaoImplementation.findAll());
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
