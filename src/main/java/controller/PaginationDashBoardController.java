@@ -5,6 +5,11 @@ import service.UtilitaryService;
 import service.serviceImplementation.ComputerServiceImplementation;
 
 import java.util.ArrayList;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.servlet.http.HttpServletRequest;
 
 public class PaginationDashBoardController {
 	private static ArrayList<Computer> listComputer;
@@ -16,6 +21,7 @@ public class PaginationDashBoardController {
 	private static ComputerServiceImplementation computerService;
 	private static int countComputer;
 	private static boolean filterState = false;
+	private static String filter="";
 	
 	public static PaginationDashBoardController getInstance() {
 		return paginationDashBoardController;
@@ -29,19 +35,28 @@ public class PaginationDashBoardController {
 	}
 	
 	public static void loadComputer() {
-		refreshComputerCount();
 		if( !filterState ) {
+			refreshComputerCount();
 			if( orderIsReverse ) {
 				selectAComputerListDesc();
 			} else {
 				selectAComputerListAsc();
 			}
 		} else {
-			loadComputerFilter();
+			refreshComputerCountFilter();
+			if( orderIsReverse ) {
+				selectAComputerListDesc();
+			} else {
+				selectAComputerListAscFilter();
+			}
 		}
 	}
 	
-	public static void loadComputerFilter() {
+	public static void refreshComputerCountFilter() {
+		listComputer = computerService.findPaginationAsc(orderType, 0, countComputer);
+	}
+	
+	public static void selectAComputerListAscFilter() {
 		switch(orderType) {
 			case "name" : 
 				listComputer = computerService.findPaginationAsc(orderType, 0, countComputer);
@@ -146,5 +161,9 @@ public class PaginationDashBoardController {
 	
 	public static void inverseOrder() {
 		orderIsReverse = orderIsReverse ? false : true ;
+	}
+	
+	public static void setFilter(String filter1) {
+		filter = filter1;
 	}
 }
