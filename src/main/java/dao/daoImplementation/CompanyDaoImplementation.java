@@ -26,8 +26,10 @@ public class CompanyDaoImplementation implements CompanyDao {
 
 	private DaoFactory daoFactory;
 	private DaoUtilitary daoUtilitary= DaoUtilitary.getInstance();
-	private static final String SQL_SELECT = "SELECT * FROM company";
-	private static final String SQL_CREATE = "INSERT INTO company "; //TODO
+	private static final String SQL_SELECT          = "SELECT * FROM company";
+	private static final String SQL_CREATE          = "INSERT INTO company ( name ) VALUES (?) ";
+	private static final String SQL_DELETE_COMPUTER = "DELETE FROM computer WHERE company_id = ? ";
+	private static final String SQL_DELETE_COMPANY  = "DELETE FROM company WHERE  id = ? ";
 	private CompanyMapper companyMapper = CompanyMapper.getCompanyMapper();
 	private Logger logger = (Logger) LoggerFactory.getLogger("CompanyDaoImplementation");
 	private HikariDataSource hikariDataSource = DataSource.getHikariDataSource();
@@ -42,6 +44,7 @@ public class CompanyDaoImplementation implements CompanyDao {
 	    PreparedStatement preparedStatement = null;
 	    try {
 	    	connection = (HikariProxyConnection) hikariDataSource.getConnection();
+	    	connection.setAutoCommit(true);
 	        preparedStatement = getPreparedStatement(connection);
 	        ResultSet resultSet = preparedStatement.executeQuery();
 	        ArrayList<Company> companies = new ArrayList<>();
@@ -49,6 +52,7 @@ public class CompanyDaoImplementation implements CompanyDao {
 	        	Company company = companyMapper.mapCompany(resultSet);
 	        	companies.add(company);
 	        }
+	        
 	        return companies;
 	    } catch ( SQLException e ) {
 	        throw new DAOException( e );
@@ -75,5 +79,44 @@ public class CompanyDaoImplementation implements CompanyDao {
 			e.printStackTrace();
 		};
 		return null;
+	}
+
+	@Override
+	public void delete(Long id) throws DAOException {
+		HikariProxyConnection connection = null;
+	    PreparedStatement preparedStatementDeleteCompany = null;
+	    PreparedStatement preparedStatementDeleteComputer = null;
+	    try {
+	    	connection = (HikariProxyConnection) hikariDataSource.getConnection();
+	    	connection.setAutoCommit(false);
+	    	Object[] objects = {id};
+	    	preparedStatementDeleteComputer = daoUtilitary.initializePreparedRequest(connection, SQL_DELETE_COMPUTER , false , objects);
+	    	preparedStatementDeleteComputer.executeUpdate();
+	    	preparedStatementDeleteCompany = daoUtilitary.initializePreparedRequest( connection, SQL_DELETE_COMPANY , false , objects);
+	    	preparedStatementDeleteCompany.executeUpdate();
+	    	connection.commit();
+	    } catch ( SQLException e ) {
+	        throw new DAOException( e );
+	    } finally {
+	    	DaoUtilitary.closeDao(preparedStatementDeleteCompany,connection);
+	    	DaoUtilitary.closeDao(preparedStatementDeleteComputer,connection);
+	    }
+	}
+
+	@Override
+	public void create(String name) throws DAOException {
+		HikariProxyConnection connection = null;
+	    PreparedStatement preparedStatement = null;
+	    try {
+	    	connection = (HikariProxyConnection) hikariDataSource.getConnection();
+	    	connection.setAutoCommit(true);
+	    	Object[] objects = { name };
+	    	preparedStatement = daoUtilitary.initializePreparedRequest( connection, SQL_CREATE, true , objects);
+	        preparedStatement.executeUpdate();
+	    } catch ( SQLException e ) {
+	        throw new DAOException( e );
+	    } finally {
+	    	DaoUtilitary.closeDao(preparedStatement,connection);
+	    }
 	}
 }

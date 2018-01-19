@@ -21,4 +21,10 @@ public interface ComputerDao {
 	void create( String name, Date introduced, Date discontinued, int idCompany);
 	
 	void delete( int idComputer );
+	
+	int count();
+	
+	ArrayList<Computer> findPaginationAsc(String orderType, int nbComputer, int nbToShow);
+	ArrayList<Computer> findPaginationDesc(String orderType, int nbComputerIndex, int nbToShow);
+	
 }

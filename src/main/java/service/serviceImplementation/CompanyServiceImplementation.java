@@ -17,6 +17,17 @@ public class CompanyServiceImplementation implements CompanyService{
 		return companies;
 	}
 	
+	@Override
+	public void create(Company company) {
+		String name = company.getName();
+		companyDao.create(name);
+	}
+	
+	@Override
+	public void delete(Long id) {
+		companyDao.delete(id);
+	}
+	
 	public static CompanyServiceImplementation getInstance(CompanyDao companyDaoLoaded) {
 		companyServiceImplementation.setCompanyDao(companyDaoLoaded);
 		return companyServiceImplementation;

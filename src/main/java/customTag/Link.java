@@ -10,12 +10,7 @@ import model.Computer;
 
 public class Link extends SimpleTagSupport {
 	
-	private String message;
 	private Computer computer = new Computer();
-	
-	public void setMessage(String message) {
-		this.message = message;
-	}
 	
 	public void setComputer(Computer computer) {
 		this.computer = computer;

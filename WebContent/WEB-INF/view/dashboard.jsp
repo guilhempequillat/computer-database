@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="java.text.NumberFormat" %>
 <%@ taglib prefix = "ex" uri = "custom.tld"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -24,12 +25,13 @@
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">
-                ${ listComputer.size() } Computers found
+                ${ listComputer.size() } Computers found<br>
+                ${ count } Computers found
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
-                    <form id="searchForm" action="#" method="GET" class="form-inline">
-                        <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" />
+                    <form id="searchForm" action="dashboard" method="POST" class="form-inline">
+                        <input type="search" id="searchbox" class="form-control" name="filter" placeholder="Search name" />
                         <input type="submit" id="searchsubmit" value="Filter by name"
                         class="btn btn-primary" />
                     </form>
@@ -65,30 +67,28 @@
                             </span>
                         </th>
                         <th>
-                            Computer name
+                            <a href="dashboard?order=name">Computer name</a>
                         </th>
                         <th>
-                            Introduced date
+                            <a href="dashboard?order=introduced">Introduced date</a>
                         </th>
                         <!-- Table header for Discontinued Date -->
                         <th>
-                            Discontinued date
+                            <a href="dashboard?order=discontinued">Discontinued date</a>
                         </th>
                         <!-- Table header for Company -->
                         <th>
-                            Company
+                            <a href="dashboard?order=company">Company</a>
                         </th>
 
                     </tr>
                 </thead>
                 <!-- Browse attribute computers -->
                 <tbody id="results">
-               
                     <c:forEach items="${listComputer}" var="computer" varStatus="status">
-                    
-                    	<c:if test="${status.count > beginComputerDisplay && status.count < beginComputerDisplay+numberComputerToShow}">
+                    	<%-- <c:if test="${status.count > beginComputerDisplay && status.count < beginComputerDisplay+numberComputerToShow}"> --%>
 							<ex:Link computer="${computer}" />
-						</c:if>
+						<%-- </c:if> --%>
 				    </c:forEach>
                 </tbody>
             </table>
@@ -104,15 +104,21 @@
 	                  </a>
 	              </li>
               </c:if>
-              <c:forEach var="i" begin="${beginComputerDisplay}" end="${listComputer.size()-numberComputerToShow}" step="${numberComputerToShow}" varStatus="status">
-              	<c:if test="${status.count < 5}">
-              		<li><a href="dashboard?beginComputerDisplay=${ i + numberComputerToShow }"> ${ i + numberComputerToShow } </a></li>
-              	</c:if>
-              	<c:if test="${status.count == 5}">
-              		<li><a href="dashboard?beginComputerDisplay=${ i + numberComputerToShow }">... </a></li>
-              	</c:if>
-              </c:forEach>
-              <c:if test="${beginComputerDisplay+numberComputerToShow <= listComputer.size()}">
+              <c:if test="${count-numberComputerToShow > 0}">
+	              <c:forEach var="i" begin="${beginComputerDisplay}" end="${count-numberComputerToShow}" step="${numberComputerToShow}" varStatus="status">
+	              	<c:if test="${status.count < 5}">
+	              		<li>
+	              			<a href="dashboard?beginComputerDisplay=${ i + numberComputerToShow }"> 
+	              				${  (i + numberComputerToShow)/numberComputerToShow } 
+	              		 	</a>
+	              		 </li>
+	              	</c:if>
+	              	<c:if test="${status.count == 5}">
+	              		<li><a href="dashboard?beginComputerDisplay=${ i + numberComputerToShow }">... </a></li>
+	              	</c:if>
+	              </c:forEach>
+	         </c:if>
+              <c:if test="${beginComputerDisplay+numberComputerToShow <= count}">
 	              <li>
 	                <a href="dashboard?beginComputerDisplay=${ beginComputerDisplay + numberComputerToShow }" aria-label="Next">
 	                    <span aria-hidden="true">&raquo;</span>

@@ -71,7 +71,22 @@ public class ComputerServiceImplementation implements ComputerService {
 		computerDao.delete(idComputer);
 	}
 	
+	@Override
+	public int count() {
+		return computerDao.count();
+	}
+	
 	public void setComputerDao(ComputerDao computerDaoLoaded) {
 		computerDao = computerDaoLoaded;	
+	}
+	
+	@Override
+	public ArrayList<Computer> findPaginationAsc(String orderType, int nbComputerIndex, int nbToShow){
+		return computerDao.findPaginationAsc(orderType, nbComputerIndex, nbToShow);
+	}
+
+	@Override
+	public ArrayList<Computer> findPaginationDesc(String orderType, int nbComputerIndex, int nbToShow) {
+		return computerDao.findPaginationDesc(orderType, nbComputerIndex, nbToShow);
 	}
 }

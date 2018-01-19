@@ -20,10 +20,13 @@ public class DataSource {
     private final static String PROPERTIY_PREP_STMT_CACHE_SQL_LIMITE = "prepStmtCacheSqlLimit";
     
 	private static HikariConfig hikariConfig = new HikariConfig();
-	private static HikariDataSource hikariDataSource;
-	
+	private static HikariDataSource hikariDataSource = initialisationHikariDataSource();
 	
 	public static HikariDataSource getHikariDataSource() {
+		return hikariDataSource;
+	}
+	
+	public static HikariDataSource initialisationHikariDataSource() {
 
 		Properties properties = new Properties();
         String url;
@@ -52,6 +55,8 @@ public class DataSource {
             hikariConfig.addDataSourceProperty( "cachePrepStmts" , cachePrepStmts );
             hikariConfig.addDataSourceProperty( "prepStmtCacheSize" , prepStmtCacheSize );
             hikariConfig.addDataSourceProperty( "prepStmtCacheSqlLimit" , prepStmtCacheSqlLimit );
+            hikariConfig.setAutoCommit(false);
+            hikariConfig.setTransactionIsolation("TRANSACTION_SERIALIZABLE");
         } catch ( IOException e  ) {
             throw new DAOConfigurationException( "Can't load properties file " + PROPERTIES_FILE, e );
         }

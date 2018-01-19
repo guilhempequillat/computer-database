@@ -23,7 +23,7 @@ public class AddComputerController {
 	private PasswordVerification passwordVerification = PasswordVerification.getInstance();
 	
 	public static AddComputerController getInstance(HttpServletRequest request) {
-		dto = Dto.getInstance(request);
+		dto = Dto.getInstance("",request);
 		return pageWebAddComputer;
 	}
 	

@@ -47,7 +47,9 @@ public class Page {
 		System.out.println("|   4- Update a computer     	    |");
 		System.out.println("|   5- Delete a computer     	    |");
 		System.out.println("|   6- Create a computer     	    |");
-		System.out.println("|   7- Quit                  	    |");
+		System.out.println("|   7- Create a company     	    |");
+		System.out.println("|   8- Delete a company     	    |");
+		System.out.println("|   9- Quit                  	    |");
 		System.out.println("|                           	    |");
 		System.out.println("-------------------------------------");
 	}
@@ -81,6 +83,12 @@ public class Page {
 				createAComputer();
 				break;
 			case "7" :
+				createACompany();
+				break;
+			case "8" :
+				deleteACompany();
+				break;
+			case "9" :
 				quit();
 				break;
 			default : 
@@ -194,7 +202,6 @@ public class Page {
 		name = commandLineInput.readUserInput();
 		do {
 			System.out.println("\nPlease enter the Introduced date : ");
-			
 			introducedLocalDate = commandLineInput.readUserInputDate();
 			introducedDate = java.sql.Date.valueOf(introducedLocalDate);
 			System.out.println("\nPlease enter the Discontined date : ");
@@ -219,5 +226,21 @@ public class Page {
 	public void quit() {
 		this.notQuit = false;
 		this.commandLineInput.closeScanner();
+	}
+	
+	public void createACompany() {
+		String name;
+		System.out.println("\nPlease enter the Company's name : ");
+		name = commandLineInput.readUserInput();
+		Company company = new Company();
+		company.setName(name);
+		companyService.create(company);		
+	}
+	
+	public void deleteACompany() {
+		Integer id;
+		System.out.println("\nPlease enter the Company's id : ");
+		id = commandLineInput.readUserInputInt();
+		companyService.delete(id.longValue());
 	}
 }

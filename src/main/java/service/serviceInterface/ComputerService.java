@@ -15,4 +15,7 @@ public interface ComputerService {
 	void updateCompany(int idComputer, int idCompany);
 	void create(Computer computer);
 	void delete(int idComputer);
+	int count();
+	public ArrayList<Computer> findPaginationAsc(String orderType, int nbComputerIndex, int nbToShow);
+	public ArrayList<Computer> findPaginationDesc(String orderType, int nbComputerIndex, int nbToShow);
 }

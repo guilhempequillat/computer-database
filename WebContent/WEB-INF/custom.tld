@@ -20,4 +20,16 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
+	<tag>
+		<name>Pagination</name>
+		<tag-class>customTag.Pagination</tag-class>
+		<body-content>scriptless</body-content>
+		
+		<attribute>
+			<name>listComputer</name>
+			<required>true</required>
+			<type>java.util.ArrayList</type>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
 </taglib>

@@ -30,6 +30,7 @@ public class DeleteComputerServlet extends HttpServlet {
 		deleteController.loadListId(request);
 		deleteController.loadPassword(request);
 		deleteController.deleteComputerDb();
+		this.getServletContext().getRequestDispatcher( "/dashboard" ).forward( request, response );
 	}
 
 	
