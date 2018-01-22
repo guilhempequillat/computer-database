@@ -18,6 +18,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
   	<mockitoVersion>1.10.19</mockitoVersion>
   	<assertjVersion>1.2.0</assertjVersion>
   	<hsqldbVersion>2.3.2</hsqldbVersion>
+  	<jasperVersion>6.0.32</jasperVersion>
   </properties>
   <dependencies>
  	<dependency>
@@ -79,6 +80,11 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	    <artifactId>hsqldb</artifactId>
 	    <version>${hsqldbVersion}</version>
 	    <scope>test</scope>
+	</dependency>
+	<dependency>
+	    <groupId>org.apache.tomcat</groupId>
+	    <artifactId>jasper</artifactId>
+	    <version>${jasperVersion}</version>
 	</dependency>
   </dependencies>
   <build>
