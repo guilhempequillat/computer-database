@@ -25,7 +25,7 @@ public class ComputerDaoImplementation implements ComputerDao {
 
 
 	private static final String SQL_FIND_ALL                          = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.id, company.name  FROM computer LEFT JOIN company ON computer.company_id = company.id";
-	private static final String SQL_FIND                              = "SELECT * FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.id = ?";
+	private static final String SQL_FIND                              = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.id, company.name FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.id = ?";
 	private static final String SQL_UPDATE_NAME                       = "UPDATE computer SET name = ? WHERE id = ?";
 	private static final String SQL_UPDATE_COMPANY                    = "UPDATE computer SET company_id = ? WHERE id = ?";
 	private static final String SQL_UPDATE_INTRODUCED                 = "UPDATE computer SET introduced = ? WHERE id = ?";
@@ -41,6 +41,44 @@ public class ComputerDaoImplementation implements ComputerDao {
 	private static final String SQL_FIND_PAGINATION_DESC_DISCONTINUED = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.id, company.name FROM computer LEFT JOIN company ON computer.company_id = company.id ORDER BY computer.discontinued DESC LIMIT ?,?";
 	private static final String SQL_FIND_PAGINATION_ASC_COMPANY       = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.id, company.name FROM computer LEFT JOIN company ON computer.company_id = company.id ORDER BY company.name ASC LIMIT ?,?";
 	private static final String SQL_FIND_PAGINATION_DESC_COMPANY      = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.id, company.name FROM computer LEFT JOIN company ON computer.company_id = company.id ORDER BY company.name DESC LIMIT ?,?";
+	private static final String SQL_COUNT_FILTER					  = "SELECT COUNT(*) FROM computer LEFT JOIN company ON computer.company_id = company.id "
+																    + "WHERE computer.name LIKE ? AND computer.introduced LIKE ? AND computer.discontinued LIKE ? AND company.name LIKE ? ";
+	
+	private static final String SQL_FIND_PAGINATION_ASC_NAME_FILTER  = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.id, company.name,''"
+																	+ " FROM computer LEFT JOIN company ON computer.company_id = company.id "
+																	+ " WHERE computer.name LIKE ? AND IFNULL(computer.introduced,'') LIKE ? AND IFNULL(computer.discontinued,'') LIKE ? AND IFNULL(company.name,'') LIKE ? "
+																	+ " ORDER BY computer.name ASC LIMIT ?,? ";
+	private static final String SQL_FIND_PAGINATION_DESC_NAME_FILTER = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.id, company.name"
+																	+ " FROM computer LEFT JOIN company ON computer.company_id = company.id "
+																	+ " WHERE computer.name LIKE ? AND IFNULL(computer.introduced,'') LIKE ? AND IFNULL(computer.discontinued,'') LIKE ? AND IFNULL(company.name,'') LIKE ?"
+																	+ " ORDER BY computer.name DESC LIMIT ?,? ";
+	
+	private static final String SQL_FIND_PAGINATION_ASC_INTRODUCED_FILTER = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.id, company.name"
+																	+ " FROM computer LEFT JOIN company ON computer.company_id = company.id "
+																	+ " WHERE computer.name LIKE ? AND IFNULL(computer.introduced,'') LIKE ? AND IFNULL(computer.discontinued,'') LIKE ? AND IFNULL(company.name,'') LIKE ? "
+																	+ " ORDER BY computer.introduced ASC LIMIT ?,? ";
+	private static final String SQL_FIND_PAGINATION_DESC_INTRODUCED_FILTER = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.id, company.name"
+																	+ " FROM computer LEFT JOIN company ON computer.company_id = company.id "
+																	+ " WHERE computer.name LIKE ? AND IFNULL(computer.introduced,'') LIKE ? AND IFNULL(computer.discontinued,'') LIKE ? AND IFNULL(company.name,'') LIKE ? "
+																	+ " ORDER BY computer.introduced DESC LIMIT ?,? ";
+
+	private static final String SQL_FIND_PAGINATION_ASC_DISCONTINUED_FILTER = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.id, company.name"
+																	+ " FROM computer LEFT JOIN company ON computer.company_id = company.id "
+																	+ " WHERE computer.name LIKE ? AND IFNULL(computer.introduced,'') LIKE ? AND IFNULL(computer.discontinued,'') LIKE ? AND IFNULL(company.name,'') LIKE ? "
+																	+ " ORDER BY computer.discontinued ASC LIMIT ?,? ";
+	private static final String SQL_FIND_PAGINATION_DESC_DISCONTINUED_FILTER = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.id, company.name"
+																	+ " FROM computer LEFT JOIN company ON computer.company_id = company.id "
+																	+ " WHERE computer.name LIKE ? AND IFNULL(computer.introduced,'') LIKE ? AND IFNULL(computer.discontinued,'') LIKE ? AND IFNULL(company.name,'') LIKE ? "
+																	+ " ORDER BY computer.discontinued DESC LIMIT ?,? ";
+
+	private static final String SQL_FIND_PAGINATION_ASC_COMPANY_FILTER = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.id, company.name"
+																	+ " FROM computer LEFT JOIN company ON computer.company_id = company.id "
+																	+ " WHERE computer.name LIKE ? AND IFNULL(computer.introduced,'') LIKE ? AND IFNULL(computer.discontinued,'') LIKE ? AND IFNULL(company.name,'') LIKE ?"
+																	+ " ORDER BY company.name ASC LIMIT ?,? ";
+	private static final String SQL_FIND_PAGINATION_DESC_COMPANY_FILTER = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.id, company.name"
+																	+ " FROM computer LEFT JOIN company ON computer.company_id = company.id "
+																	+ " WHERE computer.name LIKE ? AND IFNULL(computer.introduced,'') LIKE ? AND IFNULL(computer.discontinued,'') LIKE ? AND IFNULL(company.name,'') LIKE ? "
+																	+ " ORDER BY company.name DESC LIMIT ?,? ";
 	private DaoFactory daoFactory;
 	private DaoUtilitary daoUtilitary= DaoUtilitary.getInstance();
 	private static Logger logger = (Logger) LoggerFactory.getLogger("ComputerDao");
@@ -263,6 +301,136 @@ public class ComputerDaoImplementation implements ComputerDao {
 	    	DaoUtilitary.closeDao(preparedStatement, connection);
 	    }
 	}
+	@Override
+	public ArrayList<Computer> findPaginationDescFilter(String orderType, int nbComputerIndex, int nbToShow 
+			,String nameFilter ,String introduedFilter,String discontinuedFilter, String companyFilter) {
+		HikariProxyConnection connection = null;
+		PreparedStatement preparedStatement = null;
+		if(nameFilter != null) {
+			nameFilter = "%"+nameFilter+"%";
+		}else {
+			nameFilter = "%%";
+		}
+		if(introduedFilter != null) {
+			introduedFilter = "%"+introduedFilter+"%";
+		}else {
+			introduedFilter = "%%";
+		}
+		if(discontinuedFilter != null) {
+			discontinuedFilter = "%"+discontinuedFilter+"%";
+		}else {
+			discontinuedFilter = "%%";
+		}
+		if(companyFilter != null) {
+			companyFilter = "%"+companyFilter+"%";
+		}else {
+			companyFilter = "%%";
+		}
+		
+		try {
+			connection = (HikariProxyConnection) hikariDataSource.getConnection();
+	    	connection.setAutoCommit(true);
+	    	String order = "computer."+orderType;
+			Object[] objects = {nameFilter, introduedFilter, discontinuedFilter, companyFilter ,nbComputerIndex, nbToShow };
+	        preparedStatement = daoUtilitary.initializePreparedRequest( connection, getRequestFindPaginationDescFilter(orderType), true, objects );
+	        ResultSet resultSet = preparedStatement.executeQuery();
+	        ArrayList<Computer> computers = new ArrayList<>();
+	        while (resultSet.next()) {
+	        	Computer computer = computerMapper.mapComputer(resultSet);
+	        	computers.add(computer);
+	        }
+	        return computers;
+		} catch ( SQLException e ) {
+	        throw new DAOException( e );
+	    } finally {
+	    	DaoUtilitary.closeDao(preparedStatement, connection);
+	    }
+	}
+	
+	@Override
+	public ArrayList<Computer> findPaginationAscFilter(String orderType, int nbComputerIndex, int nbToShow 
+			,String nameFilter ,String introduedFilter,String discontinuedFilter, String companyFilter) {
+		HikariProxyConnection connection = null;
+		PreparedStatement preparedStatement = null;
+		if(nameFilter != null) {
+			nameFilter = "%"+nameFilter+"%";
+		}else {
+			nameFilter = "%%";
+		}
+		if(introduedFilter != null) {
+			introduedFilter = "%"+introduedFilter+"%";
+		}else {
+			introduedFilter = "%%";
+		}
+		if(discontinuedFilter != null) {
+			discontinuedFilter = "%"+discontinuedFilter+"%";
+		}else {
+			discontinuedFilter = "%%";
+		}
+		if(companyFilter != null) {
+			companyFilter = "%"+companyFilter+"%";
+		}else {
+			companyFilter = "%%";
+		}
+		
+		try {
+			connection = (HikariProxyConnection) hikariDataSource.getConnection();
+	    	connection.setAutoCommit(true);
+	    	String order = "computer."+orderType;
+			Object[] objects = {nameFilter, introduedFilter, discontinuedFilter, companyFilter ,nbComputerIndex, nbToShow };
+	        preparedStatement = daoUtilitary.initializePreparedRequest( connection, getRequestFindPaginationAscFilter(orderType), true, objects );
+	        ResultSet resultSet = preparedStatement.executeQuery();
+	        ArrayList<Computer> computers = new ArrayList<>();
+	        while (resultSet.next()) {
+	        	Computer computer = computerMapper.mapComputer(resultSet);
+	        	computers.add(computer);
+	        }
+	        return computers;
+		} catch ( SQLException e ) {
+	        throw new DAOException( e );
+	    } finally {
+	    	DaoUtilitary.closeDao(preparedStatement, connection);
+	    }
+	}
+	
+	@Override
+	public int countFilter(String nameFilter ,String introduedFilter,String discontinuedFilter, String companyFilter) {
+		HikariProxyConnection connection = null;
+		PreparedStatement preparedStatement = null;
+		if(nameFilter != null) {
+			nameFilter = "%"+nameFilter+"%";
+		}else {
+			nameFilter = "%%";
+		}
+		if(introduedFilter != null) {
+			introduedFilter = "%"+introduedFilter+"%";
+		}else {
+			introduedFilter = "%%";
+		}
+		if(discontinuedFilter != null) {
+			discontinuedFilter = "%"+discontinuedFilter+"%";
+		}else {
+			discontinuedFilter = "%%";
+		}
+		if(companyFilter != null) {
+			companyFilter = "%"+companyFilter+"%";
+		}else {
+			companyFilter = "%%";
+		}
+		try {
+			connection = (HikariProxyConnection) hikariDataSource.getConnection();
+	    	connection.setAutoCommit(true);
+			Object[] objects = {nameFilter, introduedFilter, discontinuedFilter, companyFilter };
+	        preparedStatement = daoUtilitary.initializePreparedRequest( connection, SQL_COUNT_FILTER, true, objects );
+	        ResultSet resultSet = preparedStatement.executeQuery();
+	        resultSet.next();
+			return resultSet.getInt(1);
+		} catch ( SQLException e ) {
+	        throw new DAOException( e );
+	    } finally {
+	    	DaoUtilitary.closeDao(preparedStatement, connection);
+	    }
+	}
 
 	public String getRequestFindPaginationAsc(String orderType) {
 		switch (orderType) {
@@ -288,6 +456,34 @@ public class ComputerDaoImplementation implements ComputerDao {
 				return SQL_FIND_PAGINATION_DESC_DISCONTINUED;
 			case "company" : 
 				return SQL_FIND_PAGINATION_DESC_COMPANY;
+		}
+		return SQL_FIND_PAGINATION_DESC_NAME;
+	}
+
+	public String getRequestFindPaginationAscFilter(String orderType) {
+		switch (orderType) {
+			case "name" : 
+				return SQL_FIND_PAGINATION_ASC_NAME_FILTER;
+			case "introduced" : 
+				return SQL_FIND_PAGINATION_ASC_INTRODUCED_FILTER;
+			case "discontinued" : 
+				return SQL_FIND_PAGINATION_ASC_DISCONTINUED_FILTER;
+			case "company" : 
+				return SQL_FIND_PAGINATION_ASC_COMPANY_FILTER;
+		}
+		return SQL_FIND_PAGINATION_ASC_NAME;
+	}
+	
+	public String getRequestFindPaginationDescFilter(String orderType) {
+		switch (orderType) {
+			case "name" : 
+				return SQL_FIND_PAGINATION_DESC_NAME_FILTER;
+			case "introduced" : 
+				return SQL_FIND_PAGINATION_DESC_INTRODUCED_FILTER;
+			case "discontinued" : 
+				return SQL_FIND_PAGINATION_DESC_DISCONTINUED_FILTER;
+			case "company" : 
+				return SQL_FIND_PAGINATION_DESC_COMPANY_FILTER;
 		}
 		return SQL_FIND_PAGINATION_DESC_NAME;
 	}

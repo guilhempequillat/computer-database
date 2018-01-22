@@ -38,6 +38,15 @@ public class DaoUtilitary {
     	return preparedStatement;
     }
 	
+//	public PreparedStatement initializePreparedRequestFilter(Connection connection, 
+//	    String sql, boolean returnGeneratedKeys, Object... objects)throws SQLException{
+//		PreparedStatement preparedStatement = (PreparedStatement) connection.prepareStatement(sql, returnGeneratedKeys ? Statement.RETURN_GENERATED_KEYS : Statement.NO_GENERATED_KEYS);
+//    	for(int i=0 ; i < objects.length ; i++) {
+//    		preparedStatement.setObject(i + 1, objects[i]);
+//    	}
+//    	return preparedStatement;
+//	}
+	
 	public static void closeDaoConnection(Connection connection) {
 		if ( connection != null ) {
 	        try {

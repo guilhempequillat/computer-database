@@ -91,3 +91,14 @@ $(document).keydown(function(e) {
     }
 });
 
+$('#toggleFilter').click(function(){
+    $('#filter').toggle(1000);
+});
+$( ".filter" ).change(function() {
+	if(this.value != ""){
+		this.style = "border-color: rgba(0,175,0,.75);";
+	}else{
+		this.style = "border-color: #ccc;";
+	}
+});
+

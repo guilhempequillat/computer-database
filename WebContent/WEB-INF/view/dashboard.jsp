@@ -25,16 +25,48 @@
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">
-                ${ listComputer.size() } Computers found<br>
                 ${ count } Computers found
             </h1>
+            <button id="toggleFilter" class="btn btn-default">Filter</button>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
-                    <form id="searchForm" action="dashboard" method="POST" class="form-inline">
-                        <input type="search" id="searchbox" class="form-control" name="filter" placeholder="Search name" />
-                        <input type="submit" id="searchsubmit" value="Filter by name"
-                        class="btn btn-primary" />
-                    </form>
+	                <div id="filter">
+	                    <form id="searchForm" action="dashboard" method="POST" class="form-inline">
+	                    	<div class="row">
+	                        	<div class = "col-sm-5">
+	                        		<label>By Name : </label>
+	                        	</div>
+	                        	<div class = "col-sm-7">
+	                        		<input type="search" id="filterName" class="form-control filter" name="filterName" placeholder="Search name" />
+	                        	</div>
+	                        </div>
+	                        <div class="row">
+		                        <div class = "col-sm-5">
+		                        	<label>By Introduced : </label>
+		                        </div>
+		                        <div class = "col-sm-7">
+		                        	<input type="search" id="filterIntroduced" class="form-control filter" name="filterIntroduced" placeholder="Search Introduced" />
+								</div>
+							</div>
+							<div class="row">
+		                        <div class = "col-sm-5">
+	                        		<label>By Discontinued : </label>
+	                        	</div>
+	                        	<div class = "col-sm-7">
+	                        		<input type="search" id="filterDiscontinued" class="form-control filter" name="filterDiscontinued" placeholder="Search Discontinued" />
+	                        	</div>
+	                        </div>
+	                        <div class="row">
+		                        <div class = "col-sm-5">
+	                        		<label>By Company : </label>
+	                        	</div>
+	                        	<div class = "col-sm-7">
+	                        		<input type="search" id="filterCompany" class="form-control filter" name="filterCompany" placeholder="Search Company" />
+	                        	</div>
+	                        </div>
+	                        <input type="submit" id="searchsubmit" value="Apply Filter" class="btn btn-primary" />
+	                    </form>
+                    </div>
                 </div>
                 <div class="pull-right">
                     <a class="btn btn-success" id="addComputer" href="add-computer">Add Computer</a> 

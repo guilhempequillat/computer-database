@@ -89,4 +89,17 @@ public class ComputerServiceImplementation implements ComputerService {
 	public ArrayList<Computer> findPaginationDesc(String orderType, int nbComputerIndex, int nbToShow) {
 		return computerDao.findPaginationDesc(orderType, nbComputerIndex, nbToShow);
 	}
+	@Override
+	public ArrayList<Computer> findPaginationDescFilter(String orderType, int nbComputerIndex, int nbToShow,String nameFilter ,String introduedFilter,String discontinuedFilter, String companyFilter) {
+		return computerDao.findPaginationDescFilter(orderType, nbComputerIndex, nbToShow, nameFilter ,introduedFilter,discontinuedFilter,companyFilter);
+	}
+	@Override
+	public ArrayList<Computer> findPaginationAscFilter(String orderType, int nbComputerIndex, int nbToShow,String nameFilter ,String introduedFilter,String discontinuedFilter, String companyFilter) {
+		return computerDao.findPaginationAscFilter(orderType, nbComputerIndex, nbToShow, nameFilter ,introduedFilter,discontinuedFilter,companyFilter);
+	}
+	
+	@Override
+	public int countFilter(String nameFilter ,String introduedFilter,String discontinuedFilter, String companyFilter) {
+		return computerDao.countFilter(nameFilter, introduedFilter, discontinuedFilter, companyFilter);
+	}
 }

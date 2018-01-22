@@ -24,7 +24,11 @@ public interface ComputerDao {
 	
 	int count();
 	
+	int countFilter(String nameFilter ,String introduedFilter,String discontinuedFilter, String companyFilter);
 	ArrayList<Computer> findPaginationAsc(String orderType, int nbComputer, int nbToShow);
-	ArrayList<Computer> findPaginationDesc(String orderType, int nbComputerIndex, int nbToShow);
+	
+	ArrayList<Computer> findPaginationDesc(String orderType, int nbComputerIndex, int nbToShow);	
+	ArrayList<Computer> findPaginationDescFilter(String orderType, int nbComputerIndex, int nbToShow,String nameFilter ,String introduedFilter,String discontinuedFilter, String companyFilter);
+	ArrayList<Computer> findPaginationAscFilter(String orderType, int nbComputerIndex, int nbToShow,String nameFilter ,String introduedFilter,String discontinuedFilter, String companyFilter);
 	
 }

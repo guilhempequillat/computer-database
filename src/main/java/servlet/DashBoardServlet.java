@@ -42,8 +42,37 @@ public class DashBoardServlet extends HttpServlet {
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		pageWeb = DashboardPaginationController.searchFilter(request.getParameter("filter"), request);
+		loadFilterParameter(request);
+		managePagination(request);
 		this.getServletContext().getRequestDispatcher( "/WEB-INF/view/dashboard.jsp" ).forward( request, response );
+	}
+	
+	public void loadFilterParameter(HttpServletRequest request) {
+		boolean filterIsUsed = false;
+		if(request.getParameter("filterName") != null && request.getParameter("filterName") != "") {
+			pagination.setFilterName(request.getParameter("filterName"));
+			request.getSession().setAttribute("filterName", request.getParameter("filterName"));
+			pagination.setFilterState(true);
+			filterIsUsed = true;
+		}
+		if(request.getParameter("filterIntroduced") != null && request.getParameter("filterIntroduced") != "") {
+			pagination.setFilterName(request.getParameter("filterIntroduced"));
+			request.getSession().setAttribute("filterIntroduced", request.getParameter("filterIntroduced"));
+			pagination.setFilterState(true);
+		}
+		if(request.getParameter("filterDiscontinued") != null && request.getParameter("filterDiscontinued") != "") {
+			pagination.setFilterName(request.getParameter("filterDiscontinued"));
+			request.getSession().setAttribute("filterDiscontinued", request.getParameter("filterDiscontinued"));
+			pagination.setFilterState(true);
+		}
+		if(request.getParameter("filterCompany") != null && request.getParameter("filterCompany") != "") {
+			pagination.setFilterName(request.getParameter("filterCompany"));
+			request.getSession().setAttribute("filterCompany", request.getParameter("filterCompany"));
+			pagination.setFilterState(true);
+		}
+		if( !filterIsUsed ) {
+			pagination.setFilterState(false);
+		}
 	}
 	
 	public void managePagination(HttpServletRequest request) {

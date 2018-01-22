@@ -16,6 +16,9 @@ public interface ComputerService {
 	void create(Computer computer);
 	void delete(int idComputer);
 	int count();
-	public ArrayList<Computer> findPaginationAsc(String orderType, int nbComputerIndex, int nbToShow);
-	public ArrayList<Computer> findPaginationDesc(String orderType, int nbComputerIndex, int nbToShow);
+	int countFilter(String nameFilter ,String introduedFilter,String discontinuedFilter, String companyFilter);
+	ArrayList<Computer> findPaginationAsc(String orderType, int nbComputerIndex, int nbToShow);
+	ArrayList<Computer> findPaginationDesc(String orderType, int nbComputerIndex, int nbToShow);
+	ArrayList<Computer> findPaginationAscFilter(String orderType, int nbComputerIndex, int nbToShow,String nameFilter ,String introduedFilter,String discontinuedFilter, String companyFilter);
+	ArrayList<Computer> findPaginationDescFilter(String orderType, int nbComputerIndex, int nbToShow,String nameFilter ,String introduedFilter,String discontinuedFilter, String companyFilter);
 }

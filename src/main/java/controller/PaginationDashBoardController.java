@@ -11,6 +11,10 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.LoggerFactory;
+
+import ch.qos.logback.classic.Logger;
+
 public class PaginationDashBoardController {
 	private static ArrayList<Computer> listComputer;
 	private static int nbComputerIndex;
@@ -22,6 +26,11 @@ public class PaginationDashBoardController {
 	private static int countComputer;
 	private static boolean filterState = false;
 	private static String filter="";
+	private static String filterName="";
+	private static String filterIntroduced="";
+	private static String filterDiscontined="";
+	private static String filterCompany="";
+	private static Logger logger = (Logger) LoggerFactory.getLogger("PaginationDashBoardController");
 	
 	public static PaginationDashBoardController getInstance() {
 		return paginationDashBoardController;
@@ -43,9 +52,10 @@ public class PaginationDashBoardController {
 				selectAComputerListAsc();
 			}
 		} else {
+			logger.debug("Filter Activate");
 			refreshComputerCountFilter();
 			if( orderIsReverse ) {
-				selectAComputerListDesc();
+				selectAComputerListDescFilter();
 			} else {
 				selectAComputerListAscFilter();
 			}
@@ -53,25 +63,44 @@ public class PaginationDashBoardController {
 	}
 	
 	public static void refreshComputerCountFilter() {
-		listComputer = computerService.findPaginationAsc(orderType, 0, countComputer);
+		countComputer = computerService.countFilter(filterName, filterIntroduced, filterDiscontined, filterCompany);
 	}
-	
+
 	public static void selectAComputerListAscFilter() {
 		switch(orderType) {
 			case "name" : 
-				listComputer = computerService.findPaginationAsc(orderType, 0, countComputer);
+				listComputer = computerService.findPaginationAscFilter(orderType, nbComputerIndex, nbToShow, filterName, filterIntroduced, filterDiscontined, filterCompany);
 				break;
 			case "introduced" :
-				listComputer = computerService.findPaginationAsc(orderType, 0, countComputer);
+				listComputer = computerService.findPaginationAscFilter(orderType, nbComputerIndex, nbToShow, filterName, filterIntroduced, filterDiscontined, filterCompany);
 				break;
 			case "discontinued" :
-				listComputer = computerService.findPaginationAsc(orderType, 0, countComputer);
+				listComputer = computerService.findPaginationAscFilter(orderType, nbComputerIndex, nbToShow, filterName, filterIntroduced, filterDiscontined, filterCompany);
 				break;
 			case "company" :
-				listComputer = computerService.findPaginationAsc(orderType, 0, countComputer);
+				listComputer = computerService.findPaginationAscFilter(orderType, nbComputerIndex, nbToShow, filterName, filterIntroduced, filterDiscontined, filterCompany);
 				break;
 			default:
-				listComputer = computerService.findPaginationAsc(orderType, 0, countComputer);
+				listComputer = computerService.findPaginationAscFilter(orderType, nbComputerIndex, nbToShow, filterName, filterIntroduced, filterDiscontined, filterCompany);
+		}
+	}
+	
+	public static void selectAComputerListDescFilter() {
+		switch(orderType) {
+			case "name" : 
+				listComputer = computerService.findPaginationDescFilter(orderType, nbComputerIndex, nbToShow, filterName, filterIntroduced, filterDiscontined, filterCompany);
+				break;
+			case "introduced" :
+				listComputer = computerService.findPaginationDescFilter(orderType, nbComputerIndex, nbToShow, filterName, filterIntroduced, filterDiscontined, filterCompany);
+				break;
+			case "discontinued" :
+				listComputer = computerService.findPaginationDescFilter(orderType, nbComputerIndex, nbToShow, filterName, filterIntroduced, filterDiscontined, filterCompany);
+				break;
+			case "company" :
+				listComputer = computerService.findPaginationDescFilter(orderType, nbComputerIndex, nbToShow, filterName, filterIntroduced, filterDiscontined, filterCompany);
+				break;
+			default:
+				listComputer = computerService.findPaginationDescFilter(orderType, nbComputerIndex, nbToShow, filterName, filterIntroduced, filterDiscontined, filterCompany);
 		}
 	}
 	
@@ -166,4 +195,38 @@ public class PaginationDashBoardController {
 	public static void setFilter(String filter1) {
 		filter = filter1;
 	}
+
+	public static boolean isFilterState() {
+		return filterState;
+	}
+
+	public static void setFilterState(boolean filterState) {
+		PaginationDashBoardController.filterState = filterState;
+	}
+
+	public static String getFilterName() {
+		return filterName;
+	}
+
+	public static void setFilterName(String filterName) {
+		PaginationDashBoardController.filterName = filterName;
+	}
+
+	public static String getFilterIntroduced() {
+		return filterIntroduced;
+	}
+
+	public static void setFilterIntroduced(String filterIntroduced) {
+		PaginationDashBoardController.filterIntroduced = filterIntroduced;
+	}
+
+	public static String getFilterDiscontined() {
+		return filterDiscontined;
+	}
+
+	public static void setFilterDiscontined(String filterDiscontined) {
+		PaginationDashBoardController.filterDiscontined = filterDiscontined;
+	}
+	
+	
 }
