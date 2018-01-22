@@ -1,8 +1,8 @@
 package cui;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
@@ -13,7 +13,6 @@ import model.Company;
 import model.Computer;
 import service.serviceImplementation.CompanyServiceImplementation;
 import service.serviceImplementation.ComputerServiceImplementation;
-import service.serviceInterface.CompanyService;
 
 public class Page {
 	

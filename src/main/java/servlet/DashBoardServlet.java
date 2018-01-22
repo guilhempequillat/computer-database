@@ -37,15 +37,6 @@ public class DashBoardServlet extends HttpServlet {
     private PaginationDashBoardController pagination = PaginationDashBoardController.getInstance();
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//		pageWeb = DashboardPaginationController.getInstance(request);
-//		if(request.getSession().getAttribute("beginComputerDisplay") != null) {
-//			if(request.getParameter("beginComputerDisplay") != "" || request.getParameter("numberComputerToShow") != "") {
-//				changeDisplay(request);
-//			}
-//		} else {
-//			initDisplay(request);
-//		}
-//		manageOrder(request);
 		managePagination(request);
 		this.getServletContext().getRequestDispatcher( "/WEB-INF/view/dashboard.jsp" ).forward( request, response );
 	}
@@ -90,7 +81,7 @@ public class DashBoardServlet extends HttpServlet {
 				PaginationDashBoardController.setNbComputerIndex(beginComputerDisplay);
 				request.getSession().setAttribute("beginComputerDisplay", beginComputerDisplay);
 			}catch(NumberFormatException e) {
-				logger.warn("beginComputerDisplay can't be parsed");
+				logger.warn("beginComputerDisplay can't be parsed" + e);
 			}
 		}
 		if(request.getParameter("numberComputerToShow") != null ) {
@@ -99,7 +90,7 @@ public class DashBoardServlet extends HttpServlet {
 				PaginationDashBoardController.setNbToShow(numberComputerToShow);
 				request.getSession().setAttribute("numberComputerToShow", numberComputerToShow);
 			}catch(NumberFormatException e) {
-				logger.warn("numberComputerToShow can't be parsed");
+				logger.warn("numberComputerToShow can't be parsed"+ e);
 			}
 		}
 	}

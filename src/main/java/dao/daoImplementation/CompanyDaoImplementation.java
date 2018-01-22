@@ -65,8 +65,7 @@ public class CompanyDaoImplementation implements CompanyDao {
 		try {
 			return daoUtilitary.initializePreparedRequest( connection, SQL_SELECT, true );
 		} catch (SQLException e) {
-			logger.error("The connection can't be reach");
-			e.printStackTrace();
+			logger.error("The connection can't be reach" + e);
 		}
 		return null;
 	}
@@ -75,8 +74,7 @@ public class CompanyDaoImplementation implements CompanyDao {
 		try {
 			return (Connection) daoFactory.getConnection();
 		} catch (SQLException e) {
-			logger.error("The connection can't be reach");
-			e.printStackTrace();
+			logger.error("The connection can't be reach" + e);
 		};
 		return null;
 	}

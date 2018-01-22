@@ -57,10 +57,6 @@ public class EditComputerServletTest {
 		Mockito.when(editComputerServlet.getListComputer(request)).thenReturn( Optional.empty()  );
 		Mockito.when(editComputerServlet.getComputerEdited(request,-1L)).thenCallRealMethod();
 		assertEquals(editComputerServlet.getComputerEdited(request,-1L),Optional.empty()  );
-		
-//		Mockito.when(editComputerServlet.getListComputer(request)).thenReturn( Optional.empty()  );
-//		Mockito.when(editComputerServlet.getComputerEdited(request,1L)).thenCallRealMethod();
-//		assertEquals(editComputerServlet.getComputerEdited(request,1L),Optional.empty()  );
 	}
 	
 	@Test
@@ -80,11 +76,9 @@ public class EditComputerServletTest {
 		Mockito.when(session.getAttribute("listComputer")).thenReturn(listComputer);
 		Mockito.when(request.getSession()).thenReturn(session);
 		Mockito.when(editComputerServlet.getListComputer(request)).thenCallRealMethod();
-		//assertEquals(editComputerServlet.getListComputer(request),listComputer );
 		
 		Mockito.when(session.getAttribute("listComputer")).thenReturn(null);
 		Mockito.when(request.getSession()).thenReturn(session);
-		//assertEquals(editComputerServlet.getListComputer(request),null );
 	}
 	
 	@Test

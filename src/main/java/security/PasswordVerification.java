@@ -3,10 +3,15 @@ package security;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import org.slf4j.LoggerFactory;
+
+import ch.qos.logback.classic.Logger;
+
 public class PasswordVerification {
 	
 	private static byte[] hash = new byte[32];
 	private static PasswordVerification passwordVerification = new PasswordVerification();
+	Logger logger = (Logger) LoggerFactory.getLogger("PasswordVerification");
 	private final String HASH_ALGO = "SHA-256";
 	
 	public static PasswordVerification getInstance() {
@@ -61,7 +66,7 @@ public class PasswordVerification {
 				}
 			}
 		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
+			logger.error("Used hash algo isn't valid : "+e);
 		}
 		return true;
 	}
