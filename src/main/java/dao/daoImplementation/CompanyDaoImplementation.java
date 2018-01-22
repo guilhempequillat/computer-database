@@ -26,7 +26,7 @@ public class CompanyDaoImplementation implements CompanyDao {
 
 	private DaoFactory daoFactory;
 	private DaoUtilitary daoUtilitary= DaoUtilitary.getInstance();
-	private static final String SQL_SELECT          = "SELECT * FROM company";
+	private static final String SQL_SELECT          = "SELECT id , name FROM company";
 	private static final String SQL_CREATE          = "INSERT INTO company ( name ) VALUES (?) ";
 	private static final String SQL_DELETE_COMPUTER = "DELETE FROM computer WHERE company_id = ? ";
 	private static final String SQL_DELETE_COMPANY  = "DELETE FROM company WHERE  id = ? ";
