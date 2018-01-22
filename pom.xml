@@ -6,80 +6,81 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
   <artifactId>computer-database</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
-  
+  <properties>
+  	<mysqlVersion>5.1.38</mysqlVersion>
+  	<logbackVersion>1.2.3</logbackVersion>
+  	<sl4jVersion>1.7.25</sl4jVersion>
+  	<jstlVersion>1.2</jstlVersion>
+  	<servletVersion>3.1.0</servletVersion>
+  	<jspVersion>2.2</jspVersion>
+  	<hikariCPVersion>2.7.2</hikariCPVersion>
+  	<junitVersion>4.12</junitVersion>
+  	<mockitoVersion>1.10.19</mockitoVersion>
+  	<assertjVersion>1.2.0</assertjVersion>
+  	<hsqldbVersion>2.3.2</hsqldbVersion>
+  </properties>
   <dependencies>
- 		<dependency>
+ 	<dependency>
 	    <groupId>mysql</groupId>
 	    <artifactId>mysql-connector-java</artifactId>
-	    <version>5.1.38</version>
-	</dependency>
-	<dependency>
-	    <groupId>ch.qos.logback</groupId>
-	    <artifactId>logback-access</artifactId>
-	    <version>1.2.3</version>
+	    <version>${mysqlVersion}</version>
 	</dependency>
 	<dependency>
 	    <groupId>ch.qos.logback</groupId>
 	    <artifactId>logback-classic</artifactId>
-	    <version>1.2.3</version>
-	</dependency>
-	<dependency>
-	    <groupId>ch.qos.logback</groupId>
-	    <artifactId>logback-core</artifactId>
-	    <version>1.2.3</version>
+	    <version>${logbackVersion}</version>
 	</dependency>
 	<dependency>
 	    <groupId>org.slf4j</groupId>
 	    <artifactId>slf4j-api</artifactId>
-	    <version>1.7.25</version>
+	    <version>${sl4jVersion}</version>
 	</dependency>
 	<dependency>
 	    <groupId>javax.servlet.jsp.jstl</groupId>
 	    <artifactId>jstl-api</artifactId>
-	    <version>1.2</version>
+	    <version>${jstlVersion}</version>
 	</dependency>
 	<dependency>
 	    <groupId>javax.servlet</groupId>
 	    <artifactId>javax.servlet-api</artifactId>
-	    <version>3.1.0</version>
+	    <version>${servletVersion}</version>
 	</dependency>
 	<dependency>
 	    <groupId>javax.servlet.jsp</groupId>
 	    <artifactId>jsp-api</artifactId>
-	    <version>2.2</version>
+	    <version>${jspVersion}</version>
 	</dependency>
 	<dependency>
 	    <groupId>com.zaxxer</groupId>
 	    <artifactId>HikariCP</artifactId>
-	    <version>2.7.2</version>
+	    <version>${hikariCPVersion}</version>
 	    <scope>compile</scope>
 	</dependency>
 	<dependency>
 	    <groupId>junit</groupId>
 	    <artifactId>junit</artifactId>
-	    <version>4.12</version>
+	    <version>${junitVersion}</version>
 	    <scope>test</scope>
 	</dependency>
 	<dependency>
 	    <groupId>org.mockito</groupId>
 	    <artifactId>mockito-all</artifactId>
-	    <version>1.10.19</version>
+	    <version>${mockitoVersion}</version>
 	    <scope>test</scope>
 	</dependency>
 	<dependency>
 	  <groupId>org.assertj</groupId>
 	  <artifactId>assertj-db</artifactId>
-	  <version>1.2.0</version>
+	  <version>${assertjVersion}</version>
 	  <scope>test</scope>
 	</dependency>
 	<dependency>
 	    <groupId>org.hsqldb</groupId>
 	    <artifactId>hsqldb</artifactId>
-	    <version>2.3.2</version>
+	    <version>${hsqldbVersion}</version>
 	    <scope>test</scope>
 	</dependency>
   </dependencies>
-  
   <build>
     <plugins>
       <plugin>
