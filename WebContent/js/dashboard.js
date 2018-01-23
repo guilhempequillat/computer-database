@@ -101,4 +101,14 @@ $( ".filter" ).change(function() {
 		this.style = "border-color: #ccc;";
 	}
 });
+$( ".filter-date" ).change(function() {
+	var regex = /^([0-9 \-]){1,10}$/;
+	if( regex.test(this.value) && this.value != "" ){
+		this.style = "border-color: rgba(0,175,0,.75);";
+	}else if(this.value == "" ){
+		this.style = "border-color: #ccc;";
+	}else if( !regex.test(this.value) ){
+		this.style = "border-color: rgba(175,0,0,.75);";
+	}
+});
 

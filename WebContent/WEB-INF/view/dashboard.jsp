@@ -45,7 +45,7 @@
 		                        	<label>By Introduced : </label>
 		                        </div>
 		                        <div class = "col-sm-7">
-		                        	<input type="search" id="filterIntroduced" class="form-control filter" name="filterIntroduced" placeholder="Search Introduced" />
+		                        	<input type="search" id="filterIntroduced" class="form-control filter-date" name="filterIntroduced" placeholder="Search Introduced" />
 								</div>
 							</div>
 							<div class="row">
@@ -53,7 +53,7 @@
 	                        		<label>By Discontinued : </label>
 	                        	</div>
 	                        	<div class = "col-sm-7">
-	                        		<input type="search" id="filterDiscontinued" class="form-control filter" name="filterDiscontinued" placeholder="Search Discontinued" />
+	                        		<input type="search" id="filterDiscontinued" class="form-control filter-date" name="filterDiscontinued" placeholder="Search Discontinued" />
 	                        	</div>
 	                        </div>
 	                        <div class="row">

@@ -42,7 +42,7 @@ public class ComputerDaoImplementation implements ComputerDao {
 	private static final String SQL_FIND_PAGINATION_ASC_COMPANY       = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.id, company.name FROM computer LEFT JOIN company ON computer.company_id = company.id ORDER BY company.name ASC LIMIT ?,?";
 	private static final String SQL_FIND_PAGINATION_DESC_COMPANY      = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.id, company.name FROM computer LEFT JOIN company ON computer.company_id = company.id ORDER BY company.name DESC LIMIT ?,?";
 	private static final String SQL_COUNT_FILTER					  = "SELECT COUNT(*) FROM computer LEFT JOIN company ON computer.company_id = company.id "
-																    + "WHERE computer.name LIKE ? AND computer.introduced LIKE ? AND computer.discontinued LIKE ? AND company.name LIKE ? ";
+																    + " WHERE computer.name LIKE ? AND IFNULL(computer.introduced,'') LIKE ? AND IFNULL(computer.discontinued,'') LIKE ? AND IFNULL(company.name,'') LIKE ? ";
 	
 	private static final String SQL_FIND_PAGINATION_ASC_NAME_FILTER  = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.id, company.name,''"
 																	+ " FROM computer LEFT JOIN company ON computer.company_id = company.id "

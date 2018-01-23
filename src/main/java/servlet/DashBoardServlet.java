@@ -56,22 +56,34 @@ public class DashBoardServlet extends HttpServlet {
 			filterIsUsed = true;
 		}
 		if(request.getParameter("filterIntroduced") != null && request.getParameter("filterIntroduced") != "") {
-			pagination.setFilterName(request.getParameter("filterIntroduced"));
+			pagination.setFilterIntroduced(request.getParameter("filterIntroduced"));
 			request.getSession().setAttribute("filterIntroduced", request.getParameter("filterIntroduced"));
 			pagination.setFilterState(true);
+			filterIsUsed = true;
 		}
 		if(request.getParameter("filterDiscontinued") != null && request.getParameter("filterDiscontinued") != "") {
-			pagination.setFilterName(request.getParameter("filterDiscontinued"));
+			pagination.setFilterDiscontined(request.getParameter("filterDiscontinued"));
 			request.getSession().setAttribute("filterDiscontinued", request.getParameter("filterDiscontinued"));
 			pagination.setFilterState(true);
+			filterIsUsed = true;
 		}
 		if(request.getParameter("filterCompany") != null && request.getParameter("filterCompany") != "") {
-			pagination.setFilterName(request.getParameter("filterCompany"));
+			pagination.setFilterCompany(request.getParameter("filterCompany"));
 			request.getSession().setAttribute("filterCompany", request.getParameter("filterCompany"));
 			pagination.setFilterState(true);
+			filterIsUsed = true;
 		}
 		if( !filterIsUsed ) {
 			pagination.setFilterState(false);
+			pagination.setFilterDiscontined(request.getParameter("filterDiscontinued"));
+			request.getSession().setAttribute("filterDiscontinued", "");
+			request.getSession().setAttribute("filterCompany", "");
+			request.getSession().setAttribute("filterIntroduced", "");
+			request.getSession().setAttribute("filterName", "");
+			pagination.setFilterName("");
+			pagination.setFilterIntroduced("");
+			pagination.setFilterDiscontined("");
+			pagination.setFilterCompany("");
 		}
 	}
 	

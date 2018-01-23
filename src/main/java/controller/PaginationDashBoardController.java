@@ -227,6 +227,12 @@ public class PaginationDashBoardController {
 	public static void setFilterDiscontined(String filterDiscontined) {
 		PaginationDashBoardController.filterDiscontined = filterDiscontined;
 	}
-	
-	
+
+	public static String getFilterCompany() {
+		return filterCompany;
+	}
+
+	public static void setFilterCompany(String filterCompany) {
+		PaginationDashBoardController.filterCompany = filterCompany;
+	}
 }
