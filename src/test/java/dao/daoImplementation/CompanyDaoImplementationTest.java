@@ -12,6 +12,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.cdb.dao.DaoFactory;
+import org.cdb.dao.DaoUtilitary;
+import org.cdb.dao.daoImplementation.CompanyDaoImplementation;
+import org.cdb.mapper.CompanyMapper;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,10 +24,7 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Logger;
-import dao.DaoFactory;
-import dao.DaoUtilitary;
 import dao.ScriptRunner;
-import mapper.CompanyMapper;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CompanyDaoImplementationTest {

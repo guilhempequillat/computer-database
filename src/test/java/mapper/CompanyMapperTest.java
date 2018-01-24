@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import org.cdb.mapper.CompanyMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;

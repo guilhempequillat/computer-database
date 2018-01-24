@@ -5,13 +5,13 @@ import static org.junit.Assert.assertNotEquals;
 
 import java.time.LocalDate;
 import java.util.Scanner;
+
+import org.cdb.cui.CommandLineInput;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import cui.CommandLineInput;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CommandLineInputTest {

@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.cdb.model.Computer;
+import org.cdb.servlet.EditComputerServlet;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -21,7 +23,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
-import model.Computer;
 
 @RunWith(MockitoJUnitRunner.class)
 public class EditComputerServletTest {

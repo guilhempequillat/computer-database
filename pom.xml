@@ -19,7 +19,8 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
   	<assertjVersion>1.2.0</assertjVersion>
   	<hsqldbVersion>2.3.2</hsqldbVersion>
   	<jasperVersion>6.0.32</jasperVersion>
-  	<springVersion>4.3.10.RELEASE</springVersion>
+  	<springVersion>4.3.13.RELEASE</springVersion>
+  	<springBootVersion>1.5.9.RELEASE</springBootVersion>
   	<javaVersion>1.8</javaVersion>
   	<javaCompilerPluginVersion>3.7.0</javaCompilerPluginVersion>
   </properties>
@@ -55,9 +56,14 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	    <version>${jspVersion}</version>
 	</dependency>
 	<dependency>
-    <groupId>org.springframework</groupId>
-	    <artifactId>spring-context</artifactId>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-webmvc</artifactId>
 	    <version>${springVersion}</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.springframework.boot</groupId>
+	    <artifactId>spring-boot-starter-web</artifactId>
+	    <version>${springBootVersion}</version>
 	</dependency>
 	<dependency>
 	    <groupId>com.zaxxer</groupId>
