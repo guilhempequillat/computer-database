@@ -122,7 +122,6 @@ public class DashBoardServlet extends HttpServlet {
 		request.getSession().setAttribute("listCompany", pagination.getListCompany());
 	}
 	
-	
 	public void changeAttributs(HttpServletRequest request) {
 		if(request.getParameter("beginComputerDisplay") != null ) {
 			try {

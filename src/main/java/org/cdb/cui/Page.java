@@ -17,16 +17,16 @@ import org.springframework.stereotype.Controller;
 
 import ch.qos.logback.classic.Logger;
 
-@Controller
+
 public class Page {
 	
-	@Autowired
+//	@Autowired
 	private CommandLineInput commandLineInput;
 	
-	@Autowired
+//	@Autowired
 	private CompanyServiceImplementation companyService;
 	
-	@Autowired
+//	@Autowired
 	private ComputerServiceImplementation computerService;
 	
 	private UtilitaryService utilitaryService = UtilitaryService.getInstance();

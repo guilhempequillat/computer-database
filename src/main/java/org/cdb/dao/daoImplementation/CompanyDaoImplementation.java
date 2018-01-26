@@ -29,65 +29,22 @@ import java.sql.PreparedStatement;
 @Repository
 public class CompanyDaoImplementation implements CompanyDao {
 
-//	private DaoFactory daoFactory;
-//	private DaoUtilitary daoUtilitary= DaoUtilitary.getInstance();
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
+	
 	private static final String SQL_SELECT          = "SELECT id , name FROM company";
 	private static final String SQL_CREATE          = "INSERT INTO company ( name ) VALUES (?) ";
 	private static final String SQL_DELETE_COMPUTER = "DELETE FROM computer WHERE company_id = ? ";
 	private static final String SQL_DELETE_COMPANY  = "DELETE FROM company WHERE  id = ? ";
 	private CompanyMapper companyMapper = CompanyMapper.getCompanyMapper();
 	private Logger logger = (Logger) LoggerFactory.getLogger("CompanyDaoImplementation");
-//	private HikariDataSource hikariDataSource = DataSourceConfigHikari.getHikariDataSource();
 	private RowMapperCompany rowMapperCompany = RowMapperCompany.getInstance();
-	@Autowired
-	private JdbcTemplate jdbcTemplate;
-	
-//	public CompanyDaoImplementation(DaoFactory daoFactory) {
-//		this.daoFactory = daoFactory;
-//	}
 	
 	@Override
 	public ArrayList<Company> findAll() throws DAOException {
-//	    HikariProxyConnection connection = null;
-//	    PreparedStatement preparedStatement = null;
-//	    try {
-//	    	connection = (HikariProxyConnection) hikariDataSource.getConnection();
-//	    	connection.setAutoCommit(true);
-//	        preparedStatement = getPreparedStatement(connection);
-//	        ResultSet resultSet = preparedStatement.executeQuery();
-//	        ArrayList<Company> companies = new ArrayList<>();
-//	        while (resultSet.next()) {
-//	        	Company company = companyMapper.mapCompany(resultSet);
-//	        	companies.add(company);
-//	        }
-//	        
-//	        return companies;
-//	    } catch ( SQLException e ) {
-//	        throw new DAOException( e );
-//	    } finally {
-//	    	DaoUtilitary.closeDao(preparedStatement,connection);
-//	    }
 		ArrayList<Company> companies = (ArrayList<Company>) jdbcTemplate.query(SQL_SELECT, rowMapperCompany);
 		return companies;
 	}
-	
-//	public PreparedStatement getPreparedStatement(Connection connection) {
-//		try {
-//			return daoUtilitary.initializePreparedRequest( connection, SQL_SELECT, true );
-//		} catch (SQLException e) {
-//			logger.error("The connection can't be reach" + e);
-//		}
-//		return null;
-//	}
-//	
-//	public Connection getDaoFactoryConnection() {
-//		try {
-//			return (Connection) daoFactory.getConnection();
-//		} catch (SQLException e) {
-//			logger.error("The connection can't be reach" + e);
-//		};
-//		return null;
-//	}
 
 	@Override
 	public void delete(Long id) throws DAOException {
@@ -114,19 +71,6 @@ public class CompanyDaoImplementation implements CompanyDao {
 
 	@Override
 	public void create(String name) throws DAOException {
-//		HikariProxyConnection connection = null;
-//	    PreparedStatement preparedStatement = null;
-//	    try {
-//	    	connection = (HikariProxyConnection) hikariDataSource.getConnection();
-//	    	connection.setAutoCommit(true);
-//	    	Object[] objects = { name };
-//	    	preparedStatement = daoUtilitary.initializePreparedRequest( connection, SQL_CREATE, true , objects);
-//	        preparedStatement.executeUpdate();
-//	    } catch ( SQLException e ) {
-//	        throw new DAOException( e );
-//	    } finally {
-//	    	DaoUtilitary.closeDao(preparedStatement,connection);
-//	    }
 		Object[] objects = { name };
 		jdbcTemplate.update(SQL_CREATE, objects);
 	}

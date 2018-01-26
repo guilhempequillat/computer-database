@@ -10,13 +10,13 @@ import org.cdb.service.serviceImplementation.ComputerServiceImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-@Controller
-public class Main {
-
-	@Autowired
-	private Page page;
-	
-	public static void main(String[] args) {
-		page.commandLineInterfaceWorking();
-	}
-}
+//@Controller
+//public class Main {
+//
+//	@Autowired
+//	private Page page;
+//	
+//	public static void main(String[] args) {
+//		Page page = new Page();
+//	}
+//}
