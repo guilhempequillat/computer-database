@@ -9,6 +9,7 @@ import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
@@ -17,16 +18,16 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @ComponentScan(basePackages = { "org.cdb" })
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
  
-	   	@Override
+		@Override
 		public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
 		    configurer.enable();
 		}
 	   
-	   @Override
-	   public void addResourceHandlers(final ResourceHandlerRegistry registry) {
-	       registry.addResourceHandler("/js/**").addResourceLocations("/WEB-INF/lib/js/");
-	       registry.addResourceHandler("/css/**").addResourceLocations("/WEB-INF/lib/css/");
-	   }
+		@Override
+		public void addResourceHandlers(final ResourceHandlerRegistry registry) {
+			registry.addResourceHandler("/js/**").addResourceLocations("/WEB-INF/lib/js/");
+			registry.addResourceHandler("/css/**").addResourceLocations("/WEB-INF/lib/css/");
+		}
 
 	    /**
 	     * Provide a view resolver to map views to the correct template files.
@@ -39,6 +40,5 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 	        viewResolver.setPrefix("/WEB-INF/view/");
 	        viewResolver.setSuffix(".jsp");
 	        return viewResolver;
-	}
- 
+	    }
 }

@@ -11,12 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.cdb.controller.PaginationDashBoardController;
-import org.cdb.springConfiguration.MainConfig;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.context.WebApplicationContext;
@@ -27,7 +24,7 @@ import ch.qos.logback.classic.Logger;
 
 @Controller
 @ComponentScan("org.cdb.controller") 
-@WebServlet("/dashboard")
+@WebServlet("/e")
 public class DashBoardServlet extends HttpServlet {
 	
 	private Logger logger = (Logger) LoggerFactory.getLogger("DashBoardServlet");
