@@ -4,8 +4,9 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.regex.Pattern;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,25 +14,32 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.cdb.dao.DaoFactory;
-import org.cdb.dao.daoImplementation.ComputerDaoImplementation;
 import org.cdb.model.Computer;
 import org.cdb.security.PasswordVerification;
 import org.cdb.service.serviceImplementation.ComputerServiceImplementation;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import ch.qos.logback.classic.Logger;
 
 /**
  * Servlet implementation class EditComputerServlet
  */
+@Controller
 @WebServlet("/edit-computer")
 public class EditComputerServlet extends HttpServlet {
 	
 	private Long computerId;
 	private Computer computer;
 	private static Logger logger = (Logger) LoggerFactory.getLogger("EditComputerServlet");
-	private PasswordVerification passwordVerification = PasswordVerification.getInstance();
+	@Autowired
+	private PasswordVerification passwordVerification;
+	@Autowired
+	private ComputerServiceImplementation computerService;
 	   
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(request.getRemoteAddr().toString().equals("10.0.1.16")) {
@@ -52,10 +60,7 @@ public class EditComputerServlet extends HttpServlet {
 	public void updateDb(HttpServletRequest request) {
 		Computer computer = parseComputer(request);
 		if (getComputerId() != (-1L) && inputAreValide() && passwordVerification.passwordIsCorrect(request.getParameter("password"))) {
-			ComputerDaoImplementation computerDao = new ComputerDaoImplementation(DaoFactory.getInstance());
-			ComputerServiceImplementation computerService =ComputerServiceImplementation.getInstance(computerDao);
 			if(computer.getName() != null ) {
-				System.out.println(Pattern.matches("#<#", computer.getName()));
 				computerService.updateName(Integer.parseInt(computer.getId().toString()), computer.getName());
 			}
 			if(computer.getIntroduced() != null) {
@@ -163,5 +168,14 @@ public class EditComputerServlet extends HttpServlet {
 	
 	public Long getComputerId() {
 		return computerId;
+	}
+	
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		super.init(config);
+		ServletContext servletContext = config.getServletContext();
+		WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+	    AutowireCapableBeanFactory autowireCapableBeanFactory = webApplicationContext.getAutowireCapableBeanFactory();
+	    autowireCapableBeanFactory.autowireBean(this);
 	}
 }

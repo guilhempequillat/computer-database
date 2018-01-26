@@ -8,30 +8,32 @@ import org.cdb.dao.daoInterface.CompanyDao;
 import org.cdb.dao.daoInterface.ComputerDao;
 import org.cdb.model.Company;
 import org.cdb.model.Computer;
+import org.cdb.service.UtilitaryService;
 import org.cdb.service.serviceImplementation.CompanyServiceImplementation;
 import org.cdb.service.serviceImplementation.ComputerServiceImplementation;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
 import ch.qos.logback.classic.Logger;
 
+@Controller
 public class Page {
 	
+	@Autowired
 	private CommandLineInput commandLineInput;
-	private DaoFactory daoFactory;
-	private CompanyDao companyDao;
-	private ComputerDao computerDao;
-	private boolean notQuit = true; 
-	private Logger logger = (Logger) LoggerFactory.getLogger("Page");
+	
+	@Autowired
 	private CompanyServiceImplementation companyService;
+	
+	@Autowired
 	private ComputerServiceImplementation computerService;
 	
+	private UtilitaryService utilitaryService = UtilitaryService.getInstance();
+	private boolean notQuit = true; 
+	private Logger logger = (Logger) LoggerFactory.getLogger("Page");
+	
 	public Page () {
-		this.daoFactory = DaoFactory.getInstance();
-		this.commandLineInput = new CommandLineInput();
-		this.companyDao = (CompanyDao) this.daoFactory.getCompanyDao();
-		this.computerDao = (ComputerDao) this.daoFactory.getComputerDao();
-		this.companyService = CompanyServiceImplementation.getInstance(companyDao);
-		this.computerService = ComputerServiceImplementation.getInstance(computerDao);
 		commandLineInterfaceWorking();
 	}
 	

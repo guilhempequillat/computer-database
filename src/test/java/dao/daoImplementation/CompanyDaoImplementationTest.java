@@ -54,23 +54,23 @@ public class CompanyDaoImplementationTest {
 	
 	@Test
 	public void testFindAll() {
-		DaoFactory daoFactory = mock(DaoFactory.class);
-		DaoUtilitary daoUtilitary = mock(DaoUtilitary.class);
-		Mockito.when(companyDaoImplementation.findAll()).thenCallRealMethod();
-		try {
-			createTable(connection);
-			Mockito.when(companyDaoImplementation.getDaoFactoryConnection()).thenReturn(connection);
-			Mockito.when(companyDaoImplementation.getPreparedStatement(connection)).thenReturn( (PreparedStatement) connection.prepareStatement(SQL_SELECT));
-			PreparedStatement preparedStatement = (PreparedStatement) connection.prepareStatement(SQL_SELECT);
-			ResultSet resultSet = preparedStatement.executeQuery();
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}catch (InstantiationException | IllegalAccessException | ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}	
+//		DaoFactory daoFactory = mock(DaoFactory.class);
+//		DaoUtilitary daoUtilitary = mock(DaoUtilitary.class);
+//		Mockito.when(companyDaoImplementation.findAll()).thenCallRealMethod();
+//		try {
+//			createTable(connection);
+//			Mockito.when(companyDaoImplementation.getDaoFactoryConnection()).thenReturn(connection);
+//			Mockito.when(companyDaoImplementation.getPreparedStatement(connection)).thenReturn( (PreparedStatement) connection.prepareStatement(SQL_SELECT));
+//			PreparedStatement preparedStatement = (PreparedStatement) connection.prepareStatement(SQL_SELECT);
+//			ResultSet resultSet = preparedStatement.executeQuery();
+//			
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}catch (InstantiationException | IllegalAccessException | ClassNotFoundException | IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}	
 	}
 	
 	public void createTable(Connection connection) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException, FileNotFoundException, IOException {

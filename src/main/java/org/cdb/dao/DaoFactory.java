@@ -13,8 +13,11 @@ import org.cdb.dao.daoInterface.CompanyDao;
 import org.cdb.dao.daoInterface.ComputerDao;
 import org.cdb.exception.DAOConfigurationException;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
 import ch.qos.logback.classic.Logger;
 
+@Component
 public class DaoFactory {
 
     private static final String PROPERTIES_FILE          = "org/cdb/dao/dao.properties";
@@ -86,11 +89,11 @@ public class DaoFactory {
         return DriverManager.getConnection( url, username, password );
     }
 
-    public CompanyDao getCompanyDao() {
-        return new CompanyDaoImplementation(this);
-    }
+//    public CompanyDao getCompanyDao() {
+//        return new CompanyDaoImplementation(this);
+//    }
     
     public ComputerDao getComputerDao() {
-    	return new ComputerDaoImplementation(this);
+    	return new ComputerDaoImplementation();
     }
 }

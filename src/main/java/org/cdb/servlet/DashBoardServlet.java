@@ -2,31 +2,38 @@ package org.cdb.servlet;
 
 import java.io.IOException;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.cdb.controller.DashboardPaginationController;
 import org.cdb.controller.PaginationDashBoardController;
-import org.cdb.service.UtilitaryService;
-import org.cdb.service.serviceImplementation.CompanyServiceImplementation;
-import org.cdb.service.serviceImplementation.ComputerServiceImplementation;
+import org.cdb.springConfiguration.MainConfig;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import ch.qos.logback.classic.Logger;
 
+
+@Controller
+@ComponentScan("org.cdb.controller") 
 @WebServlet("/dashboard")
 public class DashBoardServlet extends HttpServlet {
 	
-	private ComputerServiceImplementation computerServiceImplementation;
-	private CompanyServiceImplementation companyServiceImplementation;
-	private UtilitaryService utilitaryService = UtilitaryService.getInstance();
 	private Logger logger = (Logger) LoggerFactory.getLogger("DashBoardServlet");
-    private DashboardPaginationController pageWeb;
     
-    private PaginationDashBoardController pagination = PaginationDashBoardController.getInstance();
+	@Autowired
+    private PaginationDashBoardController pagination;
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		managePagination(request);
@@ -89,14 +96,16 @@ public class DashBoardServlet extends HttpServlet {
 			if(request.getParameter("beginComputerDisplay") != "" || request.getParameter("numberComputerToShow") != "") {
 				changeAttributs(request);
 				loadComputer(request);
+				loadCompany(request);
 			}
 		} else {
 			logger.debug("Init Pagination");
 			request.getSession().setAttribute("beginComputerDisplay", 0);
-			PaginationDashBoardController.setNbComputerIndex(0);
+			pagination.setNbComputerIndex(0);
 			request.getSession().setAttribute("numberComputerToShow", 10);
-			PaginationDashBoardController.setNbToShow(10);
+			pagination.setNbToShow(10);
 			loadComputer(request);
+			loadCompany(request);
 		}
 	}
 	
@@ -107,11 +116,18 @@ public class DashBoardServlet extends HttpServlet {
 		request.getSession().setAttribute("listComputer", pagination.getListComputer());
 	}
 	
+	public void loadCompany(HttpServletRequest request) {
+		logger.debug("Load Company");
+		pagination.loadCompany();
+		request.getSession().setAttribute("listCompany", pagination.getListCompany());
+	}
+	
+	
 	public void changeAttributs(HttpServletRequest request) {
 		if(request.getParameter("beginComputerDisplay") != null ) {
 			try {
 				int beginComputerDisplay = Integer.parseInt(request.getParameter("beginComputerDisplay"));
-				PaginationDashBoardController.setNbComputerIndex(beginComputerDisplay);
+				pagination.setNbComputerIndex(beginComputerDisplay);
 				request.getSession().setAttribute("beginComputerDisplay", beginComputerDisplay);
 			}catch(NumberFormatException e) {
 				logger.warn("beginComputerDisplay can't be parsed" + e);
@@ -120,7 +136,7 @@ public class DashBoardServlet extends HttpServlet {
 		if(request.getParameter("numberComputerToShow") != null ) {
 			try {
 				int numberComputerToShow = Integer.parseInt(request.getParameter("numberComputerToShow"));
-				PaginationDashBoardController.setNbToShow(numberComputerToShow);
+				pagination.setNbToShow(numberComputerToShow);
 				request.getSession().setAttribute("numberComputerToShow", numberComputerToShow);
 			}catch(NumberFormatException e) {
 				logger.warn("numberComputerToShow can't be parsed"+ e);
@@ -128,24 +144,12 @@ public class DashBoardServlet extends HttpServlet {
 		}
 	}
 	
-	
-	public void manageOrder(HttpServletRequest request) {
-		if(request.getParameter("order") != null) {
-			pageWeb.orderComputers(request.getParameter("order"), request);
-		} else {
-			if(request.getSession().getAttribute("order") != null) {
-				pageWeb.orderComputers(request.getSession().getAttribute("order").toString(), request);
-			}else {
-				pageWeb.orderComputers( "name" , request);
-			}
-		}
-	}
-	
-	public void initDisplay(HttpServletRequest request) {
-		pageWeb.initDisplay(request);
-	}
-	
-	public void changeDisplay(HttpServletRequest request) {
-		pageWeb.changeDisplay(request);
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		super.init(config);
+		ServletContext servletContext = config.getServletContext();
+		WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+	    AutowireCapableBeanFactory autowireCapableBeanFactory = webApplicationContext.getAutowireCapableBeanFactory();
+	    autowireCapableBeanFactory.autowireBean(this);
 	}
 }

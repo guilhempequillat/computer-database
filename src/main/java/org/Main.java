@@ -7,15 +7,16 @@ import org.cdb.dao.DaoUtilitary;
 import org.cdb.dao.daoImplementation.ComputerDaoImplementation;
 import org.cdb.service.UtilitaryService;
 import org.cdb.service.serviceImplementation.ComputerServiceImplementation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
+@Controller
 public class Main {
 
+	@Autowired
+	private Page page;
+	
 	public static void main(String[] args) {
-		UtilitaryService u = UtilitaryService.getInstance();
-		ComputerServiceImplementation cs = u.getInstanceComputerService();
-		
-		System.out.println(cs.findPaginationDescFilter("name", 1, 10,"a","","","ap"));
-		
-		Page page = new Page();
+		page.commandLineInterfaceWorking();
 	}
 }

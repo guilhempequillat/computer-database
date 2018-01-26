@@ -9,16 +9,17 @@ import org.cdb.dao.daoInterface.CompanyDao;
 import org.cdb.dao.daoInterface.ComputerDao;
 import org.cdb.model.Computer;
 import org.cdb.service.serviceInterface.ComputerService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ComputerServiceImplementation implements ComputerService {
 	
-	private static ComputerServiceImplementation computerService = new ComputerServiceImplementation();
-	private static ComputerDao computerDao;
+	//private static ComputerServiceImplementation computerService = new ComputerServiceImplementation();
+	@Autowired
+	private ComputerDao computerDao;
 
-	public static ComputerServiceImplementation getInstance(ComputerDao computerDao) {
-		computerService.setComputerDao(computerDao);
-		return computerService;
-	}
+
 	
 	@Override
 	public ArrayList<Computer> findAll() {

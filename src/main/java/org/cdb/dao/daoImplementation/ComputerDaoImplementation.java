@@ -4,25 +4,32 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
-import org.cdb.connectionPool.DataSource;
+import org.cdb.connectionPool.DataSourceConfigHikari;
 import org.cdb.dao.DaoFactory;
 import org.cdb.dao.DaoUtilitary;
 import org.cdb.dao.daoInterface.ComputerDao;
 import org.cdb.exception.DAOException;
 import org.cdb.mapper.ComputerMapper;
+import org.cdb.mapper.RowMapperComputer;
 import org.cdb.model.Computer;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 
 import com.zaxxer.hikari.HikariDataSource;
 import com.zaxxer.hikari.pool.HikariProxyConnection;
 
 import ch.qos.logback.classic.Logger;
 
-@Component
+@Repository
 public class ComputerDaoImplementation implements ComputerDao {
 
 	private static final String SQL_FIND_ALL                          = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.id, company.name  FROM computer LEFT JOIN company ON computer.company_id = company.id";
@@ -80,235 +87,86 @@ public class ComputerDaoImplementation implements ComputerDao {
 																	+ " FROM computer LEFT JOIN company ON computer.company_id = company.id "
 																	+ " WHERE computer.name LIKE ? AND IFNULL(computer.introduced,'') LIKE ? AND IFNULL(computer.discontinued,'') LIKE ? AND IFNULL(company.name,'') LIKE ? "
 																	+ " ORDER BY company.name DESC LIMIT ?,? ";
-	private DaoFactory daoFactory;
-	private DaoUtilitary daoUtilitary= DaoUtilitary.getInstance();
 	private static Logger logger = (Logger) LoggerFactory.getLogger("ComputerDao");
+
 	@Autowired
-	private ComputerMapper computerMapper; // = ComputerMapper.getComputerMapper();
+	private JdbcTemplate jdbcTemplate;
 	
-	private HikariDataSource hikariDataSource = DataSource.getHikariDataSource();
-	
-	public ComputerDaoImplementation(DaoFactory daoFactory) {
-		this.daoFactory = daoFactory;
-	}
-	
+	private RowMapperComputer rowMapperComputer = RowMapperComputer.getInstance();
+
 	@Override
 	public ArrayList<Computer> findAll() {
-	    PreparedStatement preparedStatement = null;
-	    ResultSet resultSet = null;
-	    HikariProxyConnection connection = null;
-	    try {
-	    	connection = (HikariProxyConnection) hikariDataSource.getConnection();
-	    	connection.setAutoCommit(true);
-	        preparedStatement = daoUtilitary.initializePreparedRequest( connection, SQL_FIND_ALL, true );
-	        resultSet = preparedStatement.executeQuery();
-	        ArrayList<Computer> computers = new ArrayList<>();
-	        while (resultSet.next()) {
-	        	Computer computer = computerMapper.mapComputer(resultSet);
-	        	computers.add(computer);
-	        }
-	        return computers;
-	    } catch ( SQLException e ) {
-	        throw new DAOException( e );
-	    } finally {
-	    	DaoUtilitary.closeDao(resultSet,preparedStatement, connection);
-	    }
+        ArrayList<Computer> computers = (ArrayList<Computer>) jdbcTemplate.query(SQL_FIND_ALL,rowMapperComputer);
+        return computers;
 	}
 	
 	@Override
 	public Computer find(int id) {
-		HikariProxyConnection connection = null;
-		PreparedStatement preparedStatement = null;
-		Computer computer =null;
-		ResultSet resultSet = null;
 		try {
-	    	connection = (HikariProxyConnection) hikariDataSource.getConnection();
-	    	connection.setAutoCommit(true);
-			Object[] objects = { id };
-			preparedStatement = daoUtilitary.initializePreparedRequest(connection, SQL_FIND, true, objects);
-			resultSet = preparedStatement.executeQuery();
-			if(resultSet.next()) {
-				computer = computerMapper.mapComputer(resultSet);
-			}
-			return computer;
-		} catch ( SQLException e ) {
-	        throw new DAOException( e );
-	    } finally {
-	    	DaoUtilitary.closeDao(resultSet,preparedStatement, connection);
-	    }
+			Computer computer2 = (Computer) jdbcTemplate.queryForObject(SQL_FIND, rowMapperComputer, new Object[] {id});
+			return computer2;
+		} catch (org.springframework.dao.EmptyResultDataAccessException e) {
+			logger.error("Computer not found "+e);
+		}
+		return null;
 	}
 	
 	@Override 
 	public void updateName(int id, String name) {
-		HikariProxyConnection connection = null;
-		PreparedStatement preparedStatement = null;
-		try {
-	    	connection = (HikariProxyConnection) hikariDataSource.getConnection();
-	    	connection.setAutoCommit(true);
-			Object[] objects = { name , id };
-			preparedStatement = daoUtilitary.initializePreparedRequest(connection, SQL_UPDATE_NAME, true, objects);
-			preparedStatement.executeUpdate();
-		} catch ( SQLException e ) {
-	        throw new DAOException( e );
-	    } finally {
-	    	DaoUtilitary.closeDao(preparedStatement, connection);
-	    }
+		Object[] objects = { name , id };
+		jdbcTemplate.update(SQL_UPDATE_NAME, objects);
 	}
 	
 	@Override
 	public void updateIntroduced(int id, Date introduced) {
-		HikariProxyConnection connection = null;
-		PreparedStatement preparedStatement = null;
-		try {
-	    	connection = (HikariProxyConnection) hikariDataSource.getConnection();
-	    	connection.setAutoCommit(true);
-			Object[] objects = { introduced , id };
-			preparedStatement = daoUtilitary.initializePreparedRequest(connection, SQL_UPDATE_INTRODUCED, true, objects);
-			preparedStatement.executeUpdate();
-		} catch ( SQLException e ) {
-	        throw new DAOException( e );
-	    } finally {
-	    	DaoUtilitary.closeDao(preparedStatement, connection);
-	    }
+		Object[] objects = { introduced , id };
+		jdbcTemplate.update(SQL_UPDATE_INTRODUCED,objects);
 	}
 	
 	@Override
 	public void updateDiscontinued(int id, Date discontinued) {
-		HikariProxyConnection connection = null;
-		PreparedStatement preparedStatement = null;
-		try {
-	    	connection = (HikariProxyConnection) hikariDataSource.getConnection();
-	    	connection.setAutoCommit(true);
-			Object[] objects = { discontinued , id };
-			preparedStatement = daoUtilitary.initializePreparedRequest(connection, SQL_UPDATE_DISCONTINUED, true, objects);
-			preparedStatement.executeUpdate();
-		} catch ( SQLException e ) {
-	        throw new DAOException( e );
-	    } finally {
-	    	DaoUtilitary.closeDao(preparedStatement, connection);
-	    }
+		Object[] objects = { discontinued , id };
+		jdbcTemplate.update(SQL_UPDATE_DISCONTINUED,objects);
 	}
 	
 	@Override
 	public void updateCompany(int idComputer, int idCompany) {
-		HikariProxyConnection connection = null;
-		PreparedStatement preparedStatement = null;
-		try {
-	    	connection = (HikariProxyConnection) hikariDataSource.getConnection();
-	    	connection.setAutoCommit(true);
-			Object[] objects = { idCompany , idComputer };
-			preparedStatement = daoUtilitary.initializePreparedRequest(connection, SQL_UPDATE_COMPANY, true, objects);
-			preparedStatement.executeUpdate();
-		} catch ( SQLException e ) {
-	        throw new DAOException( e );
-	    } finally {
-	    	DaoUtilitary.closeDao(preparedStatement, connection);
-	    }
+		Object[] objects = { idCompany , idComputer };
+		jdbcTemplate.update(SQL_UPDATE_COMPANY,objects);
 	}
 	
 	@Override
 	public void create(String name, Date introduced, Date discontinued , int idCompany) {
-		HikariProxyConnection connection = null;
-		PreparedStatement preparedStatement = null;
-		try {
-	    	connection = (HikariProxyConnection) hikariDataSource.getConnection();
-	    	connection.setAutoCommit(true);
-			Object[] objects = { name , discontinued, introduced, idCompany };
-			preparedStatement = daoUtilitary.initializePreparedRequest(connection, SQL_CREATE, true, objects);
-			preparedStatement.executeUpdate();
-		} catch ( SQLException e ) {
-	        throw new DAOException( e );
-	    } finally {
-	    	DaoUtilitary.closeDao(preparedStatement, connection);
-	    }
+		Object[] objects = { name , discontinued, introduced, idCompany };
+		jdbcTemplate.update(SQL_CREATE,objects);
 	}
 	
 	@Override
 	public void delete(int idComputer) {
-	    HikariProxyConnection connection = null;
-		PreparedStatement preparedStatement = null;
-		try {
-	    	connection = (HikariProxyConnection) hikariDataSource.getConnection();
-	    	connection.setAutoCommit(true);
-			Object[] objects = { idComputer };
-			preparedStatement = daoUtilitary.initializePreparedRequest(connection, SQL_DELETE, false);
-			preparedStatement.executeUpdate();
-		} catch ( SQLException e ) {
-	        throw new DAOException( e );
-	    } finally {
-	    	DaoUtilitary.closeDao(preparedStatement, connection);
-	    }
+		Object[] objects = { idComputer };
+		jdbcTemplate.update(SQL_DELETE,objects);
 	}
 	
 	@Override
 	public int count() {
-		HikariProxyConnection connection = null;
-		PreparedStatement preparedStatement = null;
-		try {
-	    	connection = (HikariProxyConnection) hikariDataSource.getConnection();
-	    	connection.setAutoCommit(true);
-			preparedStatement = daoUtilitary.initializePreparedRequest(connection, SQL_COUNT, false);
-			ResultSet resultSet = preparedStatement.executeQuery();
-			resultSet.next();
-			return resultSet.getInt(1);
-		} catch ( SQLException e ) {
-	        throw new DAOException( e );
-	    } finally {
-	    	DaoUtilitary.closeDao(preparedStatement, connection);
-	    }
+		int nbComputer = jdbcTemplate.queryForObject(SQL_COUNT, Integer.class);
+		return nbComputer;
 	}
 
 	@Override
 	public ArrayList<Computer> findPaginationAsc(String orderType, int nbComputerIndex, int nbToShow) {
-		HikariProxyConnection connection = null;
-		PreparedStatement preparedStatement = null;
-		try {
-			connection = (HikariProxyConnection) hikariDataSource.getConnection();
-	    	connection.setAutoCommit(true);
-			Object[] objects = { nbComputerIndex, (nbToShow) };
-	        preparedStatement = daoUtilitary.initializePreparedRequest( connection, getRequestFindPaginationAsc(orderType), true, objects );
-	        ResultSet resultSet = preparedStatement.executeQuery();
-	        ArrayList<Computer> computers = new ArrayList<>();
-	        while (resultSet.next()) {
-	        	Computer computer = computerMapper.mapComputer(resultSet);
-	        	computers.add(computer);
-	        }
-	        return computers;
-		} catch ( SQLException e ) {
-	        throw new DAOException( e );
-	    } finally {
-	    	DaoUtilitary.closeDao(preparedStatement, connection);
-	    }
+		Object[] objects = { nbComputerIndex, (nbToShow) };
+		return (ArrayList<Computer>) jdbcTemplate.query(getRequestFindPaginationAsc(orderType),rowMapperComputer,objects);
 	}
 
 	@Override
 	public ArrayList<Computer> findPaginationDesc(String orderType, int nbComputerIndex, int nbToShow) {
-		HikariProxyConnection connection = null;
-		PreparedStatement preparedStatement = null;
-		try {
-			connection = (HikariProxyConnection) hikariDataSource.getConnection();
-	    	connection.setAutoCommit(true);
-	    	String order = "computer."+orderType;
-			Object[] objects = { nbComputerIndex, nbToShow };
-	        preparedStatement = daoUtilitary.initializePreparedRequest( connection, getRequestFindPaginationDesc(orderType), true, objects );
-	        ResultSet resultSet = preparedStatement.executeQuery();
-	        ArrayList<Computer> computers = new ArrayList<>();
-	        while (resultSet.next()) {
-	        	Computer computer = computerMapper.mapComputer(resultSet);
-	        	computers.add(computer);
-	        }
-	        return computers;
-		} catch ( SQLException e ) {
-	        throw new DAOException( e );
-	    } finally {
-	    	DaoUtilitary.closeDao(preparedStatement, connection);
-	    }
+		Object[] objects = { nbComputerIndex, nbToShow };
+		return (ArrayList<Computer>) jdbcTemplate.query(getRequestFindPaginationDesc(orderType),rowMapperComputer,objects);
 	}
 	@Override
 	public ArrayList<Computer> findPaginationDescFilter(String orderType, int nbComputerIndex, int nbToShow 
 			,String nameFilter ,String introduedFilter,String discontinuedFilter, String companyFilter) {
-		HikariProxyConnection connection = null;
-		PreparedStatement preparedStatement = null;
 		if(nameFilter != null) {
 			nameFilter = "%"+nameFilter+"%";
 		}else {
@@ -329,32 +187,13 @@ public class ComputerDaoImplementation implements ComputerDao {
 		}else {
 			companyFilter = "%%";
 		}
-		
-		try {
-			connection = (HikariProxyConnection) hikariDataSource.getConnection();
-	    	connection.setAutoCommit(true);
-	    	String order = "computer."+orderType;
-			Object[] objects = {nameFilter, introduedFilter, discontinuedFilter, companyFilter ,nbComputerIndex, nbToShow };
-	        preparedStatement = daoUtilitary.initializePreparedRequest( connection, getRequestFindPaginationDescFilter(orderType), true, objects );
-	        ResultSet resultSet = preparedStatement.executeQuery();
-	        ArrayList<Computer> computers = new ArrayList<>();
-	        while (resultSet.next()) {
-	        	Computer computer = computerMapper.mapComputer(resultSet);
-	        	computers.add(computer);
-	        }
-	        return computers;
-		} catch ( SQLException e ) {
-	        throw new DAOException( e );
-	    } finally {
-	    	DaoUtilitary.closeDao(preparedStatement, connection);
-	    }
+		Object[] objects = {nameFilter, introduedFilter, discontinuedFilter, companyFilter ,nbComputerIndex, nbToShow };
+		return (ArrayList<Computer>) jdbcTemplate.query(getRequestFindPaginationDescFilter(orderType),rowMapperComputer,objects);
 	}
 	
 	@Override
 	public ArrayList<Computer> findPaginationAscFilter(String orderType, int nbComputerIndex, int nbToShow 
 			,String nameFilter ,String introduedFilter,String discontinuedFilter, String companyFilter) {
-		HikariProxyConnection connection = null;
-		PreparedStatement preparedStatement = null;
 		if(nameFilter != null) {
 			nameFilter = "%"+nameFilter+"%";
 		}else {
@@ -375,31 +214,12 @@ public class ComputerDaoImplementation implements ComputerDao {
 		}else {
 			companyFilter = "%%";
 		}
-		
-		try {
-			connection = (HikariProxyConnection) hikariDataSource.getConnection();
-	    	connection.setAutoCommit(true);
-	    	String order = "computer."+orderType;
-			Object[] objects = {nameFilter, introduedFilter, discontinuedFilter, companyFilter ,nbComputerIndex, nbToShow };
-	        preparedStatement = daoUtilitary.initializePreparedRequest( connection, getRequestFindPaginationAscFilter(orderType), true, objects );
-	        ResultSet resultSet = preparedStatement.executeQuery();
-	        ArrayList<Computer> computers = new ArrayList<>();
-	        while (resultSet.next()) {
-	        	Computer computer = computerMapper.mapComputer(resultSet);
-	        	computers.add(computer);
-	        }
-	        return computers;
-		} catch ( SQLException e ) {
-	        throw new DAOException( e );
-	    } finally {
-	    	DaoUtilitary.closeDao(preparedStatement, connection);
-	    }
+		Object[] objects = {nameFilter, introduedFilter, discontinuedFilter, companyFilter ,nbComputerIndex, nbToShow };
+		return (ArrayList<Computer>) jdbcTemplate.query(getRequestFindPaginationAscFilter(orderType),rowMapperComputer,objects);
 	}
 	
 	@Override
 	public int countFilter(String nameFilter ,String introduedFilter,String discontinuedFilter, String companyFilter) {
-		HikariProxyConnection connection = null;
-		PreparedStatement preparedStatement = null;
 		if(nameFilter != null) {
 			nameFilter = "%"+nameFilter+"%";
 		}else {
@@ -420,19 +240,8 @@ public class ComputerDaoImplementation implements ComputerDao {
 		}else {
 			companyFilter = "%%";
 		}
-		try {
-			connection = (HikariProxyConnection) hikariDataSource.getConnection();
-	    	connection.setAutoCommit(true);
-			Object[] objects = {nameFilter, introduedFilter, discontinuedFilter, companyFilter };
-	        preparedStatement = daoUtilitary.initializePreparedRequest( connection, SQL_COUNT_FILTER, true, objects );
-	        ResultSet resultSet = preparedStatement.executeQuery();
-	        resultSet.next();
-			return resultSet.getInt(1);
-		} catch ( SQLException e ) {
-	        throw new DAOException( e );
-	    } finally {
-	    	DaoUtilitary.closeDao(preparedStatement, connection);
-	    }
+		Object[] objects = {nameFilter, introduedFilter, discontinuedFilter, companyFilter };
+		return (Integer) jdbcTemplate.queryForObject(SQL_COUNT_FILTER,objects,Integer.class);
 	}
 
 	public String getRequestFindPaginationAsc(String orderType) {

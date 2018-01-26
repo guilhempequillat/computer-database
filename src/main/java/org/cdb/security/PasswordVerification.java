@@ -4,22 +4,18 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import ch.qos.logback.classic.Logger;
 
+@Component
 public class PasswordVerification {
 	
-	private static byte[] hash = new byte[32];
-	private static PasswordVerification passwordVerification = new PasswordVerification();
+	private byte[] hash = new byte[32];
 	Logger logger = (Logger) LoggerFactory.getLogger("PasswordVerification");
 	private final String HASH_ALGO = "SHA-256";
 	
-	public static PasswordVerification getInstance() {
-		createHash();
-		return passwordVerification;
-	}
-	
-	public static void createHash() {
+	public void createHash() {
 		//Password hash for SHA-256
 		hash[0] = 93;
 		hash[1] = 45;
@@ -57,6 +53,7 @@ public class PasswordVerification {
 	
 	public boolean passwordIsCorrect(String password) {
 		MessageDigest digest;
+		createHash();
 		try {
 			digest = MessageDigest.getInstance(HASH_ALGO);
 			byte[] hash = digest.digest(password.getBytes());

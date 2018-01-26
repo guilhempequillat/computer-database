@@ -19,8 +19,8 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
   	<assertjVersion>1.2.0</assertjVersion>
   	<hsqldbVersion>2.3.2</hsqldbVersion>
   	<jasperVersion>6.0.32</jasperVersion>
-  	<springVersion>4.3.13.RELEASE</springVersion>
-  	<springBootVersion>1.5.9.RELEASE</springBootVersion>
+  	<springVersion>5.0.2.RELEASE</springVersion>
+  	<springJdbcVersion>5.0.2.RELEASE</springJdbcVersion>
   	<javaVersion>1.8</javaVersion>
   	<javaCompilerPluginVersion>3.7.0</javaCompilerPluginVersion>
   </properties>
@@ -40,11 +40,11 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	    <artifactId>slf4j-api</artifactId>
 	    <version>${sl4jVersion}</version>
 	</dependency>
-	<dependency>
+	<!-- <dependency>
 	    <groupId>javax.servlet.jsp.jstl</groupId>
 	    <artifactId>jstl-api</artifactId>
 	    <version>${jstlVersion}</version>
-	</dependency>
+	</dependency> -->
 	<dependency>
 	    <groupId>javax.servlet</groupId>
 	    <artifactId>javax.servlet-api</artifactId>
@@ -60,10 +60,11 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	    <artifactId>spring-webmvc</artifactId>
 	    <version>${springVersion}</version>
 	</dependency>
+	
 	<dependency>
-	    <groupId>org.springframework.boot</groupId>
-	    <artifactId>spring-boot-starter-web</artifactId>
-	    <version>${springBootVersion}</version>
+    <groupId>org.springframework</groupId>
+	    <artifactId>spring-jdbc</artifactId>
+	    <version>${springJdbcVersion}</version>
 	</dependency>
 	<dependency>
 	    <groupId>com.zaxxer</groupId>

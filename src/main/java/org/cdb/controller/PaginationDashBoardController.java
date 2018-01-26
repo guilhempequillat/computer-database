@@ -7,42 +7,45 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.cdb.model.Company;
 import org.cdb.model.Computer;
 import org.cdb.service.UtilitaryService;
+import org.cdb.service.serviceImplementation.CompanyServiceImplementation;
 import org.cdb.service.serviceImplementation.ComputerServiceImplementation;
+import org.eclipse.jdt.internal.compiler.ast.ThisReference;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 import ch.qos.logback.classic.Logger;
 
+@Component
 public class PaginationDashBoardController {
-	private static ArrayList<Computer> listComputer;
-	private static int nbComputerIndex;
-	private static int nbToShow;
-	private static String orderType = "name";
-	private static PaginationDashBoardController paginationDashBoardController = initalisation();
-	private static boolean orderIsReverse = false;
-	private static ComputerServiceImplementation computerService;
-	private static int countComputer;
-	private static boolean filterState = false;
-	private static String filter="";
-	private static String filterName="";
-	private static String filterIntroduced="";
-	private static String filterDiscontined="";
-	private static String filterCompany="";
-	private static Logger logger = (Logger) LoggerFactory.getLogger("PaginationDashBoardController");
+
+	@Autowired
+	private ComputerServiceImplementation computerService;
 	
-	public static PaginationDashBoardController getInstance() {
-		return paginationDashBoardController;
-	}
+	@Autowired
+	private CompanyServiceImplementation companyService;
 	
-	public static PaginationDashBoardController initalisation() {
-		PaginationDashBoardController paginationDashBoardController = new PaginationDashBoardController();
-		UtilitaryService utilitaryService = UtilitaryService.getInstance();
-		computerService = utilitaryService.getInstanceComputerService();
-		return paginationDashBoardController;
-	}
+	private ArrayList<Computer> listComputer;
+	private ArrayList<Company> listCompany;
+	private int nbComputerIndex;
+	private int nbToShow;
+	private String orderType = "name";
+	private boolean orderIsReverse = false;
+	private int countComputer;
+	private boolean filterState = false;
+	private String filter="";
+	private String filterName="";
+	private String filterIntroduced="";
+	private String filterDiscontined="";
+	private String filterCompany="";
+	private Logger logger = (Logger) LoggerFactory.getLogger("PaginationDashBoardController");
 	
-	public static void loadComputer() {
+	public void loadComputer() {
 		if( !filterState ) {
 			refreshComputerCount();
 			if( orderIsReverse ) {
@@ -61,11 +64,11 @@ public class PaginationDashBoardController {
 		}
 	}
 	
-	public static void refreshComputerCountFilter() {
+	public void refreshComputerCountFilter() {
 		countComputer = computerService.countFilter(filterName, filterIntroduced, filterDiscontined, filterCompany);
 	}
 
-	public static void selectAComputerListAscFilter() {
+	public void selectAComputerListAscFilter() {
 		switch(orderType) {
 			case "name" : 
 				listComputer = computerService.findPaginationAscFilter(orderType, nbComputerIndex, nbToShow, filterName, filterIntroduced, filterDiscontined, filterCompany);
@@ -84,7 +87,7 @@ public class PaginationDashBoardController {
 		}
 	}
 	
-	public static void selectAComputerListDescFilter() {
+	public void selectAComputerListDescFilter() {
 		switch(orderType) {
 			case "name" : 
 				listComputer = computerService.findPaginationDescFilter(orderType, nbComputerIndex, nbToShow, filterName, filterIntroduced, filterDiscontined, filterCompany);
@@ -103,7 +106,7 @@ public class PaginationDashBoardController {
 		}
 	}
 	
-	public static void selectAComputerListAsc() {
+	public void selectAComputerListAsc() {
 		switch(orderType) {
 			case "name" : 
 				listComputer = computerService.findPaginationAsc(orderType, nbComputerIndex, nbToShow);
@@ -122,7 +125,7 @@ public class PaginationDashBoardController {
 		}
 	}
 	
-	public static void selectAComputerListDesc() {
+	public void selectAComputerListDesc() {
 		switch(orderType) {
 			case "name" : 
 				listComputer = computerService.findPaginationDesc(orderType, nbComputerIndex, nbToShow);
@@ -137,101 +140,109 @@ public class PaginationDashBoardController {
 				listComputer = computerService.findPaginationDesc(orderType, nbComputerIndex, nbToShow);
 				break;
 		}
+	}
+	
+	public void loadCompany() {
+		listCompany = companyService.findAll();
+	}
+	
+	public ArrayList<Company> getListCompany(){
+		return listCompany;
 	}
 
-	public static String getOrderType() {
+	public String getOrderType() {
 		return orderType;
 	}
 
-	public static void setOrderType(String orderType) {
-		PaginationDashBoardController.orderType = orderType;
+	public void setOrderType(String orderType) {
+		this.orderType = orderType;
 	}
 
-	public static boolean isOrderIsReverse() {
+	public boolean isOrderIsReverse() {
 		return orderIsReverse;
 	}
 	
-	public static void refreshComputerCount() {
+	public void refreshComputerCount() {
 		countComputer = computerService.count();
 	}
 	
-	public static int getCountComputerCount() {
+	public int getCountComputerCount() {
 		return countComputer;
 	}
 
-	public static void setOrderIsReverse(boolean orderIsReverse) {
-		PaginationDashBoardController.orderIsReverse = orderIsReverse;
+	public void setOrderIsReverse(boolean orderIsReverse) {
+		this.orderIsReverse = orderIsReverse;
 	}
 	
-	public static ArrayList<Computer> getListComputer(){
+	public ArrayList<Computer> getListComputer(){
 		return listComputer;
 	}
 
-	public static int getNbComputerIndex() {
+	public int getNbComputerIndex() {
 		return nbComputerIndex;
 	}
 
-	public static void setNbComputerIndex(int nbComputerIndex) {
-		PaginationDashBoardController.nbComputerIndex = nbComputerIndex;
+	public void setNbComputerIndex(int nbComputerIndex) {
+		this.nbComputerIndex = nbComputerIndex;
 	}
 
-	public static int getNbToShow() {
+	public int getNbToShow() {
 		return nbToShow;
 	}
 
-	public static void setNbToShow(int nbToShow) {
-		PaginationDashBoardController.nbToShow = nbToShow;
+	public void setNbToShow(int nbToShow) {
+		this.nbToShow = nbToShow;
 	}
 
-	public static void setListComputer(ArrayList<Computer> listComputer) {
-		PaginationDashBoardController.listComputer = listComputer;
+	public void setListComputer(ArrayList<Computer> listComputer) {
+		this.listComputer = listComputer;
 	}
 	
-	public static void inverseOrder() {
+	public void inverseOrder() {
 		orderIsReverse = orderIsReverse ? false : true ;
 	}
 	
-	public static void setFilter(String filter1) {
+	public void setFilter(String filter1) {
 		filter = filter1;
 	}
 
-	public static boolean isFilterState() {
+	public boolean isFilterState() {
 		return filterState;
 	}
 
-	public static void setFilterState(boolean filterState) {
-		PaginationDashBoardController.filterState = filterState;
+	public void setFilterState(boolean filterState) {
+		this.filterState = filterState;
 	}
 
-	public static String getFilterName() {
+	public String getFilterName() {
 		return filterName;
 	}
 
-	public static void setFilterName(String filterName) {
-		PaginationDashBoardController.filterName = filterName;
+	public void setFilterName(String filterName) {
+		this.filterName = filterName;
 	}
 
-	public static String getFilterIntroduced() {
+	public String getFilterIntroduced() {
 		return filterIntroduced;
 	}
 
-	public static void setFilterIntroduced(String filterIntroduced) {
-		PaginationDashBoardController.filterIntroduced = filterIntroduced;
+	public void setFilterIntroduced(String filterIntroduced) {
+		this.filterIntroduced = filterIntroduced;
 	}
 
-	public static String getFilterDiscontined() {
+	public String getFilterDiscontined() {
 		return filterDiscontined;
 	}
 
-	public static void setFilterDiscontined(String filterDiscontined) {
-		PaginationDashBoardController.filterDiscontined = filterDiscontined;
+	public void setFilterDiscontined(String filterDiscontined) {
+		this.filterDiscontined = filterDiscontined;
 	}
 
-	public static String getFilterCompany() {
+	public String getFilterCompany() {
 		return filterCompany;
 	}
 
-	public static void setFilterCompany(String filterCompany) {
-		PaginationDashBoardController.filterCompany = filterCompany;
+	public void setFilterCompany(String filterCompany) {
+		this.filterCompany = filterCompany;
 	}
 }

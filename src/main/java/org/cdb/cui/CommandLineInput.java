@@ -3,8 +3,11 @@ package org.cdb.cui;
 import java.time.LocalDate;
 import java.util.Scanner;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
 import ch.qos.logback.classic.Logger;
 
+@Component
 public class CommandLineInput {
 	
 	private final int MIN_YEAR  = 1970;
@@ -13,13 +16,8 @@ public class CommandLineInput {
 	private final int MAX_MONTH = 12;
 	private final int MIN_DAY   = 1;
 	private final int MAX_DAY   = 31;
-	private Scanner sc;
+	private Scanner sc= new Scanner(System.in);
 	private static Logger logger = (Logger) LoggerFactory.getLogger("CommandLineInput");
-	
-	public CommandLineInput() {
-		logger.info("Scanner creation");
-		sc = new Scanner(System.in);
-	}
 	
 	public String readUserInput() {
 		String input = getInputScanner();
