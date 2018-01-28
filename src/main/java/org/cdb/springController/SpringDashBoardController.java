@@ -119,6 +119,7 @@ public class SpringDashBoardController {
 				changeAttributs(beginComputerDisplay, numberComputerToShow,  model);
 				loadComputerController(model);
 				loadCompanyController(model);
+				loadParameter(model);
 			}
 		} else {
 			logger.debug("Init Pagination");
@@ -129,6 +130,11 @@ public class SpringDashBoardController {
 			loadComputerController(model);
 			loadCompanyController(model);
 		}
+	}
+	
+	public void loadParameter(Model model) {
+		model.addAttribute("beginComputerDisplay",nbComputerIndex);
+		model.addAttribute("numberComputerToShow", nbToShow);
 	}
 	
 	public void loadComputerController(Model model) {
@@ -146,6 +152,7 @@ public class SpringDashBoardController {
 	public void changeAttributs(String beginComputerDisplay, String numberComputerToShow, Model model) {
 		if(beginComputerDisplay != null ) {
 			try {
+				logger.debug("nomberComputerToShow : "+ numberComputerToShow);
 				int beginComputerDisplay2 = Integer.parseInt(beginComputerDisplay);
 				setNbComputerIndex(beginComputerDisplay2);
 				model.addAttribute("beginComputerDisplay", beginComputerDisplay);
@@ -157,7 +164,7 @@ public class SpringDashBoardController {
 			try {
 				int numberComputerToShow2 = Integer.parseInt(numberComputerToShow);
 				setNbToShow(numberComputerToShow2);
-				model.addAttribute("numberComputerToShow",numberComputerToShow);
+				model.addAttribute("numberComputerToShow",numberComputerToShow2);
 			}catch(NumberFormatException e) {
 				logger.warn("numberComputerToShow can't be parsed"+ e);
 			}

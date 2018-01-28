@@ -15,12 +15,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class ComputerServiceImplementation implements ComputerService {
 	
-	//private static ComputerServiceImplementation computerService = new ComputerServiceImplementation();
 	@Autowired
 	private ComputerDao computerDao;
 
-
-	
 	@Override
 	public ArrayList<Computer> findAll() {
 		ArrayList<Computer> computers  = computerDao.findAll();
