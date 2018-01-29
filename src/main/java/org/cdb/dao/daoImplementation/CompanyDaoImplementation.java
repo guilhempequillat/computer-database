@@ -4,6 +4,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+
 import org.cdb.connectionPool.DataSourceConfigHikari;
 import org.cdb.dao.DaoFactory;
 import org.cdb.dao.DaoUtilitary;
@@ -15,6 +19,7 @@ import org.cdb.model.Company;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.stereotype.Repository;
 
 import com.zaxxer.hikari.HikariDataSource;
@@ -32,6 +37,9 @@ public class CompanyDaoImplementation implements CompanyDao {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	
+	@PersistenceContext
+	private LocalContainerEntityManagerFactoryBean em;
+	
 	private static final String SQL_SELECT          = "SELECT id , name FROM company";
 	private static final String SQL_CREATE          = "INSERT INTO company ( name ) VALUES (?) ";
 	private static final String SQL_DELETE_COMPUTER = "DELETE FROM computer WHERE company_id = ? ";
@@ -44,6 +52,8 @@ public class CompanyDaoImplementation implements CompanyDao {
 	public ArrayList<Company> findAll() throws DAOException {
 		ArrayList<Company> companies = (ArrayList<Company>) jdbcTemplate.query(SQL_SELECT, rowMapperCompany);
 		return companies;
+//		TypedQuery<Company> query = em.createQuery(SQL_SELECT, Company.class);
+//		return (ArrayList<Company>) query.getResultList();
 	}
 
 	@Override

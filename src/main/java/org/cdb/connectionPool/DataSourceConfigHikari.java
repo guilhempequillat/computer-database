@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import javax.annotation.Resource;
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.cdb.exception.DAOConfigurationException;
@@ -13,7 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -53,4 +56,11 @@ public class DataSourceConfigHikari {
 		jdbcTemplate.setResultsMapCaseInsensitive(true);
 		return jdbcTemplate;
 	}
+	
+//	@Bean
+//	public PlatformTransactionManager transactionManager(EntityManagerFactory emf){
+//		JpaTransactionManager transactionManager = new JpaTransactionManager();
+//		transactionManager.setEntityManagerFactory(emf);
+//		return transactionManager;
+//	}
 }

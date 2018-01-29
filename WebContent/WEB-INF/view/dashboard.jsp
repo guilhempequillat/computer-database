@@ -20,6 +20,10 @@
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <a class="navbar-brand" href="dashboard.html"> Application - Computer Database </a>
+            <div class="pull-right">
+            	<a href="?lang=fr"><img src="image/french.png" style="width:20px;"></a>
+            	<a href="?lang=en"><img src="image/english.png" style="width:27px;"></a>
+            </div>
         </div>
     </header>
 	
