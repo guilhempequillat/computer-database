@@ -24,7 +24,7 @@ import ch.qos.logback.classic.Logger;
  * Servlet implementation class DeleteComputerServlet
  */
 @Controller
-@WebServlet("/delete-computer")
+@WebServlet("/delete-comput")
 public class DeleteComputerServlet extends HttpServlet {
        
 	

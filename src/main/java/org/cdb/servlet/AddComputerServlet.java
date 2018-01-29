@@ -11,25 +11,29 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.cdb.controller.AddComputerController;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import ch.qos.logback.classic.Logger;
+
 @Controller
-@WebServlet("/add-computer")
+@WebServlet("/add-comput")
 public class AddComputerServlet extends HttpServlet {
 	
 	@Autowired
 	private AddComputerController pageWebAddComputer;
 
+	private static Logger logger = (Logger) LoggerFactory.getLogger("PageWebAddComputer");
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		this.getServletContext().getRequestDispatcher( "/WEB-INF/view/addComputer.jsp" ).forward( request, response );
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//pageWebAddComputer = AddComputerController.getInstance(request);
+
 		boolean isAdded = pageWebAddComputer.addComputerDb(request);
 		if(isAdded) {
 			this.getServletContext().getRequestDispatcher( "/dashboard" ).forward( request, response );

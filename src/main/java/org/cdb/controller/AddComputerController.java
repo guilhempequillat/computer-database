@@ -20,6 +20,7 @@ import ch.qos.logback.classic.Logger;
 
 @Component
 public class AddComputerController {
+	
 	private static Logger logger = (Logger) LoggerFactory.getLogger("PageWebAddComputer");
 	
 	@Autowired
