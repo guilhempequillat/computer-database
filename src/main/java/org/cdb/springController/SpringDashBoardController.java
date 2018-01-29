@@ -9,6 +9,7 @@ import org.cdb.service.serviceImplementation.CompanyServiceImplementation;
 import org.cdb.service.serviceImplementation.ComputerServiceImplementation;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,9 @@ public class SpringDashBoardController {
 	
 	@Autowired
 	private CompanyServiceImplementation companyService;
+	
+	@Autowired
+    private MessageSource messageSource;
 	
 	private ArrayList<Computer> listComputer;
 	private ArrayList<Company> listCompany;
@@ -48,9 +52,10 @@ public class SpringDashBoardController {
     		@RequestParam(value = "beginComputerDisplay", required = false) String beginComputerDisplay, 
     		Model model, Locale locale) {
 		managePagination(numberComputerToShow,order,beginComputerDisplay,model);
+		loadMessage(model, locale);
         return "dashboard";
     }
-	
+
 	@RequestMapping(method = RequestMethod.POST)
     public String getDashBoardFilter(@RequestParam(value = "numberComputerToShow", required = false) String numberComputerToShow, 
     		@RequestParam(value = "order", required = false) String order, @RequestParam(value = "beginComputerDisplay", required = false) String beginComputerDisplay, 
@@ -61,8 +66,23 @@ public class SpringDashBoardController {
     		Model model, Locale locale) {
 		loadFilterParameter(model,filterName, filterCompany, filterIntroduced, filterDiscontinued);
 		managePagination(numberComputerToShow,order,beginComputerDisplay,model);
+		loadMessage(model, locale);
         return "dashboard";
     }
+	
+	public void loadMessage(Model model,Locale locale) {
+		String computerFound = messageSource.getMessage("label",new Object[] {},locale);
+		String ByName = messageSource.getMessage("ByName",new Object[] {},locale);
+		String ByIntroduced = messageSource.getMessage("ByIntroduced",new Object[] {},locale);
+		String ByDiscontinued = messageSource.getMessage("ByDiscontinued",new Object[] {},locale);
+		String ByCompany = messageSource.getMessage("ByCompany",new Object[] {},locale);
+		
+		model.addAttribute("labelComputerFound", computerFound);
+		model.addAttribute("ByName", ByName);
+		model.addAttribute("ByIntroduced", ByIntroduced);
+		model.addAttribute("ByDiscontinued", ByDiscontinued);
+		model.addAttribute("ByCompany", ByCompany);
+	}
 	
 	public void loadFilterParameter(Model model, String filterName, String filterCompany,
 			String filterIntroduced, String filterDiscontinued) {

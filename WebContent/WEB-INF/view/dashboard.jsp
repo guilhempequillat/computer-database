@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.text.NumberFormat" %>
 <%@ taglib prefix = "ex" uri = "custom.tld"%>
@@ -25,52 +26,52 @@
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">
-                ${ count } Computers found
+                ${ count } <spring:message code="label"/><p></p>
             </h1>
-            <button id="toggleFilter" class="btn btn-default">Filter</button>
+            <button id="toggleFilter" class="btn btn-default"><spring:message code="Filter"/></button>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
 	                <div id="filter">
 	                    <form id="searchForm" action="dashboard" method="POST" class="form-inline">
 	                    	<div class="row">
 	                        	<div class = "col-sm-5">
-	                        		<label>By Name : </label>
+	                        		<label><spring:message code="ByName"/></label>
 	                        	</div>
 	                        	<div class = "col-sm-7">
-	                        		<input type="search" id="filterName" class="form-control filter" name="filterName" placeholder="Search name" />
+	                        		<input type="search" id="filterName" class="form-control filter" name="filterName" placeholder="<spring:message code="SearchName"/>" />
 	                        	</div>
 	                        </div>
 	                        <div class="row">
 		                        <div class = "col-sm-5">
-		                        	<label>By Introduced : </label>
+		                        	<label><spring:message code="ByIntroduced"/></label>
 		                        </div>
 		                        <div class = "col-sm-7">
-		                        	<input type="search" id="filterIntroduced" class="form-control filter-date" name="filterIntroduced" placeholder="Search Introduced" />
+		                        	<input type="search" id="filterIntroduced" class="form-control filter-date" name="filterIntroduced" placeholder="<spring:message code="SearchIntroduced"/>" />
 								</div>
 							</div>
 							<div class="row">
 		                        <div class = "col-sm-5">
-	                        		<label>By Discontinued : </label>
+	                        		<label><spring:message code="ByDiscontinued"/></label>
 	                        	</div>
 	                        	<div class = "col-sm-7">
-	                        		<input type="search" id="filterDiscontinued" class="form-control filter-date" name="filterDiscontinued" placeholder="Search Discontinued" />
+	                        		<input type="search" id="filterDiscontinued" class="form-control filter-date" name="filterDiscontinued" placeholder="<spring:message code="SearchDiscontinued"/>" />
 	                        	</div>
 	                        </div>
 	                        <div class="row">
 		                        <div class = "col-sm-5">
-	                        		<label>By Company : </label>
+	                        		<label><spring:message code="ByCompany"/></label>
 	                        	</div>
 	                        	<div class = "col-sm-7">
-	                        		<input type="search" id="filterCompany" class="form-control filter" name="filterCompany" placeholder="Search Company" />
+	                        		<input type="search" id="filterCompany" class="form-control filter" name="filterCompany" placeholder="<spring:message code="SearchCompany"/>" />
 	                        	</div>
 	                        </div>
-	                        <input type="submit" id="searchsubmit" value="Apply Filter" class="btn btn-primary" />
+	                        <input type="submit" id="searchsubmit" value="<spring:message code="ApplyFilter"/>" class="btn btn-primary" />
 	                    </form>
                     </div>
                 </div>
                 <div class="pull-right">
-                    <a class="btn btn-success" id="addComputer" href="add-computer">Add Computer</a> 
-                    <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
+                    <a class="btn btn-success" id="addComputer" href="add-computer"><spring:message code="AddComputer"/></a> 
+                    <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();"><spring:message code="Edit"/></a>
                 </div>
             </div>
         </div>
@@ -86,9 +87,6 @@
             <table class="table table-striped table-bordered">
                 <thead>
                     <tr>
-                        <!-- Variable declarations for passing labels as parameters -->
-                        <!-- Table header for Computer Name -->
-
                         <th class="editMode" style="width: 60px; height: 22px;">
                             <input type="checkbox" id="selectall" /> 
                             <span style="vertical-align: top;">
@@ -99,28 +97,22 @@
                             </span>
                         </th>
                         <th>
-                            <a href="dashboard?order=name">Computer name</a>
+                            <a href="dashboard?order=name"><spring:message code="ComputerName"/></a>
                         </th>
                         <th>
-                            <a href="dashboard?order=introduced">Introduced date</a>
+                            <a href="dashboard?order=introduced"><spring:message code="IntroducedDate"/></a>
                         </th>
-                        <!-- Table header for Discontinued Date -->
                         <th>
-                            <a href="dashboard?order=discontinued">Discontinued date</a>
+                            <a href="dashboard?order=discontinued"><spring:message code="DiscontinuedDate"/></a>
                         </th>
-                        <!-- Table header for Company -->
                         <th>
-                            <a href="dashboard?order=company">Company</a>
+                            <a href="dashboard?order=company"><spring:message code="Company"/></a>
                         </th>
-
                     </tr>
                 </thead>
-                <!-- Browse attribute computers -->
                 <tbody id="results">
                     <c:forEach items="${listComputer}" var="computer" varStatus="status">
-                    	<%-- <c:if test="${status.count > beginComputerDisplay && status.count < beginComputerDisplay+numberComputerToShow}"> --%>
-							<ex:Link computer="${computer}" />
-						<%-- </c:if> --%>
+						<ex:Link computer="${computer}" />
 				    </c:forEach>
                 </tbody>
             </table>
@@ -133,24 +125,24 @@
 	                <li>
 	                    <a href="dashboard?beginComputerDisplay=${ beginComputerDisplay - numberComputerToShow }" aria-label="Previous">
 	                      <span aria-hidden="true">&laquo;</span>
-	                  </a>
-	              </li>
-              </c:if>
-              <c:if test="${count-numberComputerToShow > 0}">
-	              <c:forEach var="i" begin="${beginComputerDisplay}" end="${count-numberComputerToShow}" step="${numberComputerToShow}" varStatus="status">
-	              	<c:if test="${status.count < 5}">
-	              		<li>
-	              			<a href="dashboard?beginComputerDisplay=${ i + numberComputerToShow }"> 
-	              				${  (i + numberComputerToShow)/numberComputerToShow } 
-	              		 	</a>
-	              		 </li>
-	              	</c:if>
-	              	<c:if test="${status.count == 5}">
-	              		<li><a href="dashboard?beginComputerDisplay=${ i + numberComputerToShow }">... </a></li>
-	              	</c:if>
-	              </c:forEach>
-	         </c:if>
-              <c:if test="${beginComputerDisplay+numberComputerToShow <= count}">
+		                  </a>
+		              </li>
+	              </c:if>
+	              <c:if test="${count-numberComputerToShow > 0}">
+		              <c:forEach var="i" begin="${beginComputerDisplay}" end="${count-numberComputerToShow}" step="${numberComputerToShow}" varStatus="status">
+		              	<c:if test="${status.count < 5}">
+		              		<li>
+		              			<a href="dashboard?beginComputerDisplay=${ i + numberComputerToShow }"> 
+		              				${  (i + numberComputerToShow)/numberComputerToShow } 
+		              		 	</a>
+		              		 </li>
+		              	</c:if>
+		              	<c:if test="${status.count == 5}">
+		              		<li><a href="dashboard?beginComputerDisplay=${ i + numberComputerToShow }">... </a></li>
+		              	</c:if>
+		              </c:forEach>
+		         </c:if>
+              	<c:if test="${beginComputerDisplay+numberComputerToShow <= count}">
 	              <li>
 	                <a href="dashboard?beginComputerDisplay=${ beginComputerDisplay + numberComputerToShow }" aria-label="Next">
 	                    <span aria-hidden="true">&raquo;</span>
