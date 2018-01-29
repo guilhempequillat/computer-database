@@ -30,7 +30,7 @@ import ch.qos.logback.classic.Logger;
  * Servlet implementation class EditComputerServlet
  */
 @Controller
-@WebServlet("/edit-computer")
+@WebServlet("/edit-comput")
 public class EditComputerServlet extends HttpServlet {
 	
 	private Long computerId;
