@@ -1,44 +1,38 @@
 package org.cdb.dao.daoImplementation;
 
-import java.sql.ResultSet;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import java.util.List;
 
 import org.cdb.connectionPool.DataSourceConfigHikari;
-import org.cdb.dao.DaoFactory;
 import org.cdb.dao.DaoUtilitary;
 import org.cdb.dao.daoInterface.CompanyDao;
 import org.cdb.exception.DAOException;
 import org.cdb.mapper.CompanyMapper;
 import org.cdb.mapper.RowMapperCompany;
 import org.cdb.model.Company;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.zaxxer.hikari.HikariDataSource;
 import com.zaxxer.hikari.pool.HikariProxyConnection;
-
-import java.sql.Connection;
 
 import ch.qos.logback.classic.Logger;
 
-import java.sql.PreparedStatement;
-
+@Transactional
 @Repository
 public class CompanyDaoImplementation implements CompanyDao {
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	
-	@PersistenceContext
-	private LocalContainerEntityManagerFactoryBean em;
 	
 	private static final String SQL_SELECT          = "SELECT id , name FROM company";
 	private static final String SQL_CREATE          = "INSERT INTO company ( name ) VALUES (?) ";
@@ -47,13 +41,19 @@ public class CompanyDaoImplementation implements CompanyDao {
 	private CompanyMapper companyMapper = CompanyMapper.getCompanyMapper();
 	private Logger logger = (Logger) LoggerFactory.getLogger("CompanyDaoImplementation");
 	private RowMapperCompany rowMapperCompany = RowMapperCompany.getInstance();
+	@Autowired
+	private SessionFactory sessionFactory;
 	
 	@Override
 	public ArrayList<Company> findAll() throws DAOException {
-		ArrayList<Company> companies = (ArrayList<Company>) jdbcTemplate.query(SQL_SELECT, rowMapperCompany);
-		return companies;
-//		TypedQuery<Company> query = em.createQuery(SQL_SELECT, Company.class);
-//		return (ArrayList<Company>) query.getResultList();
+		Session session = sessionFactory.getCurrentSession();
+		//Transaction tx = session.beginTransaction();
+		Query query = session.createQuery("from Company");
+		System.out.println(query.list().toString());
+		return (ArrayList<Company>) query.list();
+//		System.out.println(empList.toString());
+//		ArrayList<Company> companies = (ArrayList<Company>) jdbcTemplate.query(SQL_SELECT, rowMapperCompany);
+//		return companies;
 	}
 
 	@Override

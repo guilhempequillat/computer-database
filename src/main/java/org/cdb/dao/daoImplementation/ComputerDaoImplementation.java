@@ -16,11 +16,16 @@ import org.cdb.dao.daoInterface.ComputerDao;
 import org.cdb.exception.DAOException;
 import org.cdb.mapper.ComputerMapper;
 import org.cdb.mapper.RowMapperComputer;
+import org.cdb.model.Company;
 import org.cdb.model.Computer;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -29,6 +34,7 @@ import com.zaxxer.hikari.pool.HikariProxyConnection;
 
 import ch.qos.logback.classic.Logger;
 
+@Transactional
 @Repository
 public class ComputerDaoImplementation implements ComputerDao {
 
@@ -92,6 +98,10 @@ public class ComputerDaoImplementation implements ComputerDao {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	
+	@Autowired
+	private SessionFactory sessionFactory;
+	
+	
 	private RowMapperComputer rowMapperComputer = RowMapperComputer.getInstance();
 
 	@Override
@@ -103,6 +113,9 @@ public class ComputerDaoImplementation implements ComputerDao {
 	@Override
 	public Computer find(int id) {
 		try {
+//			Session session = sessionFactory.getCurrentSession();
+//			Query query = session.createQuery("from Computer");
+//			return (Computer) query.getSingleResult();
 			Computer computer2 = (Computer) jdbcTemplate.queryForObject(SQL_FIND, rowMapperComputer, new Object[] {id});
 			return computer2;
 		} catch (org.springframework.dao.EmptyResultDataAccessException e) {
@@ -149,12 +162,21 @@ public class ComputerDaoImplementation implements ComputerDao {
 	
 	@Override
 	public int count() {
-		int nbComputer = jdbcTemplate.queryForObject(SQL_COUNT, Integer.class);
-		return nbComputer;
+		Session session = sessionFactory.getCurrentSession();
+		Query query = session.createQuery("select count(id) from Computer");
+		logger.debug(query.getSingleResult().toString());
+		return (int) Integer.parseInt(query.getSingleResult().toString());
+//		int nbComputer = jdbcTemplate.queryForObject(SQL_COUNT, Integer.class);
+//		return nbComputer;
 	}
 
 	@Override
 	public ArrayList<Computer> findPaginationAsc(String orderType, int nbComputerIndex, int nbToShow) {
+//		Session session = sessionFactory.getCurrentSession();
+//		Query query = session.createQuery("from Computer");
+//		logger.debug("ICI !!!!!!!!!!!!!!!!!!!!!!!");
+//		logger.debug(query.list().toString());
+//		return (ArrayList<Computer>) query.list();
 		Object[] objects = { nbComputerIndex, (nbToShow) };
 		return (ArrayList<Computer>) jdbcTemplate.query(getRequestFindPaginationAsc(orderType),rowMapperComputer,objects);
 	}

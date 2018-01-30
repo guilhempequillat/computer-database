@@ -1,16 +1,39 @@
 package org.cdb.model;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.time.LocalDate;;
+import java.time.LocalDate;
 
-public class Computer implements Comparable<Computer>{
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;;
+
+@Entity
+@Table(name = "computer")
+public class Computer{
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Long id;
+	
+	@Column(name = "name")
 	private String name;
+	
+	@Column(name = "introduced")
 	private LocalDate introduced;
+	
+	@Column(name = "discontinued")
 	private LocalDate discontinued;
+	
+//	@Column(name = "company_id")
 	private Long company_id;
+	
+	@OneToOne
+	@PrimaryKeyJoinColumn
 	private Company company;
 	
 	public Computer() {}
@@ -74,12 +97,6 @@ public class Computer implements Comparable<Computer>{
 			strCompanyName = this.company.toString();
 		}
 		return ""+id+"/"+strName+"/"+strIntroduced+"/"+strDiscontinued+"/"+strCompanyId+"/"+strCompanyName;
-	}
-
-	@Override
-	public int compareTo(Computer arg0) {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 	
 	public boolean equals(Computer computer) {
