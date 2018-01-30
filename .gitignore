@@ -8,3 +8,4 @@ create_db.log
 src/main/java/dao/dao.properties
 src/org/cdb/main/java/connectionPool/dataSource.properties
 src/org/cdb/main/java/connectionPool/db.properties
+src/org/cdb/springConfiguration/hibernate.properties
