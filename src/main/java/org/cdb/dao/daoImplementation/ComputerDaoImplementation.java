@@ -1,36 +1,24 @@
 package org.cdb.dao.daoImplementation;
 
 import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Types;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
-import org.cdb.connectionPool.DataSourceConfigHikari;
-import org.cdb.dao.DaoFactory;
-import org.cdb.dao.DaoUtilitary;
+import javax.persistence.criteria.CriteriaUpdate;
+
 import org.cdb.dao.daoInterface.ComputerDao;
-import org.cdb.exception.DAOException;
-import org.cdb.mapper.ComputerMapper;
 import org.cdb.mapper.RowMapperComputer;
-import org.cdb.model.Company;
 import org.cdb.model.Computer;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-
-import com.zaxxer.hikari.HikariDataSource;
-import com.zaxxer.hikari.pool.HikariProxyConnection;
 
 import ch.qos.logback.classic.Logger;
 
@@ -112,16 +100,10 @@ public class ComputerDaoImplementation implements ComputerDao {
 	
 	@Override
 	public Computer find(int id) {
-		try {
-//			Session session = sessionFactory.getCurrentSession();
-//			Query query = session.createQuery("from Computer");
-//			return (Computer) query.getSingleResult();
-			Computer computer2 = (Computer) jdbcTemplate.queryForObject(SQL_FIND, rowMapperComputer, new Object[] {id});
-			return computer2;
-		} catch (org.springframework.dao.EmptyResultDataAccessException e) {
-			logger.error("Computer not found "+e);
-		}
-		return null;
+		Session session = sessionFactory.getCurrentSession();
+		Criteria cr = session.createCriteria(Computer.class);
+		cr.add(Restrictions.eq("id", (Long) Long.parseLong(id+"")));
+		return (Computer) cr.uniqueResult();
 	}
 	
 	@Override 
@@ -166,25 +148,26 @@ public class ComputerDaoImplementation implements ComputerDao {
 		Query query = session.createQuery("select count(id) from Computer");
 		logger.debug(query.getSingleResult().toString());
 		return (int) Integer.parseInt(query.getSingleResult().toString());
-//		int nbComputer = jdbcTemplate.queryForObject(SQL_COUNT, Integer.class);
-//		return nbComputer;
 	}
 
 	@Override
 	public ArrayList<Computer> findPaginationAsc(String orderType, int nbComputerIndex, int nbToShow) {
-//		Session session = sessionFactory.getCurrentSession();
-//		Query query = session.createQuery("from Computer");
-//		logger.debug("ICI !!!!!!!!!!!!!!!!!!!!!!!");
-//		logger.debug(query.list().toString());
-//		return (ArrayList<Computer>) query.list();
-		Object[] objects = { nbComputerIndex, (nbToShow) };
-		return (ArrayList<Computer>) jdbcTemplate.query(getRequestFindPaginationAsc(orderType),rowMapperComputer,objects);
+		Session session = sessionFactory.getCurrentSession();
+		Criteria cr = session.createCriteria(Computer.class);
+		cr.addOrder( Order.asc(orderType) );
+		cr.setFirstResult(nbComputerIndex);
+		cr.setMaxResults(nbToShow);
+		return (ArrayList<Computer>) cr.list();
 	}
 
 	@Override
 	public ArrayList<Computer> findPaginationDesc(String orderType, int nbComputerIndex, int nbToShow) {
-		Object[] objects = { nbComputerIndex, nbToShow };
-		return (ArrayList<Computer>) jdbcTemplate.query(getRequestFindPaginationDesc(orderType),rowMapperComputer,objects);
+		Session session = sessionFactory.getCurrentSession();
+		Criteria cr = session.createCriteria(Computer.class);
+		cr.addOrder( Order.desc(orderType) );
+		cr.setFirstResult(nbComputerIndex);
+		cr.setMaxResults(nbToShow);
+		return (ArrayList<Computer>) cr.list();
 	}
 	@Override
 	public ArrayList<Computer> findPaginationDescFilter(String orderType, int nbComputerIndex, int nbToShow 

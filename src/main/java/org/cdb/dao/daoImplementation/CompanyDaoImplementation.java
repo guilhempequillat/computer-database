@@ -12,6 +12,7 @@ import org.cdb.exception.DAOException;
 import org.cdb.mapper.CompanyMapper;
 import org.cdb.mapper.RowMapperCompany;
 import org.cdb.model.Company;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -47,13 +48,8 @@ public class CompanyDaoImplementation implements CompanyDao {
 	@Override
 	public ArrayList<Company> findAll() throws DAOException {
 		Session session = sessionFactory.getCurrentSession();
-		//Transaction tx = session.beginTransaction();
-		Query query = session.createQuery("from Company");
-		System.out.println(query.list().toString());
-		return (ArrayList<Company>) query.list();
-//		System.out.println(empList.toString());
-//		ArrayList<Company> companies = (ArrayList<Company>) jdbcTemplate.query(SQL_SELECT, rowMapperCompany);
-//		return companies;
+		Criteria cr = session.createCriteria(Company.class);
+		return (ArrayList<Company>) cr.list();
 	}
 
 	@Override
