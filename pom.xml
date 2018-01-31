@@ -2,10 +2,27 @@
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>computer-database</groupId>
+  <groupId>fr.excilys</groupId>
   <artifactId>computer-database</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <packaging>jar</packaging>
+  
+  <packaging>pom</packaging>
+  
+  <modules>
+		<!-- <module>biding</module>
+		<module>webapp</module>
+		<module>service</module>
+		<module>persistence</module>
+		<module>console</module>
+		<module>core</module> -->
+		<module>module-core</module>
+		<module>module-binding</module>
+		<module>module-persistence</module>
+		<module>module-console</module>
+		<module>module-webapp</module>
+		<module>module-service</module>
+  </modules>
+  
   <properties>
   	<mysqlVersion>5.1.38</mysqlVersion>
   	<logbackVersion>1.2.3</logbackVersion>
@@ -29,94 +46,107 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
   	<javaVersion>1.8</javaVersion>
   	<javaCompilerPluginVersion>3.7.0</javaCompilerPluginVersion>
   </properties>
-  <dependencies>
- 	<dependency>
-	    <groupId>mysql</groupId>
-	    <artifactId>mysql-connector-java</artifactId>
-	    <version>${mysqlVersion}</version>
-	</dependency>
-	<dependency>
-	    <groupId>ch.qos.logback</groupId>
-	    <artifactId>logback-classic</artifactId>
-	    <version>${logbackVersion}</version>
-	</dependency>
-	<dependency>
-	    <groupId>org.slf4j</groupId>
-	    <artifactId>slf4j-api</artifactId>
-	    <version>${sl4jVersion}</version>
-	</dependency>
-	<dependency>
-	    <groupId>javax.servlet</groupId>
-	    <artifactId>javax.servlet-api</artifactId>
-	    <version>${servletVersion}</version>
-	</dependency>
-	<dependency>
-	    <groupId>javax.servlet.jsp</groupId>
-	    <artifactId>jsp-api</artifactId>
-	    <version>${jspVersion}</version>
-	</dependency>
-	<dependency>
+  <dependencyManagement>
+	  <dependencies>
+	 	<dependency>
+		    <groupId>mysql</groupId>
+		    <artifactId>mysql-connector-java</artifactId>
+		    <version>${mysqlVersion}</version>
+		</dependency>
+		<dependency>
+		    <groupId>ch.qos.logback</groupId>
+		    <artifactId>logback-classic</artifactId>
+		    <version>${logbackVersion}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.slf4j</groupId>
+		    <artifactId>slf4j-api</artifactId>
+		    <version>${sl4jVersion}</version>
+		</dependency>
+		<dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>javax.servlet-api</artifactId>
+		    <version>${servletVersion}</version>
+		</dependency>
+		<dependency>
+		    <groupId>javax.servlet.jsp</groupId>
+		    <artifactId>jsp-api</artifactId>
+		    <version>${jspVersion}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-webmvc</artifactId>
+		    <version>${springVersion}</version>
+		</dependency>
+		<dependency>
+		    <groupId>jstl</groupId>
+		    <artifactId>jstl</artifactId>
+		    <version>1.2</version>
+		</dependency>
+		
+		<dependency>
 	    <groupId>org.springframework</groupId>
-	    <artifactId>spring-webmvc</artifactId>
-	    <version>${springVersion}</version>
-	</dependency>
+		    <artifactId>spring-jdbc</artifactId>
+		    <version>${springJdbcVersion}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.hibernate</groupId>
+		    <artifactId>hibernate-core</artifactId>
+		    <version>5.2.12.Final</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-orm</artifactId>
+		    <version>${springOrmVersion}</version>
+		</dependency>
+		<dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>jstl</artifactId>
+		    <version>1.2</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.zaxxer</groupId>
+		    <artifactId>HikariCP</artifactId>
+		    <version>${hikariCPVersion}</version>
+		    <scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.mysema.querydsl</groupId>
+	    	<artifactId>querydsl-apt</artifactId>
+			<version>${querydslVersion}</version>
+	    </dependency>
+		<dependency>
+		    <groupId>junit</groupId>
+		    <artifactId>junit</artifactId>
+		    <version>${junitVersion}</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.mockito</groupId>
+		    <artifactId>mockito-all</artifactId>
+		    <version>${mockitoVersion}</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
+		  <groupId>org.assertj</groupId>
+		  <artifactId>assertj-db</artifactId>
+		  <version>${assertjVersion}</version>
+		  <scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.hsqldb</groupId>
+		    <artifactId>hsqldb</artifactId>
+		    <version>${hsqldbVersion}</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.tomcat</groupId>
+		    <artifactId>jasper</artifactId>
+		    <version>${jasperVersion}</version>
+		</dependency>
+	  </dependencies>
+	</dependencyManagement>
 	
-	<dependency>
-    <groupId>org.springframework</groupId>
-	    <artifactId>spring-jdbc</artifactId>
-	    <version>${springJdbcVersion}</version>
-	</dependency>
-	<dependency>
-	    <groupId>org.hibernate</groupId>
-	    <artifactId>hibernate-core</artifactId>
-	    <version>5.2.12.Final</version>
-	</dependency>
-	<dependency>
-	    <groupId>org.springframework</groupId>
-	    <artifactId>spring-orm</artifactId>
-	    <version>${springOrmVersion}</version>
-	</dependency>
-	<dependency>
-	    <groupId>com.zaxxer</groupId>
-	    <artifactId>HikariCP</artifactId>
-	    <version>${hikariCPVersion}</version>
-	    <scope>compile</scope>
-	</dependency>
-	<dependency>
-		<groupId>com.mysema.querydsl</groupId>
-    	<artifactId>querydsl-apt</artifactId>
-		<version>${querydslVersion}</version>
-    </dependency>
-	<dependency>
-	    <groupId>junit</groupId>
-	    <artifactId>junit</artifactId>
-	    <version>${junitVersion}</version>
-	    <scope>test</scope>
-	</dependency>
-	<dependency>
-	    <groupId>org.mockito</groupId>
-	    <artifactId>mockito-all</artifactId>
-	    <version>${mockitoVersion}</version>
-	    <scope>test</scope>
-	</dependency>
-	<dependency>
-	  <groupId>org.assertj</groupId>
-	  <artifactId>assertj-db</artifactId>
-	  <version>${assertjVersion}</version>
-	  <scope>test</scope>
-	</dependency>
-	<dependency>
-	    <groupId>org.hsqldb</groupId>
-	    <artifactId>hsqldb</artifactId>
-	    <version>${hsqldbVersion}</version>
-	    <scope>test</scope>
-	</dependency>
-	<dependency>
-	    <groupId>org.apache.tomcat</groupId>
-	    <artifactId>jasper</artifactId>
-	    <version>${jasperVersion}</version>
-	</dependency>
-  </dependencies>
   <build>
     <plugins>
       <plugin>
@@ -126,6 +156,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <configuration>
           <source>${javaVersion}</source>
           <target>${javaVersion}</target>
+          <failOnMissingWebXml>false</failOnMissingWebXml>
         </configuration>
       </plugin>
     </plugins>
