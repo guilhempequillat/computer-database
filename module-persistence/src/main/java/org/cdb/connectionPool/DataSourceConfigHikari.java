@@ -24,7 +24,7 @@ import com.zaxxer.hikari.HikariDataSource;
 @Configuration
 public class DataSourceConfigHikari {
 	
-	private final static String PROPERTIES_FILE                      = "/org/cdb/connectionPool/db.properties";
+	private final static String PROPERTIES_FILE                      = "/db.properties";
 	private static final String PROPERTY_URL                         = "url";
     private static final String PROPERTY_NOM_UTILISATEUR             = "username";
     private static final String PROPERTY_MOT_DE_PASSE                = "password";

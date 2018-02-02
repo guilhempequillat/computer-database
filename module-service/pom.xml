@@ -9,7 +9,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	</parent>
 	<artifactId>module-service</artifactId>
 	<name>module-service</name>
-	<packaging>jar</packaging>
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -18,12 +17,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	<dependencies>
 		<dependency>
 		    <groupId>${parent.groupId}</groupId>
-		    <artifactId>core</artifactId>
-		    <version>${parent.version}</version>
-		</dependency>
-		<dependency>
-		    <groupId>${parent.groupId}</groupId>
-		    <artifactId>persistence</artifactId>
+		    <artifactId>module-persistence</artifactId>
 		    <version>${parent.version}</version>
 		</dependency>
 		<dependency>

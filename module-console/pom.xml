@@ -9,7 +9,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	</parent>
 	<artifactId>module-console</artifactId>
 	<name>module-console</name>
-	<packaging>jar</packaging>
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -18,12 +17,12 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	<dependencies>
 		<dependency>
 		    <groupId>${parent.groupId}</groupId>
-		    <artifactId>core</artifactId>
+		    <artifactId>module-core</artifactId>
 		    <version>${parent.version}</version>
 		</dependency>
 		<dependency>
 		    <groupId>${parent.groupId}</groupId>
-		    <artifactId>service</artifactId>
+		    <artifactId>module-service</artifactId>
 		    <version>${parent.version}</version>
 		</dependency>
 		<dependency>

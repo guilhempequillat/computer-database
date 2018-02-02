@@ -9,18 +9,12 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
   <packaging>pom</packaging>
   
   <modules>
-		<!-- <module>biding</module>
-		<module>webapp</module>
-		<module>service</module>
-		<module>persistence</module>
-		<module>console</module>
-		<module>core</module> -->
-		<module>module-core</module>
-		<module>module-binding</module>
-		<module>module-persistence</module>
-		<module>module-console</module>
-		<module>module-webapp</module>
-		<module>module-service</module>
+	<module>module-core</module>
+	<module>module-binding</module>
+	<module>module-persistence</module>
+	<module>module-console</module>
+	<module>module-webapp</module>
+	<module>module-service</module>
   </modules>
   
   <properties>
@@ -38,13 +32,16 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
   	<jasperVersion>6.0.32</jasperVersion>
   	<springVersion>5.0.2.RELEASE</springVersion>
   	<springJdbcVersion>5.0.2.RELEASE</springJdbcVersion>
+  	<jstlVersion>1.2</jstlVersion>
   	<hibernateVersion>5.2.12.Final</hibernateVersion>
   	<hibernateJpaVersion>1.0.1.Final</hibernateJpaVersion>
   	<springOrmVersion>5.0.2.RELEASE</springOrmVersion>
   	<springDataVersion>2.0.3.RELEASE</springDataVersion>
+  	<springSecurityVersion>5.0.0.RELEASE</springSecurityVersion>
   	<querydslVersion>3.7.4</querydslVersion>
   	<javaVersion>1.8</javaVersion>
   	<javaCompilerPluginVersion>3.7.0</javaCompilerPluginVersion>
+    <failOnMissingWebXml>false</failOnMissingWebXml>
   </properties>
   <dependencyManagement>
 	  <dependencies>
@@ -64,11 +61,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		    <version>${sl4jVersion}</version>
 		</dependency>
 		<dependency>
-		    <groupId>javax.servlet</groupId>
-		    <artifactId>javax.servlet-api</artifactId>
-		    <version>${servletVersion}</version>
-		</dependency>
-		<dependency>
 		    <groupId>javax.servlet.jsp</groupId>
 		    <artifactId>jsp-api</artifactId>
 		    <version>${jspVersion}</version>
@@ -78,12 +70,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		    <artifactId>spring-webmvc</artifactId>
 		    <version>${springVersion}</version>
 		</dependency>
-		<dependency>
-		    <groupId>jstl</groupId>
-		    <artifactId>jstl</artifactId>
-		    <version>1.2</version>
-		</dependency>
-		
 		<dependency>
 	    <groupId>org.springframework</groupId>
 		    <artifactId>spring-jdbc</artifactId>
@@ -102,7 +88,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		<dependency>
 		    <groupId>javax.servlet</groupId>
 		    <artifactId>jstl</artifactId>
-		    <version>1.2</version>
+		    <version>${jstlVersion}</version>
 		</dependency>
 		<dependency>
 		    <groupId>com.zaxxer</groupId>
@@ -115,11 +101,26 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	    	<artifactId>querydsl-apt</artifactId>
 			<version>${querydslVersion}</version>
 	    </dependency>
+	    <dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>${springSecurityVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${springSecurityVersion}</version>
+		</dependency>
 		<dependency>
 		    <groupId>junit</groupId>
 		    <artifactId>junit</artifactId>
 		    <version>${junitVersion}</version>
 		    <scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>javax.servlet-api</artifactId>
+		    <version>${servletVersion}</version>
 		</dependency>
 		<dependency>
 		    <groupId>org.mockito</groupId>
@@ -156,9 +157,13 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <configuration>
           <source>${javaVersion}</source>
           <target>${javaVersion}</target>
-          <failOnMissingWebXml>false</failOnMissingWebXml>
         </configuration>
       </plugin>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-war-plugin</artifactId>
+			<version>3.2.0</version>
+		</plugin>
     </plugins>
   </build>
 </project>

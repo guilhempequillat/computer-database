@@ -9,7 +9,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	</parent>
 	<artifactId>module-persistence</artifactId>
 	<name>module-persistence</name>
-	<packaging>jar</packaging>
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -18,12 +17,12 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	<dependencies>
 		<dependency>
 		    <groupId>${project.parent.groupId}</groupId>
-		    <artifactId>core</artifactId>
+		    <artifactId>module-core</artifactId>
 		    <version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 		    <groupId>${project.parent.groupId}</groupId>
-		    <artifactId>biding</artifactId>
+		    <artifactId>module-biding</artifactId>
 		    <version>${project.parent.version}</version>
 		</dependency>
 	 	<dependency>
