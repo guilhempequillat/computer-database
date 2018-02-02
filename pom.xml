@@ -30,12 +30,12 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
   	<assertjVersion>1.2.0</assertjVersion>
   	<hsqldbVersion>2.3.2</hsqldbVersion>
   	<jasperVersion>6.0.32</jasperVersion>
-  	<springVersion>5.0.2.RELEASE</springVersion>
-  	<springJdbcVersion>5.0.2.RELEASE</springJdbcVersion>
+  	<springVersion>5.0.0.RELEASE</springVersion>
+  	<springJdbcVersion>5.0.0.RELEASE</springJdbcVersion>
   	<jstlVersion>1.2</jstlVersion>
   	<hibernateVersion>5.2.12.Final</hibernateVersion>
   	<hibernateJpaVersion>1.0.1.Final</hibernateJpaVersion>
-  	<springOrmVersion>5.0.2.RELEASE</springOrmVersion>
+  	<springOrmVersion>5.0.0.RELEASE</springOrmVersion>
   	<springDataVersion>2.0.3.RELEASE</springDataVersion>
   	<springSecurityVersion>5.0.0.RELEASE</springSecurityVersion>
   	<querydslVersion>3.7.4</querydslVersion>

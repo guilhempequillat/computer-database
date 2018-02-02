@@ -4,6 +4,8 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
+import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
+import org.cdb.connectionPool.DataSourceConfigHikari;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -37,24 +39,22 @@ public class PersistanceConfig {
 	      return sessionFactory;
 	   }
 	 
-//	   @Bean
-//	   public DataSource restDataSource() {
-//	      BasicDataSource dataSource = new BasicDataSource();
-//	      dataSource.setDriverClassName(env.getProperty("jdbc.driverClassName"));
-//	      dataSource.setUrl(env.getProperty("jdbc.url"));
-//	      dataSource.setUsername(env.getProperty("jdbc.user"));
-//	      dataSource.setPassword(env.getProperty("jdbc.pass"));
-//	 
-//	      return dataSource;
-//	   }
+	   @Bean
+	   public org.apache.tomcat.jdbc.pool.DataSource restDataSource() {
+	      org.apache.tomcat.jdbc.pool.DataSource dataSource = new org.apache.tomcat.jdbc.pool.DataSource();
+	      dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+	      dataSource.setUrl("jdbc:mysql://localhost:3306/computer-database-db?useSSL=false");
+	      dataSource.setUsername("admincdb");
+	      dataSource.setPassword("test123");
+	      return dataSource;
+	   }
 	 
 	   @Bean
 	   @Autowired
 	   public HibernateTransactionManager transactionManager(
-	     SessionFactory sessionFactory) {
+        SessionFactory sessionFactory) {
 	  
-	      HibernateTransactionManager txManager
-	       = new HibernateTransactionManager();
+	      HibernateTransactionManager txManager = new HibernateTransactionManager();
 	      txManager.setSessionFactory(sessionFactory);
 	 
 	      return txManager;

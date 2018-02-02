@@ -1,10 +1,12 @@
 package org.cdb.dao.daoImplementation;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.tomcat.jdbc.pool.DataSource;
 import org.cdb.connectionPool.DataSourceConfigHikari;
 import org.cdb.dao.DaoUtilitary;
 import org.cdb.dao.daoInterface.CompanyDao;
@@ -33,7 +35,10 @@ public class CompanyDaoImplementation implements CompanyDao {
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
-	
+	@Autowired
+	private SessionFactory sessionFactory;
+	@Autowired
+	private DataSource dataSource;
 	
 	private static final String SQL_SELECT          = "SELECT id , name FROM company";
 	private static final String SQL_CREATE          = "INSERT INTO company ( name ) VALUES (?) ";
@@ -42,8 +47,7 @@ public class CompanyDaoImplementation implements CompanyDao {
 	private CompanyMapper companyMapper = CompanyMapper.getCompanyMapper();
 	private Logger logger = (Logger) LoggerFactory.getLogger("CompanyDaoImplementation");
 	private RowMapperCompany rowMapperCompany = RowMapperCompany.getInstance();
-	@Autowired
-	private SessionFactory sessionFactory;
+	
 	
 	@Override
 	public ArrayList<Company> findAll() throws DAOException {
@@ -54,12 +58,12 @@ public class CompanyDaoImplementation implements CompanyDao {
 
 	@Override
 	public void delete(Long id) throws DAOException {
-		HikariProxyConnection connection = null;
+		Connection connection = null;
 	    PreparedStatement preparedStatementDeleteCompany = null;
 	    PreparedStatement preparedStatementDeleteComputer = null;
 	    DaoUtilitary daoUtilitary = DaoUtilitary.getInstance();
 	    try {
-	    	connection = (HikariProxyConnection) DataSourceConfigHikari.getDataSource().getConnection();
+	    	connection = (Connection) dataSource.getConnection();
 	    	connection.setAutoCommit(false);
 	    	Object[] objects = {id};
 	    	preparedStatementDeleteComputer = daoUtilitary.initializePreparedRequest(connection, SQL_DELETE_COMPUTER , false , objects);
