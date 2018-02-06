@@ -28,8 +28,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
-                    <h1><spring:message code="AddComputer"/></h1>
-                    <form action="login" method="POST">
+                    <h1>Login</h1>
+                    <form action="perform-login" method="POST">
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Login</label>
@@ -48,7 +48,7 @@
             </div>
         </div>
     </section>
-    <script src="js/jquery.min.js"></script>
-	<script src="js/addComputer.js"></script>
+    <script src="js/jquery.min.js"></script><!-- 
+	<script src="js/addComputer.js"></script> -->
 </body>
 </html>

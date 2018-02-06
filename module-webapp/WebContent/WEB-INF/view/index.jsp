@@ -28,27 +28,51 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
-                    <h1><spring:message code="AddComputer"/></h1>
-                    <form action="login" method="POST">
+                    <h1>Login</h1>
+                    <form action="perform-login" method="POST">
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Login</label>
-                                <input type="text" class="form-control" id="computerName" name="computerName" placeholder="">
+                                <input type="text" class="form-control" id="username" name="username" placeholder="">
                             </div>
                             <div class="form-group">
-                                <label for="introduced"><spring:message code="Password"/></label>
-                                <input type="password" class="form-control" id="introduced" name="introduced" placeholder="">
+                                <label for="password"><spring:message code="Password"/></label>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="">
                             </div>
                         </fieldset>
                         <div class="actions pull-right">
                             <input type="submit" value="Login" class="btn btn-primary">
                         </div>
+                        <input type="hidden" name="${_csrf.parameterName}"
+							value="${_csrf.token}" />
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-8 col-xs-offset-2 box">
+                    <h1>Register</h1>
+                    <form action="register" method="POST">
+                        <fieldset>
+                            <div class="form-group">
+                                <label for="username">Login</label>
+                                <input type="text" class="form-control" id="username" name="username" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="password"><spring:message code="Password"/></label>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="">
+                            </div>
+                        </fieldset>
+                        <div class="actions pull-right">
+                            <input type="submit" value="Register" class="btn btn-primary">
+                        </div>
+                        <input type="hidden" name="${_csrf.parameterName}"
+							value="${_csrf.token}" />
                     </form>
                 </div>
             </div>
         </div>
     </section>
-    <script src="js/jquery.min.js"></script>
-	<script src="js/addComputer.js"></script>
+    <script src="js/jquery.min.js"></script><!-- 
+	<script src="js/addComputer.js"></script> -->
 </body>
 </html>

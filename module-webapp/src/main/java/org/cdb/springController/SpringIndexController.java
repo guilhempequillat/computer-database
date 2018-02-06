@@ -2,6 +2,11 @@ package org.cdb.springController;
 
 import java.util.Locale;
 
+import org.cdb.model.User;
+
+import org.cdb.service.serviceImplementation.UserServiceImplementation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,15 +14,28 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-@RequestMapping("/index")
 public class SpringIndexController {
+	
+	@Autowired
+	UserServiceImplementation userService; 
 
-	@RequestMapping(method = RequestMethod.GET)
-    public String getDashBoard(@RequestParam(value = "numberComputerToShow", required = false) String numberComputerToShow, 
-    		@RequestParam(value = "order", required = false) String order, 
-    		@RequestParam(value = "beginComputerDisplay", required = false) String beginComputerDisplay, 
-    		Model model, Locale locale) {
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String getLogin(Model model, Locale locale) {
         return "index";
     }
-
+	
+//	@RequestMapping(value = "/perform-login", method = RequestMethod.POST)
+//    public String performLogin(Model model, Locale locale) {
+//        return "dashboard";
+//    }
+//	
+	@RequestMapping(value = "/register", method = RequestMethod.POST)
+    public String getRegister(@RequestParam(value = "username", required = true) String username, 
+    	@RequestParam(value = "password", required = true) String password, 
+    	Model model, Locale locale) {
+		BCryptPasswordEncoder bcp = new BCryptPasswordEncoder();
+		userService.addUser(new User(username,"mail",bcp.encode(password)));
+        return "index";
+    }
 }
+
