@@ -39,6 +39,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
   	<springDataVersion>2.0.3.RELEASE</springDataVersion>
   	<springSecurityVersion>5.0.0.RELEASE</springSecurityVersion>
   	<querydslVersion>3.7.4</querydslVersion>
+  	<jacksonVersion>2.7.5</jacksonVersion>
   	<javaVersion>1.8</javaVersion>
   	<javaCompilerPluginVersion>3.7.0</javaCompilerPluginVersion>
     <failOnMissingWebXml>false</failOnMissingWebXml>
@@ -112,6 +113,16 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 			<version>${springSecurityVersion}</version>
 		</dependency>
 		<dependency>
+		    <groupId>org.apache.tomcat</groupId>
+		    <artifactId>tomcat-jdbc</artifactId>
+		    <version>7.0.42</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-databind</artifactId>
+		    <version>${jacksonVersion}</version>
+		</dependency>
+		<dependency>
 		    <groupId>junit</groupId>
 		    <artifactId>junit</artifactId>
 		    <version>${junitVersion}</version>
@@ -144,7 +155,19 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		    <groupId>org.apache.tomcat</groupId>
 		    <artifactId>jasper</artifactId>
 		    <version>${jasperVersion}</version>
+		    
 		</dependency>
+		<dependency>
+		    <groupId>commons-dbcp</groupId>
+		    <artifactId>commons-dbcp</artifactId>
+		    <version>1.4</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-dbcp2</artifactId>
+		    <version>2.0</version>
+		</dependency>
+		
 	  </dependencies>
 	</dependencyManagement>
 	

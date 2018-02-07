@@ -40,13 +40,10 @@ public class CompanyDaoImplementation implements CompanyDao {
 	@Autowired
 	private DataSource dataSource;
 	
-	private static final String SQL_SELECT          = "SELECT id , name FROM company";
 	private static final String SQL_CREATE          = "INSERT INTO company ( name ) VALUES (?) ";
 	private static final String SQL_DELETE_COMPUTER = "DELETE FROM computer WHERE company_id = ? ";
 	private static final String SQL_DELETE_COMPANY  = "DELETE FROM company WHERE  id = ? ";
-	private CompanyMapper companyMapper = CompanyMapper.getCompanyMapper();
 	private Logger logger = (Logger) LoggerFactory.getLogger("CompanyDaoImplementation");
-	private RowMapperCompany rowMapperCompany = RowMapperCompany.getInstance();
 	
 	
 	@Override

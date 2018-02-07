@@ -50,6 +50,14 @@ public class User {
 		this.password = password;
 		this.roles.add(new Role("ROLE_USER"));
 	}
+	
+	public User(String username, String email, String password, Set<Role> roles) {
+		super();
+		this.username = username;
+		this.email = email;
+		this.password = password;
+		this.roles = roles;
+	}
 
 	public Long getId() {
 		return id;

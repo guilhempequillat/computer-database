@@ -24,17 +24,13 @@ public class SpringIndexController {
         return "index";
     }
 	
-//	@RequestMapping(value = "/perform-login", method = RequestMethod.POST)
-//    public String performLogin(Model model, Locale locale) {
-//        return "dashboard";
-//    }
-//	
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
     public String getRegister(@RequestParam(value = "username", required = true) String username, 
-    	@RequestParam(value = "password", required = true) String password, 
+        	@RequestParam(value = "password", required = true) String password, 
+        	@RequestParam(value = "email", required = true) String email, 
     	Model model, Locale locale) {
 		BCryptPasswordEncoder bcp = new BCryptPasswordEncoder();
-		userService.addUser(new User(username,"mail",bcp.encode(password)));
+		userService.addUser(new User(username,email,bcp.encode(password)));
         return "index";
     }
 }

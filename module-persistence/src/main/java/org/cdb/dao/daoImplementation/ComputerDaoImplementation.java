@@ -27,14 +27,12 @@ import ch.qos.logback.classic.Logger;
 public class ComputerDaoImplementation implements ComputerDao {
 
 	private static final String SQL_FIND_ALL                          = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.id, company.name  FROM computer LEFT JOIN company ON computer.company_id = company.id";
-	private static final String SQL_FIND                              = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.id, company.name FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.id = ?";
 	private static final String SQL_UPDATE_NAME                       = "UPDATE computer SET name = ? WHERE id = ?";
 	private static final String SQL_UPDATE_COMPANY                    = "UPDATE computer SET company_id = ? WHERE id = ?";
 	private static final String SQL_UPDATE_INTRODUCED                 = "UPDATE computer SET introduced = ? WHERE id = ?";
 	private static final String SQL_UPDATE_DISCONTINUED               = "UPDATE computer SET discontinued = ? WHERE id = ?";
 	private static final String SQL_CREATE                            = "INSERT INTO computer ( name , discontinued ,introduced , company_id ) VALUES (?,?,?,?) ";
 	private static final String SQL_DELETE                            = "DELETE FROM computer WHERE id = ?";
-	private static final String SQL_COUNT                             = "SELECT COUNT(id) FROM computer AS nb";
 	private static final String SQL_FIND_PAGINATION_ASC_NAME          = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.id, company.name FROM computer LEFT JOIN company ON computer.company_id = company.id ORDER BY computer.name ASC LIMIT ?,?";
 	private static final String SQL_FIND_PAGINATION_DESC_NAME         = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.id, company.name FROM computer LEFT JOIN company ON computer.company_id = company.id ORDER BY computer.name DESC LIMIT ?,?";
 	private static final String SQL_FIND_PAGINATION_ASC_INTRODUCED    = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.id, company.name FROM computer LEFT JOIN company ON computer.company_id = company.id ORDER BY computer.introduced ASC LIMIT ?,?";
