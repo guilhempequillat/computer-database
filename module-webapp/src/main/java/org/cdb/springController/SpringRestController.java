@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 @RestController
 public class SpringRestController {
 
@@ -20,4 +23,20 @@ public class SpringRestController {
 		
 		return "coucou";
     }
+	
+	@RequestMapping("/json/{string}")
+	public String json(@PathVariable String s) {
+		ObjectMapper objectMapper = new ObjectMapper();
+		Company company  = new Company("Json");
+		String jsonInString="";
+		try {
+			jsonInString = objectMapper.writeValueAsString(company);
+		
+			jsonInString = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(company);
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return jsonInString;
+	}
 }
