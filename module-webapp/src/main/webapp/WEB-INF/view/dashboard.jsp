@@ -4,6 +4,8 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.text.NumberFormat" %>
 <%@ taglib prefix = "ex" uri = "custom.tld"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -31,53 +33,86 @@
             <h1 id="homeTitle">
                 ${ count } <spring:message code="label"/><p></p>
             </h1>
-            <button id="toggleFilter" class="btn btn-default"><spring:message code="Filter"/></button>
-            <div id="actions" class="form-horizontal">
-                <div class="pull-left">
-	                <div id="filter">
+	        <div class="container btn-group  btn-group-toggle" id="groupe-btn" data-toggle="buttons">
+		        	<label class="btn btn-default col-xs-4" id="toggleFilter">
+						<input type="radio" name="options"  id="a"><spring:message code="Filter"/>
+					</label>
+					<label class="btn btn-default col-xs-4" id="label-login" onclick="location.href='add-computer'" >
+						<input type="radio" name="options"  id="btn-login"><spring:message code="AddComputer"/>
+					</label>
+					<label class="btn btn-default col-xs-4" id="label-login" onclick="$.fn.toggleEditMode();">
+						<input type="radio" name="options"  id="btn-login"><spring:message code="Edit"/>
+					</label>
+				</div>
+					 <div id="filter">
 	                    <form id="searchForm" action="dashboard" method="POST" class="form-inline">
-	                    	<div class="row">
+	                    <div class="col-sm-6">
+	                    	<div class="row col-xs-12">
 	                        	<div class = "col-sm-5">
 	                        		<label><spring:message code="ByName"/></label>
 	                        	</div>
 	                        	<div class = "col-sm-7">
-	                        		<input type="search" id="filterName" class="form-control filter" name="filterName" placeholder="<spring:message code="SearchName"/>" />
+	                        		<c:choose>
+	                        		 	<c:when test = "${filterName != null &&  filterName!=''}">
+	                        		 		<input type="search" id="filterName" class="form-control filter" name="filterName" value="${filterName}" />
+	                        		 	</c:when>
+	                        		 	<c:otherwise>
+	                        		 		<input type="search" id="filterName" class="form-control filter" name="filterName" placeholder="<spring:message code="SearchName"/>" />
+	                        		 	</c:otherwise>
+	                        		</c:choose>
 	                        	</div>
 	                        </div>
-	                        <div class="row">
+	                        <div class="row col-xs-12">
 		                        <div class = "col-sm-5">
 		                        	<label><spring:message code="ByIntroduced"/></label>
 		                        </div>
 		                        <div class = "col-sm-7">
-		                        	<input type="search" id="filterIntroduced" class="form-control filter-date" name="filterIntroduced" placeholder="<spring:message code="SearchIntroduced"/>" />
+		                        	<c:choose>
+	                        		 	<c:when test = "${filterIntroduced != null &&  filterIntroduced!=''}">
+	                        		 		<input type="search" id="filterIntroduced" class="form-control filter filter-date" name="filterIntroduced" value="${filterIntroduced}" />
+	                        		 	</c:when>
+	                        		 	<c:otherwise>
+	                        		 		<input type="search" id="filterIntroduced" class="form-control filter filter-date" name="filterIntroduced" placeholder="<spring:message code="SearchIntroduced"/>" />
+	                        		 	</c:otherwise>
+	                        		</c:choose>
 								</div>
 							</div>
-							<div class="row">
+							<div class="row col-xs-12">
 		                        <div class = "col-sm-5">
 	                        		<label><spring:message code="ByDiscontinued"/></label>
 	                        	</div>
 	                        	<div class = "col-sm-7">
-	                        		<input type="search" id="filterDiscontinued" class="form-control filter-date" name="filterDiscontinued" placeholder="<spring:message code="SearchDiscontinued"/>" />
+		                        	<c:choose>
+	                        		 	<c:when test = "${filterDiscontinued != null &&  filterDiscontinued!=''}">
+	                        		 		<input type="search" id="filterDiscontinued" class="form-control filter filter-date" name="filterDiscontinued" value="${filterDiscontinued}" />
+	                        		 	</c:when>
+	                        		 	<c:otherwise>
+	                        		 		<input type="search" id="filterDiscontinued" class="form-control filter filter-date" name="filterDiscontinued" placeholder="<spring:message code="SearchDiscontinued"/>" />
+	                        		 	</c:otherwise>
+	                        		</c:choose>
 	                        	</div>
 	                        </div>
-	                        <div class="row">
+	                        <div class="row col-xs-12">
 		                        <div class = "col-sm-5">
 	                        		<label><spring:message code="ByCompany"/></label>
 	                        	</div>
 	                        	<div class = "col-sm-7">
-	                        		<input type="search" id="filterCompany" class="form-control filter" name="filterCompany" placeholder="<spring:message code="SearchCompany"/>" />
+		                        	<c:choose>
+	                        		 	<c:when test = "${filterCompany != null &&  filterCompany!=''}">
+	                        		 		<input type="search" id="filterCompany" class="form-control filter" name="filterCompany" value="${filterCompany}" />
+	                        		 	</c:when>
+	                        		 	<c:otherwise>
+	                        		 		<input type="search" id="filterCompany" class="form-control filter" name="filterCompany" placeholder="<spring:message code="SearchCompany"/>" />
+	                        		 	</c:otherwise>
+	                        		</c:choose>
 	                        	</div>
-	                        </div>
-	                        <input type="submit" id="searchsubmit" value="<spring:message code="ApplyFilter"/>" class="btn btn-primary" />
-	                    </form>
+	                        </div><br>
+	                        <input class="row col-sm-6 btn btn-primary" type="submit" id="searchsubmit" value="<spring:message code="ApplyFilter"/>" />
+	                        <button type=button class="row col-sm-6 btn btn-primary" id="reset-filter">Reset</button>
+	                   </div>
+	                   </form>
                     </div>
-                </div>
-                <div class="pull-right">
-                    <a class="btn btn-success" id="addComputer" href="add-computer"><spring:message code="AddComputer"/></a> 
-                    <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();"><spring:message code="Edit"/></a>
-                </div>
-            </div>
-        </div>
+		   </div>
         <form id="deleteForm" action="delete-computer" method="POST">
         	<div class=" container">
         		<div class = "pull-left">
@@ -136,7 +171,7 @@
 		              	<c:if test="${status.count < 5}">
 		              		<li>
 		              			<a href="dashboard?beginComputerDisplay=${ i + numberComputerToShow }"> 
-		              				${  (i + numberComputerToShow)/numberComputerToShow } 
+		              				<fmt:formatNumber type = "number" value="${  (i + numberComputerToShow)/numberComputerToShow } " maxFractionDigits="0" />
 		              		 	</a>
 		              		 </li>
 		              	</c:if>

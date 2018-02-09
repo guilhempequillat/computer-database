@@ -94,6 +94,13 @@ $(document).keydown(function(e) {
 $('#toggleFilter').click(function(){
     $('#filter').toggle(1000);
 });
+$('#reset-filter').click(function(){
+    $('#filterName').val('');
+    $('#filterIntroduced').val('');
+    $('#filterDiscontinued').val('');
+    $('#filterCompany').val('');
+    $('#searchsubmit').click();
+});
 $( ".filter" ).change(function() {
 	if(this.value != ""){
 		this.style = "border-color: rgba(0,175,0,.75);";

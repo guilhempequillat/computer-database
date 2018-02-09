@@ -4,8 +4,6 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
-import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
-import org.cdb.connectionPool.DataSourceConfigHikari;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -52,7 +50,8 @@ public class PersistanceConfig {
 	   @Bean
 	   @Autowired
 	   public HibernateTransactionManager transactionManager(
-        SessionFactory sessionFactory) {
+      
+			   SessionFactory sessionFactory) {
 	  
 	      HibernateTransactionManager txManager = new HibernateTransactionManager();
 	      txManager.setSessionFactory(sessionFactory);

@@ -27,3 +27,15 @@ input[type='checkbox'] {
     border-radius: 5px;
     white-space: nowrap;
 }
+.valid{
+	border-color: green;
+}
+
+.error{
+	color:red;
+	border-color: red;
+}
+#nav-dashboard{
+	background-color:grey;
+	color:white;
+}
