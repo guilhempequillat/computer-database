@@ -1,11 +1,8 @@
-package org.cdb.cui;
+package org.cdb.cli;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import org.cdb.dao.DaoFactory;
-import org.cdb.dao.daoInterface.CompanyDao;
-import org.cdb.dao.daoInterface.ComputerDao;
 import org.cdb.model.Company;
 import org.cdb.model.Computer;
 import org.cdb.service.UtilitaryService;
@@ -13,30 +10,26 @@ import org.cdb.service.serviceImplementation.CompanyServiceImplementation;
 import org.cdb.service.serviceImplementation.ComputerServiceImplementation;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 
 import ch.qos.logback.classic.Logger;
 
-
+@Component
 public class Page {
 	
-//	@Autowired
+	@Autowired
 	private CommandLineInput commandLineInput;
 	
-//	@Autowired
+	@Autowired
 	private CompanyServiceImplementation companyService;
 	
-//	@Autowired
+	@Autowired
 	private ComputerServiceImplementation computerService;
 	
 	private UtilitaryService utilitaryService = UtilitaryService.getInstance();
 	private boolean notQuit = true; 
 	private Logger logger = (Logger) LoggerFactory.getLogger("Page");
-	
-	public Page () {
-		commandLineInterfaceWorking();
-	}
-	
+		
 	public void menu() {
 		System.out.println("-------------------------------------");
 		System.out.println("|                           	    |");
@@ -56,6 +49,9 @@ public class Page {
 	}
 	
 	public void commandLineInterfaceWorking() {
+		
+		
+		
 		while(this.notQuit) {
 			menu();
 			String input = commandLineInput.readUserInput();

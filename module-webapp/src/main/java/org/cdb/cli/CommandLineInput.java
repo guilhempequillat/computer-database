@@ -1,4 +1,4 @@
-package org.cdb.cui;
+package org.cdb.cli;
 
 import java.time.LocalDate;
 import java.util.Scanner;

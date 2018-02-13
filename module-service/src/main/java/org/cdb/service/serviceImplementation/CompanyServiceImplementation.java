@@ -11,8 +11,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class CompanyServiceImplementation implements CompanyService{
 
-	//private static CompanyServiceImplementation companyServiceImplementation = new CompanyServiceImplementation();
-	
 	@Autowired
 	private CompanyDao companyDao;
 	
@@ -32,11 +30,6 @@ public class CompanyServiceImplementation implements CompanyService{
 	public void delete(Long id) {
 		companyDao.delete(id);
 	}
-	
-//	public static CompanyServiceImplementation getInstance(CompanyDao companyDaoLoaded) {
-//		companyServiceImplementation.setCompanyDao(companyDaoLoaded);
-//		return companyServiceImplementation;
-//	}
 	
 	public void setCompanyDao(CompanyDao companyDaoLoaded) {
 		companyDao = companyDaoLoaded;

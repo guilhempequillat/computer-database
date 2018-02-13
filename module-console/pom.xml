@@ -17,21 +17,17 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	<dependencies>
 		<dependency>
 		    <groupId>${parent.groupId}</groupId>
-		    <artifactId>module-core</artifactId>
-		    <version>${parent.version}</version>
-		</dependency>
-		<dependency>
-		    <groupId>${parent.groupId}</groupId>
 		    <artifactId>module-service</artifactId>
 		    <version>${parent.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-		</dependency>
-		<dependency>
-		    <groupId>ch.qos.logback</groupId>
-		    <artifactId>logback-classic</artifactId>
-		</dependency>
-	</dependencies>
+	</dependencies> 
+	  <!-- <build>
+    <plugins>
+      <plugin>
+        <groupId>${parent.groupId}</groupId>
+		    <artifactId>module-webapp</artifactId>
+		    <version>${parent.version}</version>
+      </plugin>
+    </plugins>
+  </build> -->
 </project>
