@@ -1,5 +1,7 @@
 package org.cdb.springConfiguration;
 
+import java.util.Arrays;
+
 import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import javax.sql.DataSource;
@@ -19,6 +21,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.DelegatingFilterProxy;
 
 @Configuration
@@ -41,9 +46,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable();
 		http.authorizeRequests().antMatchers("/dashboard").hasAnyRole("USER", "ADMIN");
+		http.authorizeRequests().antMatchers("/find-a-computer/**").hasAnyRole("USER", "ADMIN");
 		http.authorizeRequests().antMatchers("/add-computer").hasAnyRole("ADMIN");
 		http.authorizeRequests().antMatchers("/edit-computer").hasAnyRole("ADMIN")
-				.and()
+				.and().cors().and()
 			.formLogin()
 				.loginProcessingUrl("/perform-login")
 				.loginPage("/login") 
@@ -74,5 +80,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		authProvider.setUserDetailsService(userDetailsServiceBean());
 		authProvider.setPasswordEncoder(passwordEncoder());
 		return authProvider;
+	}
+
+	@Bean
+	CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration();
+		configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+		configuration.setAllowedMethods(Arrays.asList("GET","POST","OPTION"));
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
 	}
 }

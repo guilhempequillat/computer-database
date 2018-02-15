@@ -14,6 +14,7 @@ import org.cdb.service.serviceImplementation.ComputerServiceImplementation;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,6 +41,7 @@ public class SpringRestController {
 	
 	private Logger logger = (Logger) LoggerFactory.getLogger(SpringRestController.class);
 
+	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping("find-a-computer/{id}")
 	public String findAComputer(@PathVariable String id) {
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -54,6 +56,7 @@ public class SpringRestController {
 		return jsonInString;
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping("find-all-companies")
 	public String findAllCompanies() {
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -67,10 +70,12 @@ public class SpringRestController {
 		}
 		return jsonString;
 	}
-
+	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping("find-computer-pagination")
 	public String findComputerPagination(@RequestParam(value = "params", required = true) String params) {
 		ObjectMapper objectMapper = new ObjectMapper();
+
 		ArrayList<Computer> listComputer= new ArrayList<>();
 		String jsonString = "";
 		HashMap<String,String> mapParams = convertJsonToHashMap(params);
@@ -88,6 +93,7 @@ public class SpringRestController {
 		return jsonString;
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping("find-computer-pagination-filter")
 	public String findComputerPaginationFilter(@RequestParam(value = "params", required = true) String params) {
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -109,6 +115,7 @@ public class SpringRestController {
 		return jsonString;
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping("count-computer")
 	public String countComputer() {
 		Map<String, String> result = new HashMap<>();
@@ -122,6 +129,7 @@ public class SpringRestController {
 		return jsonString;
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping("count-computer-filter")
 	public String countFilter(@RequestParam(value = "params", required = true) String params) {
 		HashMap<String, String> jsonMap = convertJsonToHashMap(params);
@@ -132,6 +140,7 @@ public class SpringRestController {
 				jsonMap.get("filterCompany"))+"";
 	}
 
+	@CrossOrigin(origins = "http://localhost:4200")
 	@PutMapping("update-name")
 	public String updateName(@RequestParam(value = "params", required = true) String params) {
 		HashMap<String, String> jsonMap = convertJsonToHashMap(params);
@@ -141,6 +150,7 @@ public class SpringRestController {
 		return resultRequestDone();
 	}
 
+	@CrossOrigin(origins = "http://localhost:4200")
 	@PutMapping("update-introduced")
 	public String updateIntroduced(@RequestParam(value = "params", required = true) String params) {
 		HashMap<String, String> jsonMap = convertJsonToHashMap(params);
@@ -148,7 +158,8 @@ public class SpringRestController {
 		computerService.updateIntroduced(Integer.parseInt(jsonMap.get("id")), introduced);
 		return resultRequestDone();
 	}
-
+	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@PutMapping("update-discontinued")
 	public String updateDiscontinued(@RequestParam(value = "params", required = true) String params) {
 		HashMap<String, String> jsonMap = convertJsonToHashMap(params);
@@ -157,14 +168,15 @@ public class SpringRestController {
 		return resultRequestDone();
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@PutMapping("update-company")
 	public String updateCompany(@RequestParam(value = "params", required = true) String params) {
 		HashMap<String, String> jsonMap = convertJsonToHashMap(params);
 		computerService.updateCompany(Integer.parseInt(jsonMap.get("id")), Integer.parseInt(jsonMap.get("idCompany")));
-		
 		return resultRequestDone();
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping("create-computer")
 	public String createComputer(@RequestParam(value="params",required = true) String params) {
 		HashMap<String, String> jsonMap = convertJsonToHashMap(params);
@@ -177,6 +189,7 @@ public class SpringRestController {
 		return resultRequestDone();
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping("create-company")
 	public String createCompany(@RequestParam(value="params", required = true) String params) {
 		HashMap<String, String> jsonMap = convertJsonToHashMap(params);
@@ -186,6 +199,7 @@ public class SpringRestController {
 		return resultRequestDone();
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@DeleteMapping("delete-computer")
 	public String deleteComputer(@RequestParam(value="params", required = true) String params) {
 		HashMap<String, String> jsonMap = convertJsonToHashMap(params);
@@ -193,6 +207,7 @@ public class SpringRestController {
 		return resultRequestDone();
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@DeleteMapping("delete-company")
 	public String deleteCompany(@RequestParam(value="params", required = true) String params) {
 		HashMap<String, String> jsonMap =  convertJsonToHashMap(params);
