@@ -74,9 +74,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .csrf().disable()
         .exceptionHandling()
         .authenticationEntryPoint(restAuthenticationEntryPoint)
-        .and()
-        .authorizeRequests()
-        .antMatchers("/find-a-computer/**").authenticated()
+        .and().authorizeRequests().antMatchers("/find-a-computer/**").authenticated()
+        .and().authorizeRequests().antMatchers("/find-computer-pagination").authenticated()
         .and()
         .authorizeRequests().antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
         .and()
@@ -108,7 +107,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
-		configuration.setAllowedMethods(Arrays.asList("GET","POST","OPTIONS"));
+		configuration.setAllowedMethods(Arrays.asList("PUT","GET","POST","OPTIONS"));
 		configuration.setAllowCredentials(true);
 		configuration.setMaxAge(3600L);
 		configuration.addAllowedHeader("content-type");
