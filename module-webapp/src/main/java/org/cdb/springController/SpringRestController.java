@@ -73,17 +73,19 @@ public class SpringRestController {
 	
 	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping("find-computer-pagination")
-	public String findComputerPagination(@RequestParam(value = "params", required = true) String params) {
+	public String findComputerPagination(
+			@RequestParam(value = "order", required = true) String order,
+			@RequestParam(value = "orderType", required = true) String orderType,
+			@RequestParam(value = "beginComputerDisplay", required = true) String beginComputerDisplay,
+			@RequestParam(value = "numberComputerToShow", required = true) String numberComputerToShow) {
 		ObjectMapper objectMapper = new ObjectMapper();
 
 		ArrayList<Computer> listComputer= new ArrayList<>();
 		String jsonString = "";
-		HashMap<String,String> mapParams = convertJsonToHashMap(params);
-		
-		if(mapParams.get("order").equals("ASC")) {
-			listComputer = computerService.findPaginationAsc(mapParams.get("orderType"), Integer.parseInt(mapParams.get("beginComputerDisplay")), Integer.parseInt(mapParams.get("numberComputerToShow")));
-		}else if(mapParams.get("order").equals("DESC") ) {
-			listComputer = computerService.findPaginationDesc(mapParams.get("orderType"), Integer.parseInt(mapParams.get("beginComputerDisplay")), Integer.parseInt(mapParams.get("numberComputerToShow")));
+		if(order.equals("ASC")) {
+			listComputer = computerService.findPaginationAsc(orderType, Integer.parseInt(beginComputerDisplay), Integer.parseInt(numberComputerToShow));
+		}else if(order.equals("DESC") ) {
+			listComputer = computerService.findPaginationDesc(orderType, Integer.parseInt(beginComputerDisplay), Integer.parseInt(numberComputerToShow));
 		}
 		try {
 			jsonString = objectMapper.writeValueAsString(listComputer);
@@ -95,17 +97,25 @@ public class SpringRestController {
 	
 	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping("find-computer-pagination-filter")
-	public String findComputerPaginationFilter(@RequestParam(value = "params", required = true) String params) {
+	public String findComputerPaginationFilter(
+		@RequestParam(value = "order", required = true) String order,
+		@RequestParam(value = "orderType", required = true) String orderType,
+		@RequestParam(value = "beginComputerDisplay", required = true) String beginComputerDisplay,
+		@RequestParam(value = "numberComputerToShow", required = true) String numberComputerToShow,
+		@RequestParam(value = "filterName", required = true) String filterName,
+		@RequestParam(value = "filterIntroduced", required = true) String filterIntroduced,
+		@RequestParam(value = "filterDiscontinued", required = true) String filterDiscontinued,
+		@RequestParam(value = "filterCompany", required = true) String filterCompany) {
 		ObjectMapper objectMapper = new ObjectMapper();
 		ArrayList<Computer> listComputer= new ArrayList<>();
 		String jsonString = "";
 		
-		HashMap<String,String> mapParams = convertJsonToHashMap(params);
-		
-		if(mapParams.get("order").equals("ASC")) {
-			listComputer = computerService.findPaginationAscFilter(mapParams.get("orderType"), Integer.parseInt(mapParams.get("beginComputerDisplay")), Integer.parseInt(mapParams.get("numberComputerToShow")), mapParams.get("filterName"), mapParams.get("filterIntroduced"), mapParams.get("filterDiscontinued"), mapParams.get("filterCompany"));
-		}else if(mapParams.get("order").equals("DESC") ) {
-			listComputer = computerService.findPaginationDescFilter(mapParams.get("orderType"), Integer.parseInt(mapParams.get("beginComputerDisplay")), Integer.parseInt(mapParams.get("numberComputerToShow")), mapParams.get("filterName"), mapParams.get("filterIntroduced"), mapParams.get("filterDiscontinued"), mapParams.get("filterCompany"));
+		if(order.equals("ASC")) {
+			listComputer = computerService.findPaginationAscFilter(orderType, Integer.parseInt(beginComputerDisplay), 
+					Integer.parseInt(numberComputerToShow), filterName, filterIntroduced, filterDiscontinued, filterCompany);
+		}else if(order.equals("DESC") ) {
+			listComputer = computerService.findPaginationDescFilter(orderType, Integer.parseInt(beginComputerDisplay),
+					Integer.parseInt(numberComputerToShow), filterName, filterIntroduced, filterDiscontinued, filterCompany);
 		}
 		try {
 			jsonString = objectMapper.writeValueAsString(listComputer);
@@ -131,106 +141,88 @@ public class SpringRestController {
 	
 	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping("count-computer-filter")
-	public String countFilter(@RequestParam(value = "params", required = true) String params) {
-		HashMap<String, String> jsonMap = convertJsonToHashMap(params);
+	public String countFilter(
+			@RequestParam(value = "filterName", required = true) String filterName,
+			@RequestParam(value = "filterIntroduced", required = true) String filterIntroduced,
+			@RequestParam(value = "filterDiscontinued", required = true) String filterDiscontinued,
+			@RequestParam(value = "filterCompany", required = true) String filterCompany) {
 		return computerService.countFilter(
-				jsonMap.get("filterName"), 
-				jsonMap.get("filterIntroduced"), 
-				jsonMap.get("filterDiscontinued"), 
-				jsonMap.get("filterCompany"))+"";
+				filterName, 
+				filterIntroduced,
+				filterDiscontinued,
+				filterCompany)+"";
 	}
 
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PutMapping("update-name")
-	public String updateName(@RequestParam(value = "params", required = true) String params) {
-		HashMap<String, String> jsonMap = convertJsonToHashMap(params);
-		
-		computerService.updateName(Integer.parseInt(jsonMap.get("id")), jsonMap.get("name"));
-
+	public String updateName(@RequestParam(value = "id", required = true) String id,
+			@RequestParam(value = "name", required = true) String name) {
+		computerService.updateName(Integer.parseInt(id),name);
 		return resultRequestDone();
 	}
 
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PutMapping("update-introduced")
-	public String updateIntroduced(@RequestParam(value = "params", required = true) String params) {
-		HashMap<String, String> jsonMap = convertJsonToHashMap(params);
-		LocalDate introduced = LocalDate.parse(jsonMap.get("introduced"));
-		computerService.updateIntroduced(Integer.parseInt(jsonMap.get("id")), introduced);
+	public String updateIntroduced(@RequestParam(value = "id", required = true) String id,
+			@RequestParam(value = "introduced", required = true) String introduced) {
+		LocalDate introducedld = LocalDate.parse(introduced);
+		computerService.updateIntroduced(Integer.parseInt(id), introducedld);
 		return resultRequestDone();
 	}
 	
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PutMapping("update-discontinued")
-	public String updateDiscontinued(@RequestParam(value = "params", required = true) String params) {
-		HashMap<String, String> jsonMap = convertJsonToHashMap(params);
-		LocalDate discontinued = LocalDate.parse(jsonMap.get("discontinued"));
-		computerService.updateDiscontinued(Integer.parseInt(jsonMap.get("id")), discontinued);
+	public String updateDiscontinued(@RequestParam(value = "id", required = true) String id,
+			@RequestParam(value = "discontinued", required = true) String discontinued) {
+		LocalDate discontinuedld = LocalDate.parse(discontinued);
+		computerService.updateDiscontinued(Integer.parseInt(id), discontinuedld);
 		return resultRequestDone();
 	}
 	
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PutMapping("update-company")
-	public String updateCompany(@RequestParam(value = "params", required = true) String params) {
-		HashMap<String, String> jsonMap = convertJsonToHashMap(params);
-		computerService.updateCompany(Integer.parseInt(jsonMap.get("id")), Integer.parseInt(jsonMap.get("idCompany")));
+	public String updateCompany(@RequestParam(value = "id", required = true) String id,
+			@RequestParam(value = "idCompany", required = true) String idCompany) {
+		computerService.updateCompany(Integer.parseInt(id), Integer.parseInt(idCompany));
 		return resultRequestDone();
 	}
 	
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping("create-computer")
-	public String createComputer(@RequestParam(value="params",required = true) String params) {
-		HashMap<String, String> jsonMap = convertJsonToHashMap(params);
+	public String createComputer(@RequestParam(value="name",required = true) String name,
+			@RequestParam(value="introduced",required = true) String introduced,
+			@RequestParam(value="discontinued",required = true) String discontinued,
+			@RequestParam(value="idCompany",required = true) String idCompany) {
 		Computer computer = new Computer();
-		computer.setName(jsonMap.get("name"));
-		computer.setIntroduced(LocalDate.parse(jsonMap.get("introduced")));
-		computer.setDiscontinued(LocalDate.parse(jsonMap.get("discontinued")));
-		computer.setCompany_id(Long.parseLong(jsonMap.get("idCompany")));
+		computer.setName(name);
+		computer.setIntroduced(LocalDate.parse(introduced));
+		computer.setDiscontinued(LocalDate.parse(discontinued));
+		computer.setCompany_id(Long.parseLong(idCompany));
 		computerService.create(computer);
 		return resultRequestDone();
 	}
 	
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping("create-company")
-	public String createCompany(@RequestParam(value="params", required = true) String params) {
-		HashMap<String, String> jsonMap = convertJsonToHashMap(params);
+	public String createCompany(@RequestParam(value="name", required = true) String name) {
 		Company company = new Company();
-		company.setName(jsonMap.get("name"));
+		company.setName(name);
 		companyService.create(company);
 		return resultRequestDone();
 	}
 	
 	@CrossOrigin(origins = "http://localhost:4200")
 	@DeleteMapping("delete-computer")
-	public String deleteComputer(@RequestParam(value="params", required = true) String params) {
-		HashMap<String, String> jsonMap = convertJsonToHashMap(params);
-		computerService.delete(Integer.parseInt(jsonMap.get("id")));
+	public String deleteComputer(@RequestParam(value="id", required = true) String id) {
+		computerService.delete(Integer.parseInt(id));
 		return resultRequestDone();
 	}
 	
 	@CrossOrigin(origins = "http://localhost:4200")
 	@DeleteMapping("delete-company")
-	public String deleteCompany(@RequestParam(value="params", required = true) String params) {
-		HashMap<String, String> jsonMap =  convertJsonToHashMap(params);
-		companyService.delete(Long.parseLong("id"));
+	public String deleteCompany(@RequestParam(value="id", required = true) String id) {
+		companyService.delete(Long.parseLong(id));
 		return resultRequestDone();
-	}
-	
-	public HashMap<String,String> convertJsonToHashMap(String jsonString){
-		byte[] dataJson = jsonString.getBytes();
-		HashMap<String,String> jsonMap = new HashMap<String, String>();
-		ObjectMapper objectMapper = new ObjectMapper();
-		try {
-			jsonMap = objectMapper.readValue(dataJson, HashMap.class);
-		}catch(ClassCastException e) {
-			logger.error("The json input isn't only String composed : "+e);
-		} catch (JsonParseException e) {
-			logger.error("Json String to hashMap failed : "+e);
-		} catch (JsonMappingException e) {
-			logger.error("Json String to hashMap failed : "+e);
-		} catch (IOException e) {
-			logger.error("Json String to hashMap failed : "+e);
-		}
-		return jsonMap;
 	}
 	
 	public String resultRequestDone() {
