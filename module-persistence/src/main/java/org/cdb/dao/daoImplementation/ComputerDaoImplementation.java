@@ -150,22 +150,26 @@ public class ComputerDaoImplementation implements ComputerDao {
 
 	@Override
 	public ArrayList<Computer> findPaginationAsc(String orderType, int nbComputerIndex, int nbToShow) {
-		Session session = sessionFactory.getCurrentSession();
-		Criteria cr = session.createCriteria(Computer.class);
-		cr.addOrder( Order.asc(orderType) );
-		cr.setFirstResult(nbComputerIndex);
-		cr.setMaxResults(nbToShow);
-		return (ArrayList<Computer>) cr.list();
+//		Session session = sessionFactory.getCurrentSession();
+//		Criteria cr = session.createCriteria(Computer.class);
+//		cr.addOrder( Order.asc(orderType) );
+//		cr.setFirstResult(nbComputerIndex);
+//		cr.setMaxResults(nbToShow);
+//		return (ArrayList<Computer>) cr.list();
+		Object[] objects = { nbComputerIndex, nbToShow };
+		return (ArrayList<Computer>) jdbcTemplate.query(getRequestFindPaginationAsc(orderType),rowMapperComputer,objects);
 	}
 
 	@Override
 	public ArrayList<Computer> findPaginationDesc(String orderType, int nbComputerIndex, int nbToShow) {
-		Session session = sessionFactory.getCurrentSession();
-		Criteria cr = session.createCriteria(Computer.class);
-		cr.addOrder( Order.desc(orderType) );
-		cr.setFirstResult(nbComputerIndex);
-		cr.setMaxResults(nbToShow);
-		return (ArrayList<Computer>) cr.list();
+//		Session session = sessionFactory.getCurrentSession();
+//		Criteria cr = session.createCriteria(Computer.class);
+//		cr.addOrder( Order.desc(orderType) );
+//		cr.setFirstResult(nbComputerIndex);
+//		cr.setMaxResults(nbToShow);
+//		return (ArrayList<Computer>) cr.list();
+		Object[] objects = { nbComputerIndex, nbToShow };
+		return (ArrayList<Computer>) jdbcTemplate.query(getRequestFindPaginationDesc(orderType),rowMapperComputer,objects);
 	}
 	@Override
 	public ArrayList<Computer> findPaginationDescFilter(String orderType, int nbComputerIndex, int nbToShow 
