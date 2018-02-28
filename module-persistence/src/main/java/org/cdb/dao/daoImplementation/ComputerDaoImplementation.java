@@ -130,7 +130,13 @@ public class ComputerDaoImplementation implements ComputerDao {
 	
 	@Override
 	public void create(String name, Date introduced, Date discontinued , int idCompany) {
-		Object[] objects = { name , discontinued, introduced, idCompany };
+		Integer idc = 0;
+		if( idCompany == -1 ) {
+			idc = null;
+		} else {
+			idc = idCompany;
+		}
+		Object[] objects = { name , discontinued, introduced, idc };
 		jdbcTemplate.update(SQL_CREATE,objects);
 	}
 	

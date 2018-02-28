@@ -58,9 +58,24 @@ public class ComputerServiceImplementation implements ComputerService {
 		String name = computer.getName();
 		LocalDate introduced = computer.getIntroduced();
 		LocalDate discontinued = computer.getDiscontinued();
-		int idCompany = Integer.parseInt(computer.getCompany_id().toString());
-		Date dateIntroduced = Date.valueOf(introduced);
-		Date dateDiscontinued = Date.valueOf(discontinued);
+		int idCompany = 0;
+		try {
+			idCompany = Integer.parseInt(computer.getCompany_id().toString());
+		}catch(NullPointerException e) {
+			idCompany = -1;
+		}
+		Date dateIntroduced = null;
+		try {
+			dateIntroduced = Date.valueOf(introduced);
+		}catch(NullPointerException e) {
+			dateIntroduced = null;
+		}
+		Date dateDiscontinued = null;
+		try {
+			dateDiscontinued = Date.valueOf(discontinued);
+		}catch(NullPointerException e) {
+			dateDiscontinued = null;
+		}
 		computerDao.create(name, dateIntroduced, dateDiscontinued, idCompany);
 	}
 

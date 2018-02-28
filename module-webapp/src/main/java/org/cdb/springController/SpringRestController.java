@@ -3,17 +3,21 @@ package org.cdb.springController;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.cdb.model.Company;
 import org.cdb.model.Computer;
+import org.cdb.model.User;
 import org.cdb.service.serviceImplementation.CompanyServiceImplementation;
 import org.cdb.service.serviceImplementation.ComputerServiceImplementation;
+import org.cdb.service.serviceImplementation.UserServiceImplementation;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,6 +42,9 @@ public class SpringRestController {
 	
 	@Autowired
 	private CompanyServiceImplementation companyService;
+	
+	@Autowired
+	UserServiceImplementation userService; 
 	
 	private Logger logger = (Logger) LoggerFactory.getLogger(SpringRestController.class);
 
@@ -195,9 +202,21 @@ public class SpringRestController {
 			@RequestParam(value="idCompany",required = true) String idCompany) {
 		Computer computer = new Computer();
 		computer.setName(name);
-		computer.setIntroduced(LocalDate.parse(introduced));
-		computer.setDiscontinued(LocalDate.parse(discontinued));
-		computer.setCompany_id(Long.parseLong(idCompany));
+		try {
+			computer.setIntroduced(LocalDate.parse(introduced));
+		}catch(DateTimeParseException e) {
+			computer.setIntroduced(null);
+		}
+		try {
+			computer.setDiscontinued(LocalDate.parse(discontinued));
+		}catch(DateTimeParseException e) {
+			computer.setDiscontinued(null);
+		}
+		try {
+			computer.setCompany_id(Long.parseLong(idCompany));
+		} catch (NumberFormatException e) {
+			computer.setCompany_id(null);
+		}
 		computerService.create(computer);
 		return resultRequestDone();
 	}
@@ -217,12 +236,22 @@ public class SpringRestController {
 		computerService.delete(Integer.parseInt(id));
 		return resultRequestDone();
 	}
-	
+
 	@CrossOrigin(origins = "http://localhost:4200")
 	@DeleteMapping("delete-company")
 	public String deleteCompany(@RequestParam(value="id", required = true) String id) {
 		companyService.delete(Long.parseLong(id));
 		return resultRequestDone();
+	}
+
+	@CrossOrigin(origins = "http://localhost:4200")
+	@PostMapping("register-user")
+	public String registerUser(@RequestParam(value = "username", required = true) String username, 
+        	@RequestParam(value = "password", required = true) String password, 
+        	@RequestParam(value = "email", required = true) String email) {
+		BCryptPasswordEncoder bcp = new BCryptPasswordEncoder();
+		userService.addUser(new User(username,email,bcp.encode(password)));
+        return "index";
 	}
 	
 	public String resultRequestDone() {
