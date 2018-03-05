@@ -172,7 +172,12 @@ public class SpringRestController {
 	@PutMapping("update-introduced")
 	public String updateIntroduced(@RequestParam(value = "id", required = true) String id,
 			@RequestParam(value = "introduced", required = true) String introduced) {
-		LocalDate introducedld = LocalDate.parse(introduced);
+		LocalDate introducedld = null;
+		try {
+			introducedld = LocalDate.parse(introduced);
+		} catch (DateTimeParseException e) {
+			introducedld = null;
+		}
 		computerService.updateIntroduced(Integer.parseInt(id), introducedld);
 		return resultRequestDone();
 	}
@@ -181,7 +186,12 @@ public class SpringRestController {
 	@PutMapping("update-discontinued")
 	public String updateDiscontinued(@RequestParam(value = "id", required = true) String id,
 			@RequestParam(value = "discontinued", required = true) String discontinued) {
-		LocalDate discontinuedld = LocalDate.parse(discontinued);
+		LocalDate discontinuedld = null;
+		try {
+			discontinuedld = LocalDate.parse(discontinued);
+		} catch (DateTimeParseException e) {
+			discontinuedld = null;
+		}
 		computerService.updateDiscontinued(Integer.parseInt(id), discontinuedld);
 		return resultRequestDone();
 	}

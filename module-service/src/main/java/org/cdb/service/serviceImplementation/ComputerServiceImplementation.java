@@ -37,13 +37,23 @@ public class ComputerServiceImplementation implements ComputerService {
 	
 	@Override
 	public void updateIntroduced(int id, LocalDate introduced) {
-		Date date = Date.valueOf(introduced);
+		Date date = null;
+		try {
+			date = Date.valueOf(introduced);
+		} catch (NullPointerException e) {
+			date = null;
+		}
 		computerDao.updateIntroduced(id, date);
 	}
 	
 	@Override
 	public void updateDiscontinued(int id, LocalDate discontinued) {
-		Date date = Date.valueOf(discontinued);
+		Date date = null;
+		try {
+			date = Date.valueOf(discontinued);
+		} catch (NullPointerException e) {
+			date = null;
+		}
 		computerDao.updateDiscontinued(id, date);
 		
 	}
